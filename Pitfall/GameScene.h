@@ -2,11 +2,11 @@
 # include "Common.h"
 
 // ゲームシーン
-class Game : public App::Scene
+class GameScene : public App::Scene
 {
 public:
 
-	Game(const InitData& init);
+	GameScene(const InitData& init);
 
 	void update() override;
 

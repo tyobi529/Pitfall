@@ -1,6 +1,6 @@
 ﻿# include "Common.h"
 # include "Title.h"
-# include "Game.h"
+# include "GameScene.h"
 # include "Ranking.h"
 
 void Main()
@@ -14,7 +14,7 @@ void Main()
 
 	App manager;
 	manager.add<Title>(State::Title);
-	manager.add<Game>(State::Game);
+	manager.add<GameScene>(State::Game);
 	manager.add<Ranking>(State::Ranking);
 
 	// ゲームシーンから開始したい場合はこのコメントを外す

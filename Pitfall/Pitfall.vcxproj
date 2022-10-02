@@ -113,7 +113,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Ranking.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -317,7 +317,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h" />
-    <ClInclude Include="Game.h" />
+    <ClInclude Include="GameScene.h" />
     <ClInclude Include="Ranking.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Title.h" />

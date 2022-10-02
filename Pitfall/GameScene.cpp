@@ -1,6 +1,6 @@
-﻿# include "Game.h"
+﻿# include "GameScene.h"
 
-Game::Game(const InitData& init)
+GameScene::GameScene(const InitData& init)
 	: IScene{ init }
 {
 	// 横 (Scene::Width() / blockSize.x) 個、縦 5 個のブロックを配列に追加する
@@ -10,7 +10,7 @@ Game::Game(const InitData& init)
 	}
 }
 
-void Game::update()
+void GameScene::update()
 {
 	// ボールを移動
 	m_ball.moveBy(m_ballVelocity * Scene::DeltaTime());
@@ -69,7 +69,7 @@ void Game::update()
 	}
 }
 
-void Game::draw() const
+void GameScene::draw() const
 {
 	Scene::SetBackground(ColorF{ 0.2 });
 
@@ -85,10 +85,10 @@ void Game::draw() const
 	// パドルを描く
 	getPaddle().draw();
 
-	FontAsset(U"GameScore")(m_score).draw(10, 10);
+	FontAsset(U"GameSceneScore")(m_score).draw(10, 10);
 }
 
-Rect Game::getPaddle() const
+Rect GameScene::getPaddle() const
 {
 	return{ Arg::center(Cursor::Pos().x, 500), 60, 10 };
 }

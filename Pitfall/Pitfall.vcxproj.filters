@@ -147,10 +147,10 @@
     <ClCompile Include="Title.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Game.cpp">
+    <ClCompile Include="Ranking.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Ranking.cpp">
+    <ClCompile Include="GameScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -791,10 +791,10 @@
     <ClInclude Include="Title.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Game.h">
+    <ClInclude Include="Ranking.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Ranking.h">
+    <ClInclude Include="GameScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
