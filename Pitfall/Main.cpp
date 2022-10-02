@@ -1,5 +1,5 @@
 ﻿# include "Common.h"
-# include "Title.h"
+# include "TitleScene.h"
 # include "GameScene.h"
 # include "Ranking.h"
 
@@ -13,7 +13,7 @@ void Main()
 	AudioAsset::Register(U"Brick", GMInstrument::Woodblock, PianoKey::C5, 0.2s, 0.1s);
 
 	App manager;
-	manager.add<Title>(State::Title);
+	manager.add<TitleScene>(State::Title);
 	manager.add<GameScene>(State::Game);
 	manager.add<Ranking>(State::Ranking);
 

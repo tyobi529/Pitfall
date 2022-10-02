@@ -1,9 +1,9 @@
-﻿# include "Title.h"
+﻿# include "TitleScene.h"
 
-Title::Title(const InitData& init)
+TitleScene::TitleScene(const InitData& init)
 	: IScene{ init } {}
 
-void Title::update()
+void TitleScene::update()
 {
 	m_startTransition.update(m_startButton.mouseOver());
 	m_rankingTransition.update(m_rankingButton.mouseOver());
@@ -31,11 +31,11 @@ void Title::update()
 	}
 }
 
-void Title::draw() const
+void TitleScene::draw() const
 {
 	Scene::SetBackground(ColorF{ 0.2, 0.8, 0.4 });
 
-	FontAsset(U"TitleFont")(U"BREAKOUT")
+	FontAsset(U"TitleSceneFont")(U"BREAKOUT")
 		.drawAt(TextStyle::OutlineShadow(0.2, ColorF{ 0.2, 0.6, 0.2 }, Vec2{ 3, 3 }, ColorF{ 0.0, 0.5 }), 100, Vec2{ 400, 100 });
 
 	m_startButton.draw(ColorF{ 1.0, m_startTransition.value() }).drawFrame(2);
