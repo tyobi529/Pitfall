@@ -33,4 +33,24 @@ private:
 	int32 m_score = 0;
 
 	Rect getPaddle() const;
+
+
+	const ColorF backgroundColor = ColorF{ 0.4, 0.6, 0.8 }.removeSRGBCurve();
+	const Texture uvChecker{ U"example/texture/uv.png", TextureDesc::MippedSRGB };
+	const MSRenderTexture renderTexture{ Scene::Size(), TextureFormat::R8G8B8A8_Unorm_SRGB, HasDepth::Yes };
+
+	Vec3 eyePosition{ 0, 0, -50 };
+
+	double angle = 0_deg;
+	BasicCamera3D camera;
+
+	//プレイヤー
+	//Mesh playerMesh;
+
+	//Vec3 playerPos;
+
+	Mesh playerMesh;
+	Vec3 playerPos;
+
+	bool isLeft = true;
 };

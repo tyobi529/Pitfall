@@ -1,94 +1,137 @@
 ﻿# include "GameScene.h"
 
+Vec3 GetDirection(double angle)
+{
+	const Vec2 dir = Circular{ 1.0, angle };
+	return{ dir.x, 0.0, -dir.y };
+}
+
+Vec3 GetFocusPosition(const Vec3& eyePosition, double angle)
+{
+	return (eyePosition + GetDirection(angle));
+}
+
 GameScene::GameScene(const InitData& init)
 	: IScene{ init }
 {
-	// 横 (Scene::Width() / blockSize.x) 個、縦 5 個のブロックを配列に追加する
-	for (auto p : step(Size{ (Scene::Width() / BrickSize.x), 5 }))
-	{
-		m_bricks << Rect{ (p.x * BrickSize.x), (60 + p.y * BrickSize.y), BrickSize };
-	}
+
+	camera = BasicCamera3D{ renderTexture.size(), 30_deg, Vec3{ 0, 16, -32 }, GetFocusPosition(eyePosition, angle) };
+
+
+	playerMesh = Mesh{ MeshData::Pyramid(1.0, 1.0) };
+	playerPos = Vec3(0, 0, 0);
 }
 
 void GameScene::update()
 {
-	// ボールを移動
-	m_ball.moveBy(m_ballVelocity * Scene::DeltaTime());
+	
+	//ゲーム中動かさないがデバック用にカメラの移動
+	ClearPrint();
+	const double deltaTime = Scene::DeltaTime();
+	const double speed = (deltaTime * 2.0);
 
-	// ブロックを順にチェック
-	for (auto it = m_bricks.begin(); it != m_bricks.end(); ++it)
+	if (KeyW.pressed())
 	{
-		// ブロックとボールが交差していたら
-		if (it->intersects(m_ball))
+		eyePosition += (GetDirection(angle) * speed);
+	}
+
+	if (KeyA.pressed())
+	{
+		eyePosition += (GetDirection(angle - 90_deg) * speed);
+	}
+
+	if (KeyS.pressed())
+	{
+		eyePosition += (-GetDirection(angle) * speed);
+	}
+
+	if (KeyD.pressed())
+	{
+		eyePosition += (GetDirection(angle + 90_deg) * speed);
+	}
+
+	if (KeyLeft.pressed())
+	{
+		angle -= (deltaTime * 30_deg);
+
+		if (angle < 0_deg)
 		{
-			// ボールの向きを反転する
-			(it->bottom().intersects(m_ball) || it->top().intersects(m_ball)
-				? m_ballVelocity.y : m_ballVelocity.x) *= -1;
-
-			// ブロックを配列から削除（イテレータが無効になるので注意）
-			m_bricks.erase(it);
-
-			AudioAsset(U"Brick").playOneShot(0.5);
-
-			// スコアを加算
-			++m_score;
-
-			// これ以上チェックしない
-			break;
+			angle += 360_deg;
 		}
 	}
 
-	// 天井にぶつかったらはね返る
-	if (m_ball.y < 0 && m_ballVelocity.y < 0)
+	if (KeyRight.pressed())
 	{
-		m_ballVelocity.y *= -1;
+		angle += (deltaTime * 30_deg);
+
+		if (360_deg < angle)
+		{
+			angle -= 360_deg;
+		}
 	}
 
-	// 左右の壁にぶつかったらはね返る
-	if ((m_ball.x < 0 && m_ballVelocity.x < 0)
-		|| (Scene::Width() < m_ball.x && 0 < m_ballVelocity.x))
-	{
-		m_ballVelocity.x *= -1;
-	}
+	// 位置・注目点情報を更新
+	camera.setView(eyePosition, GetFocusPosition(eyePosition, angle));
+	Print << U"angle: {:.1f}°"_fmt(Math::ToDegrees(angle));
+	Print << U"direction: {:.2f}"_fmt(GetDirection(angle));
+	Print << U"eyePositon: {:.1f}"_fmt(camera.getEyePosition());
+	Print << U"focusPosition: {:.1f}"_fmt(camera.getFocusPosition());
+	Graphics3D::SetCameraTransform(camera);
 
-	// パドルにあたったらはね返る
-	if (const Rect paddle = getPaddle();
-		(0 < m_ballVelocity.y) && paddle.intersects(m_ball))
-	{
-		// パドルの中心からの距離に応じてはね返る方向を変える
-		m_ballVelocity = Vec2{ (m_ball.x - paddle.center().x) * 10, -m_ballVelocity.y }.setLength(Speed);
-	}
 
-	// 画面外に出るか、ブロックが無くなったら
-	if ((Scene::Height() < m_ball.y) || m_bricks.isEmpty())
+
+	if (MouseL.up())
 	{
-		// タイトル画面へ
+		isLeft = !isLeft;
+	}
+	else if (MouseR.up())
+	{
+		// 右クリックでタイトル画面へ
 		changeScene(State::Title);
 
 		getData().lastGameScore = m_score;
+
+		return;
 	}
+
+	if (isLeft)
+	{
+		playerPos = Vec3(-5, 0, 0);
+	}
+	else
+	{
+		playerPos = Vec3(5, 0, 0);
+	}
+
 }
 
 void GameScene::draw() const
 {
-	Scene::SetBackground(ColorF{ 0.2 });
+	//Scene::SetBackground(ColorF{ 0.2 });
+	FontAsset(U"GameSceneScore")(m_score).draw(10, 10);
 
-	// すべてのブロックを描画する
-	for (const auto& brick : m_bricks)
+
+	// 3D 描画
 	{
-		brick.stretched(-1).draw(HSV{ brick.y - 40 });
+		const ScopedRenderTarget3D target{ renderTexture.clear(backgroundColor) }; //これより後に書く
+
+		playerMesh.draw(playerPos, ColorF{ 0.8, 0.6, 0.4 });
+
+
+		//デバッグ
+		const int length = 30;
+		Line3D{ Vec3{-length, 0, 0}, Vec3{length, 0, 0} }.draw();
+		Line3D{ Vec3{0, -length, 0}, Vec3{0, length, 0} }.draw();
+
+
 	}
 
-	// ボールを描く
-	m_ball.draw();
-
-	// パドルを描く
-	getPaddle().draw();
-
-	FontAsset(U"GameSceneScore")(m_score).draw(10, 10);
+	// 3D シーンを 2D シーンに描画
+	{
+		Graphics3D::Flush();
+		renderTexture.resolve();
+		Shader::LinearToScreen(renderTexture);
+	}
 }
 
-Rect GameScene::getPaddle() const
-{
-	return{ Arg::center(Cursor::Pos().x, 500), 60, 10 };
-}
+
