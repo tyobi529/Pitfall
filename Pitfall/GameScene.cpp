@@ -62,8 +62,8 @@ void GameScene::update()
 	// 画面外に出るか、ブロックが無くなったら
 	if ((Scene::Height() < m_ball.y) || m_bricks.isEmpty())
 	{
-		// ランキング画面へ
-		changeScene(State::Ranking);
+		// タイトル画面へ
+		changeScene(State::Title);
 
 		getData().lastGameScore = m_score;
 	}

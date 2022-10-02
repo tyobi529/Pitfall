@@ -1,7 +1,6 @@
 ﻿# include "Common.h"
 # include "TitleScene.h"
 # include "GameScene.h"
-# include "Ranking.h"
 
 void Main()
 {
@@ -15,10 +14,9 @@ void Main()
 	App manager;
 	manager.add<TitleScene>(State::Title);
 	manager.add<GameScene>(State::Game);
-	manager.add<Ranking>(State::Ranking);
 
 	// ゲームシーンから開始したい場合はこのコメントを外す
-	//manager.init(State::Game);
+	manager.init(State::Game);
 
 	while (System::Update())
 	{

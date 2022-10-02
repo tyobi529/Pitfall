@@ -6,7 +6,6 @@ enum class State
 {
 	Title,
 	Game,
-	Ranking,
 };
 
 // 共有するデータ

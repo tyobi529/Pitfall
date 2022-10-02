@@ -19,11 +19,6 @@ void TitleScene::update()
 		// ゲームシーンへ
 		changeScene(State::Game);
 	}
-	else if (m_rankingButton.leftClicked())
-	{
-		// ランキングシーンへ
-		changeScene(State::Ranking);
-	}
 	else if (m_exitButton.leftClicked())
 	{
 		// 終了
