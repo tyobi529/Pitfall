@@ -152,7 +152,7 @@ void GameScene::update()
 		break;
 	case Wall::DAMAGE:
 		Print << U"DAMAGE";
-		InitGame();
+		//InitGame();
 		return;
 		break;
 	case Wall::DASH:
@@ -179,12 +179,20 @@ void GameScene::draw() const
 	const ScopedRenderTarget3D target{ renderTexture.clear(backgroundColor) }; //これより後に書く
 	{
 
-
 		//デバッグ
-		//const int length = 30;
-		//Line3D{ Vec3{-length, 0, 0}, Vec3{length, 0, 0} }.draw();
-		//Line3D{ Vec3{0, -length, 0}, Vec3{0, length, 0} }.draw();
-
+		int length = 30;
+		Line3D{ Vec3{-length, 0, 0}, Vec3{length, 0, 0} }.draw(ColorF(0, 0, 0, 1));
+		Line3D{ Vec3{0, -length, 0}, Vec3{0, length, 0} }.draw(ColorF(0, 0, 0, 1));
+		for (int i = 1; i < 5; i++)
+		{
+			Line3D{ Vec3{i, -length, 0}, Vec3{i, length, 0} }.draw();
+			Line3D{ Vec3{-i, -length, 0}, Vec3{-i, length, 0} }.draw();
+		}
+		for (int i = 1; i < 10; i++)
+		{
+			Line3D{ Vec3{-length, i, 0}, Vec3{length, i, 0} }.draw();
+			Line3D{ Vec3{-length, -i, 0}, Vec3{length, -i, 0} }.draw();
+		}
 
 		//プレイヤー
 		if (isLeft)
@@ -209,7 +217,10 @@ void GameScene::draw() const
 		renderTexture.resolve();
 		Shader::LinearToScreen(renderTexture);
 	}
+
+
+
+	// 座標 (20, 40) を左上の基準位置にして、幅 400, 高さ 100 の長方形を描く
+	int size = 250;
+	Rect{ 0, Define::WIN_W - size, Define::WIN_H, size }.draw();
 }
-
-
-
