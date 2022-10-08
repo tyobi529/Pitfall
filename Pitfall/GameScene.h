@@ -16,6 +16,8 @@ public:
 
 	void draw() const override;
 
+	void InitGame();
+
 private:
 
 	// ブロックのサイズ

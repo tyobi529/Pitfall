@@ -2,12 +2,12 @@
 # include "TitleScene.h"
 # include "GameScene.h"
 
-
+#include "Define.h"
 
 
 void Main()
 {
-	Window::Resize(540, 960);
+	Window::Resize(Define::WIN_H, Define::WIN_W);
 
 	FontAsset::Register(U"TitleFont", FontMethod::MSDF, 50, U"example/font/RocknRoll/RocknRollOne-Regular.ttf");
 	FontAsset(U"TitleFont").setBufferThickness(4);

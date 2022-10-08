@@ -1,6 +1,8 @@
 ﻿# include "GameScene.h"
 //#include "Wall.h"
 
+#include "Define.h"
+
 Vec3 GetDirection(double angle)
 {
 	const Vec2 dir = Circular{ 1.0, angle };
@@ -22,41 +24,40 @@ GameScene::GameScene(const InitData& init)
 	//camera = BasicCamera3D{ renderTexture.size(), 30_deg, Vec3{ 0, 16, -32 }, GetFocusPosition(eyePosition, angle) };
 	camera = BasicCamera3D{ renderTexture.size(), 30_deg, eyePosition, GetFocusPosition(eyePosition, angle) };
 
-
-
-
 	playerMesh = Mesh{ MeshData::Pyramid(1.0, 1.0) };
+
+	InitGame();
+
+}
+
+void GameScene::InitGame()
+{
+	m_gameTime = 0.0f;
+	m_timeSpeed = Define::TIME_SPEED_FIRST;
+
 	playerPos = Vec3(0, 0, 0);
 
 	float posY = -50;
 	for (int i = 0; i < 30; i++)
 	{
 		float height = 0.2f * (i + 1);
-		//Wall* pWall = nullptr;
 
-		//Wall* pWall = std::make_unique<Wall>();
 		Wall::TYPE type;
 
 		if (i % 3 == 0)
 		{
-			//pWall = new Wall(Wall::NORMAL, height, posY, 0.f);
 			type = Wall::NORMAL;
 		}
 		else if (i % 3 == 1)
 		{
-			//pWall = new Wall(Wall::DAMAGE, height, posY, 0.f);
-			//m_smpWalls.push_back(std::make_unique<Wall>(Wall::DAMAGE, height, posY, 0.f));
 			type = Wall::DAMAGE;
 		}
 		else
 		{
-			//pWall = new Wall(Wall::DASH, height, posY, 0.f);
 			type = Wall::DASH;
 		}
 
-		//m_smpWalls.push_back(std::make_unique<Wall>(Wall::NORMAL, height, posY, 0.f));
 		m_smpWalls.push_back(std::make_unique<Wall>(type, height, posY, 0.f));
-
 
 		posY += height;
 	}
@@ -64,11 +65,14 @@ GameScene::GameScene(const InitData& init)
 
 void GameScene::update()
 {
-	
 	//ゲーム中動かさないがデバック用にカメラの移動
 	ClearPrint();
-	const double deltaTime = Scene::DeltaTime();
-	const double speed = (deltaTime * 2.0);
+	const float deltaTime = (float)Scene::DeltaTime();
+	m_gameTime += deltaTime * m_timeSpeed;
+
+	const float speed = (float)(deltaTime * 2.0);
+
+
 
 	if (KeyW.pressed())
 	{
@@ -186,7 +190,7 @@ void GameScene::draw() const
 		for (auto itr = m_smpWalls.begin(); itr != m_smpWalls.end(); itr++)
 		{
 			//float bottomPosY = (*itr)->GetBottomPosY(0);
-			float bottomPosY = (*itr)->GetBottomPosY(Scene::Time());
+			float bottomPosY = (*itr)->GetBottomPosY(m_gameTime);
 			float height = (*itr)->GetHeight();
 
 			Vec3 pos1 = Vec3{ -playerPosX , bottomPosY, 0 };
@@ -216,5 +220,6 @@ void GameScene::draw() const
 		Shader::LinearToScreen(renderTexture);
 	}
 }
+
 
 
