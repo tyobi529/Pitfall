@@ -11,11 +11,16 @@ enum class State
 // 共有するデータ
 struct GameData
 {
+
+	//1フレームの経過時間
+	float deltaTime;
+
 	// 直前のゲームのスコア
 	Optional<int32> lastGameScore;
 
 	// ハイスコア
 	Array<int32> highScores = { 50, 40, 30, 20, 10 };
+
 };
 
 using App = SceneManager<State, GameData>;

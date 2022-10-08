@@ -1,4 +1,5 @@
 ﻿# include "GameScene.h"
+//#include "Wall.h"
 
 Vec3 GetDirection(double angle)
 {
@@ -13,13 +14,52 @@ Vec3 GetFocusPosition(const Vec3& eyePosition, double angle)
 
 GameScene::GameScene(const InitData& init)
 	: IScene{ init }
+	, m_gameTime(0)
+	, m_timeSpeed(0)
 {
 
-	camera = BasicCamera3D{ renderTexture.size(), 30_deg, Vec3{ 0, 16, -32 }, GetFocusPosition(eyePosition, angle) };
+
+	//camera = BasicCamera3D{ renderTexture.size(), 30_deg, Vec3{ 0, 16, -32 }, GetFocusPosition(eyePosition, angle) };
+	camera = BasicCamera3D{ renderTexture.size(), 30_deg, eyePosition, GetFocusPosition(eyePosition, angle) };
+
+
 
 
 	playerMesh = Mesh{ MeshData::Pyramid(1.0, 1.0) };
 	playerPos = Vec3(0, 0, 0);
+
+	float posY = -50;
+	for (int i = 0; i < 30; i++)
+	{
+		float height = 0.2f * (i + 1);
+		//Wall* pWall = nullptr;
+
+		//Wall* pWall = std::make_unique<Wall>();
+		Wall::TYPE type;
+
+		if (i % 3 == 0)
+		{
+			//pWall = new Wall(Wall::NORMAL, height, posY, 0.f);
+			type = Wall::NORMAL;
+		}
+		else if (i % 3 == 1)
+		{
+			//pWall = new Wall(Wall::DAMAGE, height, posY, 0.f);
+			//m_smpWalls.push_back(std::make_unique<Wall>(Wall::DAMAGE, height, posY, 0.f));
+			type = Wall::DAMAGE;
+		}
+		else
+		{
+			//pWall = new Wall(Wall::DASH, height, posY, 0.f);
+			type = Wall::DASH;
+		}
+
+		//m_smpWalls.push_back(std::make_unique<Wall>(Wall::NORMAL, height, posY, 0.f));
+		m_smpWalls.push_back(std::make_unique<Wall>(type, height, posY, 0.f));
+
+
+		posY += height;
+	}
 }
 
 void GameScene::update()
@@ -112,10 +152,10 @@ void GameScene::draw() const
 
 
 	// 3D 描画
+	const ScopedRenderTarget3D target{ renderTexture.clear(backgroundColor) }; //これより後に書く
 	{
-		const ScopedRenderTarget3D target{ renderTexture.clear(backgroundColor) }; //これより後に書く
 
-		playerMesh.draw(playerPos, ColorF{ 0.8, 0.6, 0.4 });
+		//playerMesh.draw(playerPos, ColorF{ 0.8, 0.6, 0.4 });
 
 
 		//デバッグ
@@ -123,7 +163,50 @@ void GameScene::draw() const
 		Line3D{ Vec3{-length, 0, 0}, Vec3{length, 0, 0} }.draw();
 		Line3D{ Vec3{0, -length, 0}, Vec3{0, length, 0} }.draw();
 
+		//int size = 1;
+		//float posX = 3;
 
+
+		//左の壁
+		/*float offsetY = -20;
+		int height = 40;
+		Box::FromPoints(Vec3{ -playerPosX, offsetY, 0 }, Vec3{ -playerPosX - wallWidth, offsetY + height, depthZ }).draw();
+		Box::FromPoints(Vec3{ playerPosX, offsetY, 0 }, Vec3{ playerPosX + wallWidth, offsetY + height, depthZ }).draw();*/
+
+		//プレイヤー
+		if (isLeft)
+		{
+			Box::FromPoints(Vec3{ -playerPosX, 0, 0 }, Vec3{ -playerPosX + depthZ, depthZ, depthZ }).draw(ColorF{ 0.8, 0.9, 0.4 });
+		}
+		else
+		{
+			Box::FromPoints(Vec3{ playerPosX, 0, 0 }, Vec3{ playerPosX - depthZ, depthZ, depthZ }).draw(ColorF{ 0.8, 0.9, 0.4 });
+		}
+
+		for (auto itr = m_smpWalls.begin(); itr != m_smpWalls.end(); itr++)
+		{
+			//float bottomPosY = (*itr)->GetBottomPosY(0);
+			float bottomPosY = (*itr)->GetBottomPosY(Scene::Time());
+			float height = (*itr)->GetHeight();
+
+			Vec3 pos1 = Vec3{ -playerPosX , bottomPosY, 0 };
+			Vec3 pos2 = Vec3{ -playerPosX - wallWidth , bottomPosY + height, depthZ };
+
+			switch ((*itr)->GetType())
+			{
+			case Wall::NORMAL:
+				Box::FromPoints(pos1, pos2).draw(ColorF{ 0.8, 0.6, 0.4 });
+				break;
+			case Wall::DAMAGE:
+				Box::FromPoints(pos1, pos2).draw(ColorF{ 0.6, 0.6, 0.4 });
+				break;
+			case Wall::DASH:
+				Box::FromPoints(pos1, pos2).draw(ColorF{ 0.8, 0.4, 0.4 });
+				break;
+			default:
+				break;
+			}
+		}
 	}
 
 	// 3D シーンを 2D シーンに描画
