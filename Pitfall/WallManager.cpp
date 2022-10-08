@@ -5,28 +5,39 @@
 
 WallManager::WallManager()
 {
-	float posY = -50;
-	for (int i = 0; i < 30; i++)
+	float posY = -280.0f;
+	for (int i = 0; i < 100; i++)
 	{
-		float height = 0.2f * (i + 1);
+		//float height = 0.2f * (i + 1);
+		float height = 3.0f;
+
 
 		Wall::TYPE type;
 
-		if (i % 3 == 0)
+		if (i % 2 == 0 || i == 0)
 		{
 			type = Wall::NORMAL;
-		}
-		else if (i % 3 == 1)
-		{
-			type = Wall::DAMAGE;
+			m_smpLeftWalls.push_back(std::make_unique<Wall>(type, height, posY, 0.f));
+			m_smpRightWalls.push_back(std::make_unique<Wall>(type, height, posY, 0.f));
 		}
 		else
 		{
-			type = Wall::DASH;
+			type = Wall::DAMAGE;
+
+			if (RandomBool()) //50%でtrue
+			{
+				m_smpLeftWalls.push_back(std::make_unique<Wall>(type, height, posY, 0.f));
+				m_smpRightWalls.push_back(std::make_unique<Wall>(Wall::NORMAL, height, posY, 0.f));
+			}
+			else
+			{
+				m_smpLeftWalls.push_back(std::make_unique<Wall>(Wall::NORMAL, height, posY, 0.f));
+				m_smpRightWalls.push_back(std::make_unique<Wall>(type, height, posY, 0.f));
+			}
 		}
 
-		m_smpLeftWalls.push_back(std::make_unique<Wall>(type, height, posY, 0.f));
-		m_smpRightWalls.push_back(std::make_unique<Wall>(Wall::NORMAL, height, posY, 0.f));
+
+		
 
 		posY += height;
 	}
@@ -54,10 +65,10 @@ void WallManager::draw()
 			Box::FromPoints(pos1, pos2).draw(ColorF{ 0.8, 0.6, 0.4 });
 			break;
 		case Wall::DAMAGE:
-			Box::FromPoints(pos1, pos2).draw(ColorF{ 0.6, 0.6, 0.4 });
+			Box::FromPoints(pos1, pos2).draw(ColorF{ 0.8, 0.4, 0.4 });
 			break;
 		case Wall::DASH:
-			Box::FromPoints(pos1, pos2).draw(ColorF{ 0.8, 0.4, 0.4 });
+			Box::FromPoints(pos1, pos2).draw(ColorF{ 0.6, 0.6, 0.4 });
 			break;
 		default:
 			break;
@@ -79,10 +90,10 @@ void WallManager::draw()
 			Box::FromPoints(pos1, pos2).draw(ColorF{ 0.8, 0.6, 0.4 });
 			break;
 		case Wall::DAMAGE:
-			Box::FromPoints(pos1, pos2).draw(ColorF{ 0.6, 0.6, 0.4 });
+			Box::FromPoints(pos1, pos2).draw(ColorF{ 0.8, 0.4, 0.4 });
 			break;
 		case Wall::DASH:
-			Box::FromPoints(pos1, pos2).draw(ColorF{ 0.8, 0.4, 0.4 });
+			Box::FromPoints(pos1, pos2).draw(ColorF{ 0.6, 0.6, 0.4 });
 			break;
 		default:
 			break;
@@ -148,5 +159,6 @@ std::shared_ptr<Wall> WallManager::GetPlayerWallType(bool isLeft)
 		}
 	}
 
+	assert(false); //プレイヤーのところに壁がない
 	return nullptr;
 }

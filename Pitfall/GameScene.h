@@ -59,7 +59,7 @@ private:
 	//Vec3 playerPos;
 
 	Mesh playerMesh;
-	Vec3 playerPos;
+	//Vec3 playerPos;
 
 	int playerPosX = 3;
 	int depthZ = 1;

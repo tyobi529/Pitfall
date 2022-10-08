@@ -40,7 +40,7 @@ void GameScene::InitGame()
 
 	m_wallSpeed = Define::WALL_SPEED_FIRST;
 
-	playerPos = Vec3(0, 0, 0);
+	//playerPos = Vec3(0, 0, 0);
 
 
 	m_smpWallManager.reset(new WallManager());
@@ -55,6 +55,9 @@ void GameScene::update()
 	ClearPrint();
 	m_deltaTime = (float)Scene::DeltaTime() * m_timeSpeed;
 	m_gameTime += m_deltaTime;
+
+	float addSpeed = 0.02f;
+	m_timeSpeed += m_deltaTime * addSpeed;
 
 	//getData().UpdateTime(m_timeSpeed);
 
@@ -128,19 +131,17 @@ void GameScene::update()
 		return;
 	}
 
-	if (isLeft)
-	{
-		playerPos = Vec3(-5, 0, 0);
-	}
-	else
-	{
-		playerPos = Vec3(5, 0, 0);
-	}
+	//if (isLeft)
+	//{
+	//	playerPos = Vec3(-5, 0, 0);
+	//}
+	//else
+	//{
+	//	playerPos = Vec3(5, 0, 0);
+	//}
 
 
-	//壁の位置更新
-	float deltaPosY = m_deltaTime * m_wallSpeed;
-	m_smpWallManager->UpdateWallPos(deltaPosY);
+
 
 	std::shared_ptr<Wall> smpWall = m_smpWallManager->GetPlayerWallType(isLeft);
 	Wall::TYPE type = smpWall->GetType();
@@ -151,6 +152,8 @@ void GameScene::update()
 		break;
 	case Wall::DAMAGE:
 		Print << U"DAMAGE";
+		InitGame();
+		return;
 		break;
 	case Wall::DASH:
 		Print << U"DASH";
@@ -158,6 +161,11 @@ void GameScene::update()
 	default:
 		break;
 	}
+
+
+	//壁の位置更新
+	float deltaPosY = m_deltaTime * m_wallSpeed;
+	m_smpWallManager->UpdateWallPos(deltaPosY);
 
 }
 
@@ -173,19 +181,22 @@ void GameScene::draw() const
 
 
 		//デバッグ
-		const int length = 30;
-		Line3D{ Vec3{-length, 0, 0}, Vec3{length, 0, 0} }.draw();
-		Line3D{ Vec3{0, -length, 0}, Vec3{0, length, 0} }.draw();
+		//const int length = 30;
+		//Line3D{ Vec3{-length, 0, 0}, Vec3{length, 0, 0} }.draw();
+		//Line3D{ Vec3{0, -length, 0}, Vec3{0, length, 0} }.draw();
 
 
 		//プレイヤー
 		if (isLeft)
 		{
-			Box::FromPoints(Vec3{ -playerPosX, 0, 0 }, Vec3{ -playerPosX + depthZ, depthZ, depthZ }).draw(ColorF{ 0.8, 0.9, 0.4 });
+			//Box::FromPoints(Vec3{ -playerPosX, 0, 0 }, Vec3{ -playerPosX + depthZ, depthZ, depthZ }).draw(ColorF{ 0.8, 0.9, 0.4 });
+			Box::FromPoints(Vec3{ -Define::PLAYER_POS.x, Define::PLAYER_POS.y, 0 }, Vec3{ -Define::PLAYER_POS.x + Define::DEPTH_Z, Define::PLAYER_POS.y + Define::DEPTH_Z, Define::DEPTH_Z }).draw(ColorF{ 0.8, 0.9, 0.4 });
+
 		}
 		else
 		{
-			Box::FromPoints(Vec3{ playerPosX, 0, 0 }, Vec3{ playerPosX - depthZ, depthZ, depthZ }).draw(ColorF{ 0.8, 0.9, 0.4 });
+			//Box::FromPoints(Vec3{ playerPosX, 0, 0 }, Vec3{ playerPosX - depthZ, depthZ, depthZ }).draw(ColorF{ 0.8, 0.9, 0.4 });
+			Box::FromPoints(Vec3{ Define::PLAYER_POS.x, Define::PLAYER_POS.y, 0 }, Vec3{ Define::PLAYER_POS.x - Define::DEPTH_Z, Define::PLAYER_POS.y + Define::DEPTH_Z, Define::DEPTH_Z }).draw(ColorF{ 0.8, 0.9, 0.4 });
 		}
 
 		m_smpWallManager->draw();
