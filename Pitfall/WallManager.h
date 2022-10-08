@@ -15,6 +15,8 @@ public:
 
 private:
 
-	std::vector<std::unique_ptr<Wall>> m_smpWalls;
+	std::vector<std::unique_ptr<Wall>> m_smpLeftWalls;
+	std::vector<std::unique_ptr<Wall>> m_smpRightWalls;
+
 
 };

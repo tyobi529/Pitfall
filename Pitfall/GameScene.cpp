@@ -156,23 +156,12 @@ void GameScene::draw() const
 	const ScopedRenderTarget3D target{ renderTexture.clear(backgroundColor) }; //これより後に書く
 	{
 
-		//playerMesh.draw(playerPos, ColorF{ 0.8, 0.6, 0.4 });
-
 
 		//デバッグ
 		const int length = 30;
 		Line3D{ Vec3{-length, 0, 0}, Vec3{length, 0, 0} }.draw();
 		Line3D{ Vec3{0, -length, 0}, Vec3{0, length, 0} }.draw();
 
-		//int size = 1;
-		//float posX = 3;
-
-
-		//左の壁
-		/*float offsetY = -20;
-		int height = 40;
-		Box::FromPoints(Vec3{ -playerPosX, offsetY, 0 }, Vec3{ -playerPosX - wallWidth, offsetY + height, depthZ }).draw();
-		Box::FromPoints(Vec3{ playerPosX, offsetY, 0 }, Vec3{ playerPosX + wallWidth, offsetY + height, depthZ }).draw();*/
 
 		//プレイヤー
 		if (isLeft)
