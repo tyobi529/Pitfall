@@ -43,8 +43,6 @@ void GameScene::InitGame()
 	playerPos = Vec3(0, 0, 0);
 
 
-	//m_smpWallManager.reset();
-	//WallManager* pWallManager = 
 	m_smpWallManager.reset(new WallManager());
 
 }
@@ -144,6 +142,23 @@ void GameScene::update()
 	float deltaPosY = m_deltaTime * m_wallSpeed;
 	m_smpWallManager->UpdateWallPos(deltaPosY);
 
+	std::shared_ptr<Wall> smpWall = m_smpWallManager->GetPlayerWallType(isLeft);
+	Wall::TYPE type = smpWall->GetType();
+	switch (type)
+	{
+	case Wall::NORMAL:
+		Print << U"NORMAL";
+		break;
+	case Wall::DAMAGE:
+		Print << U"DAMAGE";
+		break;
+	case Wall::DASH:
+		Print << U"DASH";
+		break;
+	default:
+		break;
+	}
+
 }
 
 void GameScene::draw() const
@@ -174,7 +189,6 @@ void GameScene::draw() const
 		}
 
 		m_smpWallManager->draw();
-
 
 	}
 
