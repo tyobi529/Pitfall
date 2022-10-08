@@ -17,7 +17,9 @@ Vec3 GetFocusPosition(const Vec3& eyePosition, double angle)
 GameScene::GameScene(const InitData& init)
 	: IScene{ init }
 	, m_gameTime(0)
+	, m_deltaTime(0)
 	, m_timeSpeed(0)
+	, m_wallSpeed(0)
 {
 
 
@@ -33,45 +35,35 @@ GameScene::GameScene(const InitData& init)
 void GameScene::InitGame()
 {
 	m_gameTime = 0.0f;
-	m_timeSpeed = Define::TIME_SPEED_FIRST;
+	m_deltaTime = 0.0f;
+	m_timeSpeed = 1.0f;
+
+	m_wallSpeed = Define::WALL_SPEED_FIRST;
 
 	playerPos = Vec3(0, 0, 0);
 
-	float posY = -50;
-	for (int i = 0; i < 30; i++)
-	{
-		float height = 0.2f * (i + 1);
 
-		Wall::TYPE type;
+	//m_smpWallManager.reset();
+	//WallManager* pWallManager = 
+	m_smpWallManager.reset(new WallManager());
 
-		if (i % 3 == 0)
-		{
-			type = Wall::NORMAL;
-		}
-		else if (i % 3 == 1)
-		{
-			type = Wall::DAMAGE;
-		}
-		else
-		{
-			type = Wall::DASH;
-		}
-
-		m_smpWalls.push_back(std::make_unique<Wall>(type, height, posY, 0.f));
-
-		posY += height;
-	}
 }
+
+
 
 void GameScene::update()
 {
 	//ゲーム中動かさないがデバック用にカメラの移動
 	ClearPrint();
-	const float deltaTime = (float)Scene::DeltaTime();
-	m_gameTime += deltaTime * m_timeSpeed;
+	m_deltaTime = (float)Scene::DeltaTime() * m_timeSpeed;
+	m_gameTime += m_deltaTime;
 
-	const float speed = (float)(deltaTime * 2.0);
+	//getData().UpdateTime(m_timeSpeed);
 
+	//const float deltaTime = (float)Scene::DeltaTime();
+	//const float deltaTime = getData().gameTime;
+	//const float speed = (float)(m_deltaTime * 2.0);
+	const float speed = m_deltaTime * 2.0;
 
 
 	if (KeyW.pressed())
@@ -96,7 +88,7 @@ void GameScene::update()
 
 	if (KeyLeft.pressed())
 	{
-		angle -= (deltaTime * 30_deg);
+		angle -= (m_deltaTime * 30_deg);
 
 		if (angle < 0_deg)
 		{
@@ -106,7 +98,7 @@ void GameScene::update()
 
 	if (KeyRight.pressed())
 	{
-		angle += (deltaTime * 30_deg);
+		angle += (m_deltaTime * 30_deg);
 
 		if (360_deg < angle)
 		{
@@ -146,6 +138,11 @@ void GameScene::update()
 	{
 		playerPos = Vec3(5, 0, 0);
 	}
+
+
+	//壁の位置更新
+	float deltaPosY = m_deltaTime * m_wallSpeed;
+	m_smpWallManager->UpdateWallPos(deltaPosY);
 
 }
 
@@ -187,30 +184,9 @@ void GameScene::draw() const
 			Box::FromPoints(Vec3{ playerPosX, 0, 0 }, Vec3{ playerPosX - depthZ, depthZ, depthZ }).draw(ColorF{ 0.8, 0.9, 0.4 });
 		}
 
-		for (auto itr = m_smpWalls.begin(); itr != m_smpWalls.end(); itr++)
-		{
-			//float bottomPosY = (*itr)->GetBottomPosY(0);
-			float bottomPosY = (*itr)->GetBottomPosY(m_gameTime);
-			float height = (*itr)->GetHeight();
+		m_smpWallManager->draw();
 
-			Vec3 pos1 = Vec3{ -playerPosX , bottomPosY, 0 };
-			Vec3 pos2 = Vec3{ -playerPosX - wallWidth , bottomPosY + height, depthZ };
 
-			switch ((*itr)->GetType())
-			{
-			case Wall::NORMAL:
-				Box::FromPoints(pos1, pos2).draw(ColorF{ 0.8, 0.6, 0.4 });
-				break;
-			case Wall::DAMAGE:
-				Box::FromPoints(pos1, pos2).draw(ColorF{ 0.6, 0.6, 0.4 });
-				break;
-			case Wall::DASH:
-				Box::FromPoints(pos1, pos2).draw(ColorF{ 0.8, 0.4, 0.4 });
-				break;
-			default:
-				break;
-			}
-		}
 	}
 
 	// 3D シーンを 2D シーンに描画

@@ -2,10 +2,10 @@
 #include "Wall.h"
 
 
-Wall::Wall(TYPE type, float height, float generatedPosY, float generatedTime) :
+Wall::Wall(TYPE type, float height, float posY, float generatedTime) :
 	m_type(type),
 	m_height(height),
-	m_generatedPosY(generatedPosY),
+	m_posY(posY),
 	m_generatedTime(generatedTime)
 {
 
@@ -16,20 +16,20 @@ Wall::~Wall()
 
 }
 
-void Wall::update()
-{
+//void Wall::update()
+//{
+//
+//}
+//
+//
+//void Wall::draw()
+//{
+//
+//}
 
-}
 
-
-void Wall::draw()
-{
-
-}
-
-
-float Wall::GetBottomPosY(float currentTime)
-{
-	float speed = 1.0f;
-	return m_generatedPosY + (currentTime - m_generatedTime) * speed;
-}
+//float Wall::GetBottomPosY(float currentTime)
+//{
+//	float speed = 1.0f;
+//	return m_generatedPosY + (currentTime - m_generatedTime) * speed;
+//}

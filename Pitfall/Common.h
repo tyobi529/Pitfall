@@ -11,7 +11,8 @@ enum class State
 // 共有するデータ
 struct GameData
 {
-
+	//ゲーム時間
+	float gameTime;
 	//1フレームの経過時間
 	float deltaTime;
 
@@ -20,6 +21,25 @@ struct GameData
 
 	// ハイスコア
 	Array<int32> highScores = { 50, 40, 30, 20, 10 };
+
+	GameData() :
+		gameTime(0),
+		deltaTime(0)
+	{
+	}
+
+	~GameData() {};
+
+	void Init() {
+		gameTime = 0;
+		deltaTime = 0;
+	}
+
+	void UpdateTime(float timeSpeed = 1.0f)
+	{
+		deltaTime = timeSpeed * (float)Scene::DeltaTime();
+		gameTime += deltaTime;
+	}
 
 };
 

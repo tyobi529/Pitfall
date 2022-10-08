@@ -3,7 +3,10 @@
 #include <vector>
 #include <memory>   // スマートポインタ
 #include "Wall.h"
+
+#include "WallManager.h"
 //class Wall;
+
 
 // ゲームシーン
 class GameScene : public App::Scene
@@ -71,8 +74,12 @@ private:
 	std::vector<std::unique_ptr<Wall>> m_smpWalls;
 
 
-	//ゲーム時間
-	float m_gameTime;
-	//時間経過速度
-	float m_timeSpeed;
+	//== 時間 ==
+	float m_gameTime; //ゲームシーンの経過時間合計
+	float m_deltaTime; //前フレームからの経過時間
+	float m_timeSpeed; //時間経過速度（基本的に1）
+
+	float m_wallSpeed;
+
+	std::unique_ptr<WallManager> m_smpWallManager;
 };
