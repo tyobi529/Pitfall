@@ -91,10 +91,13 @@ private:
 
 	//std::vector<std::unique_ptr<BlockUnit>> m_smpBlockUnit;
 
-	std::unique_ptr<BlockUnit> m_blockUnits[Define::BLOCK_H_NUM];
+	//std::unique_ptr<BlockUnit> m_blockUnits[Define::BLOCK_H_NUM];
+	std::vector<std::unique_ptr<BlockUnit>> m_smpBlockUnits; //rotateするためvector
 
 
 	const Texture woodTexture{ U"example/texture/wood.jpg", TextureDesc::MippedSRGB };
 
 	int m_blockIndex;
+
+	float m_difX;
 };

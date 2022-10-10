@@ -28,14 +28,15 @@ const float Define::FIELD_RANGE_Y = 10.0f;
 const float Define::GROUND_POS_Y = 0.0f;
 
 const float Define::BLOCK_LIMIT_POS_X = 0.0f;
-const float Define::BLOCK_GENERATED_POS_X = 10.0f;
+const float Define::BLOCK_SIZE = 1.0f;
+
+const float Define::BLOCK_GENERATED_POS_X = Define::BLOCK_SIZE * BLOCK_H_NUM;
 
 const float Define::BLOCK_SPEED = 1.0f;
 
 //const int Define::BLOCK_NUM_V = 12; 
 //const int Define::BLOCK_HALL_NUM = 2; //穴が開けられる部分のブロックの数。
 
-const float Define::BLOCK_SIZE = 1.0f;
 
 //player
 //const Vec3 Define::PLAYER_POS = Vec3(4, 0, 0); //右にいるときのプレイヤーの座標。右下手前の点。これを基準にwallも作る

@@ -29,11 +29,6 @@ public:
 
 	};
 
-	//const Texture woodTexture{ U"example/texture/wood.jpg", TextureDesc::MippedSRGB };
-
-	//const static Texture woodTexture;
-	//const static Texture woodTexture{ U"example/texture/wood.jpg", TextureDesc::MippedSRGB };
-
 
 	const static float GROUND_POS_Y;
 

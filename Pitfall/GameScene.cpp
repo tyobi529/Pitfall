@@ -21,6 +21,8 @@ GameScene::GameScene(const InitData& init)
 	, m_timeSpeed(0)
 	, m_wallSpeed(0)
 	, eyePosition(Define::EYE_POS)
+	, m_blockIndex(0)
+	, m_difX(0)
 {
 
 
@@ -50,6 +52,7 @@ void GameScene::InitGame()
 	m_smpPlayer.reset(new Player());
 
 	//m_smpBlockUnit.reset(new BlockUnit());
+	m_smpBlockUnits.clear();
 
 	Block::TYPE types[Define::BLOCK_HURDLE_NUM] = {};
 	for (int i = 0; i < Define::BLOCK_HURDLE_NUM; i++)
@@ -69,11 +72,15 @@ void GameScene::InitGame()
 	}
 	for (int i = 0; i < Define::BLOCK_H_NUM; i++)
 	{
-		m_blockUnits[i] = std::make_unique<BlockUnit>();
-		m_blockUnits[i]->Init(types, m_gameTime, Define::BLOCK_SIZE * i);
-
+		m_smpBlockUnits.push_back(std::make_unique<BlockUnit>());
+		m_smpBlockUnits[i]->Init(types);
+		m_smpBlockUnits[i]->UpdatePos(Define::BLOCK_SIZE * i);
 	}
 
+
+	m_difX = 0;
+
+	m_blockIndex = 0;
 }
 
 
@@ -199,9 +206,39 @@ void GameScene::update()
 	//	(*itr)->update();
 	//}
 
+
+	//移動量計算
+	m_difX += m_deltaTime * Define::BLOCK_SPEED;
+
+	//更新
+	if (m_difX > 1.0f)
+	{
+		std::rotate(m_smpBlockUnits.begin(), m_smpBlockUnits.begin() + 1, m_smpBlockUnits.end());
+		m_difX -= 1.0f;
+
+		Block::TYPE types[Define::BLOCK_HURDLE_NUM] = {};
+		for (int i = 0; i < Define::BLOCK_HURDLE_NUM; i++)
+		{
+			if (i < Define::BLOCK_HURDLE_HALL_NUM)
+			{
+				types[i] = Block::BLOCK_HALL;
+			}
+			else if (i < Define::BLOCK_HURDLE_HALL_NUM + Define::BLOCK_HURDLE_CENTER_NUM)
+			{
+				types[i] = Block::BLOCK_NONE;
+			}
+			else
+			{
+				types[i] = Block::BLOCK_HALL;
+			}
+		}
+		m_smpBlockUnits[Define::BLOCK_H_NUM - 1]->Init(types);
+	}
+
 	for (int i = 0; i < Define::BLOCK_H_NUM; i++)
 	{
-		//m_blockUnits[i]->UpdatePos(m_gameTime);
+		float posX = Define::BLOCK_SIZE * i - m_difX;
+		m_smpBlockUnits[i]->UpdatePos(posX);
 	}
 }
 
@@ -264,7 +301,7 @@ void GameScene::draw() const
 
 		for (int i = 0; i < Define::BLOCK_H_NUM; i++)
 		{
-			m_blockUnits[i]->draw();
+			m_smpBlockUnits[i]->draw();
 		}
 
 		//Box::FromPoints(Vec3{ 0, 0, 0 }, Vec3{ 20, 5, 1 }).draw(TextureAsset(U"uvChecker"));
@@ -278,9 +315,4 @@ void GameScene::draw() const
 		Shader::LinearToScreen(renderTexture);
 	}
 
-
-
-	// 座標 (20, 40) を左上の基準位置にして、幅 400, 高さ 100 の長方形を描く
-	//int size = 250;
-	//Rect{ 0, Define::WIN_W - size, Define::WIN_H, size }.draw();
 }

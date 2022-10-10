@@ -9,12 +9,13 @@ public:
 	BlockUnit();
 	~BlockUnit();
 
-	void Init(Block::TYPE* types, float generatedTime, float generatedPosX = Define::BLOCK_GENERATED_POS_X);
+	void Init(Block::TYPE* types);
 
 	void update();
 	void draw();
 
-	void UpdatePos(float currentTime);
+	void UpdatePos(float moveX);
+
 private:
 
 	//std::vector<std::unique_ptr<Block>> m_blocks;
@@ -24,8 +25,9 @@ private:
 
 	std::unique_ptr<Block> m_hBlocks[Define::BLOCK_HURDLE_NUM];//真ん中の可変部分
 
-	float m_generatedTime;
-	float m_generatedPosX;
+	//float m_generatedTime;
+	//float m_generatedPosX;
+	//float m_posX;
 
 
 };
