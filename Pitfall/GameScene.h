@@ -50,7 +50,7 @@ private:
 	const Texture uvChecker{ U"example/texture/uv.png", TextureDesc::MippedSRGB };
 	const MSRenderTexture renderTexture{ Scene::Size(), TextureFormat::R8G8B8A8_Unorm_SRGB, HasDepth::Yes };
 
-	Vec3 eyePosition{ 6, 7, -35 };
+	Vec3 eyePosition;
 
 	double angle = 0_deg;
 	BasicCamera3D camera;

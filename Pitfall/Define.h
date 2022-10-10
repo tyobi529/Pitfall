@@ -4,21 +4,36 @@
 class Define final {
 	
 public:
+	static void RegisterTexture();
+
+	//===================================
+	const static int WIN_H;	//ウィンドウサイズ縦
+	const static int WIN_W;	//ウィンドウサイズ横
+
+	//カメラ位置
+	const static Vec3 EYE_POS;
+
 	//=============　定数 =================
 	enum
 	{
-		BLOCK_GROUND_TOP_NUM = 3,
-		BLOCK_GROUND_BOTTOM_NUM = 5,
+		BLOCK_GROUND_TOP_NUM = 5,
+		BLOCK_GROUND_BOTTOM_NUM = 3,
 
 		BLOCK_HURDLE_CENTER_NUM = 8,
 		BLOCK_HURDLE_HALL_NUM = 2, //流れるブロックのうち、穴をあけられる部分
 
 		BLOCK_HURDLE_NUM = BLOCK_HURDLE_CENTER_NUM + 2 * BLOCK_HURDLE_HALL_NUM,
 		BLOCK_V_NUM = BLOCK_GROUND_BOTTOM_NUM + BLOCK_HURDLE_NUM + BLOCK_GROUND_TOP_NUM,
-		BLOCK_H_NUM = 10, //横に並ぶすべてのブロックの数
+		BLOCK_H_NUM = 15, //横に並ぶすべてのブロックの数
 
 
 	};
+
+	//const Texture woodTexture{ U"example/texture/wood.jpg", TextureDesc::MippedSRGB };
+
+	//const static Texture woodTexture;
+	//const static Texture woodTexture{ U"example/texture/wood.jpg", TextureDesc::MippedSRGB };
+
 
 	const static float GROUND_POS_Y;
 
@@ -27,9 +42,7 @@ public:
 
 	const static float BLOCK_SPEED;
 
-	//===================================
-	const static int WIN_H;	//ウィンドウサイズ縦
-	const static int WIN_W;	//ウィンドウサイズ横
+
 
 	//============ GameScene ============
 	//const static float TIME_SPEED_FIRST;	//最初の時間経過速度

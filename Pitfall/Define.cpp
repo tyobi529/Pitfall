@@ -1,8 +1,23 @@
 ﻿#include "Define.h"
 
+
+void Define::RegisterTexture()
+{
+	TextureAsset::Register(U"wood", U"example/texture/wood.jpg");
+
+	TextureAsset::Register(U"uvChecker", U"example/texture/uv.png");
+}
+
+
 const int   Define::WIN_H = 540;		//ウィンドウサイズ縦
 const int   Define::WIN_W = 960;		//ウィンドウサイズ横
 
+
+//カメラ位置
+const Vec3 Define::EYE_POS = Vec3(7.5f, 10, -35);
+
+//const Texture woodTexture{ U"example/texture/wood.jpg", TextureDesc::MippedSRGB };
+//const Texture woodTexture = Texture{ U"example/texture/wood.jpg", TextureDesc::MippedSRGB };
 
 //============ GameScene ============
 //const float Define::TIME_SPEED_FIRST = 1.0f;	//最初の時間経過速度

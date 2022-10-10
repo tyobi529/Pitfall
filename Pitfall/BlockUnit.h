@@ -9,7 +9,7 @@ public:
 	BlockUnit();
 	~BlockUnit();
 
-	void Init(float generatedTime, float generatedPosX = Define::BLOCK_GENERATED_POS_X);
+	void Init(Block::TYPE* types, float generatedTime, float generatedPosX = Define::BLOCK_GENERATED_POS_X);
 
 	void update();
 	void draw();
@@ -19,10 +19,14 @@ private:
 
 	//std::vector<std::unique_ptr<Block>> m_blocks;
 
+	std::unique_ptr<Block> m_tBlocks[Define::BLOCK_GROUND_TOP_NUM];//上の固定部分
+	std::unique_ptr<Block> m_bBlocks[Define::BLOCK_GROUND_BOTTOM_NUM];//下の固定部分
 
-	std::unique_ptr<Block> m_blocks[Define::BLOCK_HURDLE_NUM];
+	std::unique_ptr<Block> m_hBlocks[Define::BLOCK_HURDLE_NUM];//真ん中の可変部分
 
 	float m_generatedTime;
 	float m_generatedPosX;
+
+
 };
 

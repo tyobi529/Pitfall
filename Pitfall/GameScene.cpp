@@ -20,6 +20,7 @@ GameScene::GameScene(const InitData& init)
 	, m_deltaTime(0)
 	, m_timeSpeed(0)
 	, m_wallSpeed(0)
+	, eyePosition(Define::EYE_POS)
 {
 
 
@@ -50,13 +51,27 @@ void GameScene::InitGame()
 
 	//m_smpBlockUnit.reset(new BlockUnit());
 
+	Block::TYPE types[Define::BLOCK_HURDLE_NUM] = {};
+	for (int i = 0; i < Define::BLOCK_HURDLE_NUM; i++)
+	{
+		if (i < Define::BLOCK_HURDLE_HALL_NUM)
+		{
+			types[i] = Block::BLOCK_HALL;
+		}
+		else if (i < Define::BLOCK_HURDLE_HALL_NUM + Define::BLOCK_HURDLE_CENTER_NUM)
+		{
+			types[i] = Block::BLOCK_NONE;
+		}
+		else
+		{
+			types[i] = Block::BLOCK_HALL;
+		}
+	}
 	for (int i = 0; i < Define::BLOCK_H_NUM; i++)
 	{
-		//float posX = 5.0f + i;
-		//m_smpLeftWalls.push_back(std::make_unique<Wall>(type, height, posY, 0.f));
-		//m_smpBlockUnit.push_back(std::make_unique<BlockUnit>(0));
 		m_blockUnits[i] = std::make_unique<BlockUnit>();
-		m_blockUnits[i]->Init(m_gameTime, Define::BLOCK_SIZE * i);
+		m_blockUnits[i]->Init(types, m_gameTime, Define::BLOCK_SIZE * i);
+
 	}
 
 }
@@ -171,26 +186,6 @@ void GameScene::update()
 
 
 
-	//std::shared_ptr<Wall> smpWall = m_smpWallManager->GetPlayerWallType(isLeft);
-	//Wall::TYPE type = smpWall->GetType();
-	//switch (type)
-	//{
-	//case Wall::NORMAL:
-	//	Print << U"NORMAL";
-	//	break;
-	//case Wall::DAMAGE:
-	//	Print << U"DAMAGE";
-	//	//InitGame();
-	//	return;
-	//	break;
-	//case Wall::DASH:
-	//	Print << U"DASH";
-	//	break;
-	//default:
-	//	break;
-	//}
-
-
 	//壁の位置更新
 	//float deltaPosY = m_deltaTime * m_wallSpeed;
 	//m_smpWallManager->UpdateWallPos(deltaPosY);
@@ -206,7 +201,7 @@ void GameScene::update()
 
 	for (int i = 0; i < Define::BLOCK_H_NUM; i++)
 	{
-		m_blockUnits[i]->UpdatePos(m_gameTime);
+		//m_blockUnits[i]->UpdatePos(m_gameTime);
 	}
 }
 
@@ -221,29 +216,16 @@ void GameScene::draw() const
 	{
 
 		//デバッグ
-		//int length = 30;
-		//Line3D{ Vec3{-length, 0, 0}, Vec3{length, 0, 0} }.draw(ColorF(0, 0, 0, 1));
-		//Line3D{ Vec3{0, -length, 0}, Vec3{0, length, 0} }.draw(ColorF(0, 0, 0, 1));
-		//for (int i = 1; i < 10; i++) //縦線
-		//{
-		//	Line3D{ Vec3{i - 0.5f, -length, 0}, Vec3{i - 0.5f, length, 0} }.draw();
-		//	Line3D{ Vec3{-i + 0.5f, -length, 0}, Vec3{-i + 0.5f, length, 0} }.draw();
-		//}
-		//for (int i = 1; i < 10; i++) //横線
-		//{
-		//	Line3D{ Vec3{-length, i - 0.5f, 0}, Vec3{length, i - 0.5f, 0} }.draw();
-		//	Line3D{ Vec3{-length, -i + 0.5f, 0}, Vec3{length, -i + 0.5f, 0} }.draw();
-		//}
 
 		int length = 30;
 		Line3D{ Vec3{-length, 0, 0}, Vec3{length, 0, 0} }.draw(ColorF(0, 0, 0, 1));
 		Line3D{ Vec3{0, -length, 0}, Vec3{0, length, 0} }.draw(ColorF(0, 0, 0, 1));
-		for (int i = 1; i < 10; i++) //縦線
+		for (int i = 1; i < 15; i++) //縦線
 		{
 			Line3D{ Vec3{i, -length, 0}, Vec3{i, length, 0} }.draw();
 			Line3D{ Vec3{-i, -length, 0}, Vec3{-i, length, 0} }.draw();
 		}
-		for (int i = 1; i < 10; i++) //横線
+		for (int i = 1; i < 15; i++) //横線
 		{
 			Line3D{ Vec3{-length, i, 0}, Vec3{length, i, 0} }.draw();
 			Line3D{ Vec3{-length, -i, 0}, Vec3{length, -i, 0} }.draw();
@@ -272,63 +254,7 @@ void GameScene::draw() const
 		m_smpPlayer->draw();
 
 
-		//地面
-		//--下--
-		//{
-		//	//穴をあけられる分
-		//	Box::FromPoints(Vec3{ -Define::FIELD_RANGE_X , -Define::BLOCK_HALL_NUM * 2.0f, 0.0f },
-		//	Vec3{ Define::FIELD_RANGE_X , Define::GROUND_POS_Y, Define::DEPTH_Z }).draw(ColorF{ 0.8, 0.6, 0.4 });
-
-		//	Box::FromPoints(Vec3{ -Define::FIELD_RANGE_X , -Define::FIELD_RANGE_Y, 0.0f },
-		//		Vec3{ Define::FIELD_RANGE_X , Define::GROUND_POS_Y - Define::BLOCK_HALL_NUM * 1.0f, Define::DEPTH_Z }).draw(ColorF{ 0.8, 0.9, 0.4 });
-		//}
-		//
-		////--上--
-		//{
-		//	//穴をあけられる分
-		//	Vec3 hallPos1 = Vec3(-Define::FIELD_RANGE_X, Define::GROUND_POS_Y + Define::BLOCK_NUM_V - Define::BLOCK_HALL_NUM, 0.0f);
-		//	Vec3 hallPos2 = Vec3(Define::FIELD_RANGE_X, Define::GROUND_POS_Y + Define::BLOCK_NUM_V, Define::DEPTH_Z);
-		//	Box::FromPoints(hallPos1, hallPos2).draw(ColorF{ 0.8, 0.6, 0.4 });
-
-		//	Vec3 groundPos1 = Vec3(hallPos1.x, hallPos2.y, hallPos1.z);
-		//	Vec3 groundPos2 = Vec3()
-		//	pos1 = Vec3(-Define::FIELD_RANGE_X, Define::GROUND_POS_Y + Define::BLOCK_NUM_V - Define::BLOCK_HALL_NUM, 0.0f);
-		//	pos2 = Vec3(Define::FIELD_RANGE_X, Define::GROUND_POS_Y + Define::BLOCK_NUM_V, Define::DEPTH_Z);
-		//	Box::FromPoints(Vec3{ -Define::FIELD_RANGE_X , -Define::FIELD_RANGE_Y, 0.0f },
-		//		Vec3{ Define::FIELD_RANGE_X , Define::GROUND_POS_Y - Define::BLOCK_HALL_NUM * 1.0f, Define::DEPTH_Z }).draw(ColorF{ 0.8, 0.9, 0.4 });
-		//}
-
-		//フィールド（固定部分）
-		//下
-		for (int i = 0; i < Define::BLOCK_GROUND_BOTTOM_NUM; i++)
-		{
-			for (int j = 0; j < Define::BLOCK_H_NUM; j++)
-			{
-				float posX = j * Define::BLOCK_SIZE + Define::BLOCK_SIZE / 2.0f;
-				float posY = Define::GROUND_POS_Y - i * Define::BLOCK_SIZE - Define::BLOCK_SIZE / 2.0f;
-				float posZ = Define::BLOCK_SIZE / 2.0f;
-				Box{ posX, posY, posZ, Define::BLOCK_SIZE}.draw(woodTexture);
-			}
-		}
-
-		//上
-		for (int i = 0; i < Define::BLOCK_GROUND_TOP_NUM; i++)
-		{
-			float posY = Define::GROUND_POS_Y + Define::BLOCK_HURDLE_NUM * Define::BLOCK_SIZE
-				+ Define::BLOCK_SIZE * i + Define::BLOCK_SIZE / 2.0f;
-
-			for (int j = 0; j < Define::BLOCK_H_NUM; j++)
-			{
-				float posX = j * Define::BLOCK_SIZE + Define::BLOCK_SIZE / 2.0f;
-				//float posY = Define::GROUND_POS_Y - i * Define::BLOCK_SIZE - Define::BLOCK_SIZE / 2.0f;
-				//float posY = basePosY + Define::BLOCK_SIZE * j + Define::BLOCK_SIZE / 2.0f;
-
-				float posZ = Define::BLOCK_SIZE / 2.0f;
-				Box{ posX, posY, posZ, Define::BLOCK_SIZE }.draw(woodTexture);
-			}
-		}
-
-		
+	
 		
 		//m_smpBlockUnit->draw();
 		//for (auto itr = m_smpBlockUnit.begin(); itr != m_smpBlockUnit.end(); itr++)
@@ -340,6 +266,9 @@ void GameScene::draw() const
 		{
 			m_blockUnits[i]->draw();
 		}
+
+		//Box::FromPoints(Vec3{ 0, 0, 0 }, Vec3{ 20, 5, 1 }).draw(TextureAsset(U"uvChecker"));
+
 	}
 
 	// 3D シーンを 2D シーンに描画

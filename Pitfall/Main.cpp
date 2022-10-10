@@ -9,6 +9,8 @@ void Main()
 {
 	Window::Resize(Define::WIN_H, Define::WIN_W);
 
+	Define::RegisterTexture(); //テクスチャ登録
+
 	FontAsset::Register(U"TitleFont", FontMethod::MSDF, 50, U"example/font/RocknRoll/RocknRollOne-Regular.ttf");
 	FontAsset(U"TitleFont").setBufferThickness(4);
 	FontAsset::Register(U"Menu", FontMethod::MSDF, 40, Typeface::Medium);

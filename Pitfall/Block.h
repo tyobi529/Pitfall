@@ -24,5 +24,7 @@ private:
 
 
 	Vec3 m_centerPos;
+
+
 };
 

@@ -24,10 +24,10 @@ void Block::draw()
 		//Box{ m_centerPos, Define::BLOCK_SIZE }.draw(ColorF{ 0.8, 0.6, 0.4, 0.5f }.removeSRGBCurve());
 		break;
 	case Block::BLOCK_GROUND:
-		Box{ m_centerPos, Define::BLOCK_SIZE }.draw(ColorF{ 0.6, 0.4, 0.4 }.removeSRGBCurve());
+		Box{ m_centerPos, Define::BLOCK_SIZE }.draw(TextureAsset(U"wood"));
 		break;
 	case Block::BLOCK_HALL:
-		Box{ m_centerPos, Define::BLOCK_SIZE }.draw(ColorF{ 0.6, 0.6, 0.4 }.removeSRGBCurve());
+		Box{ m_centerPos, Define::BLOCK_SIZE }.draw(ColorF{ 0, 0.5, 0 }.removeSRGBCurve());
 		break;
 	case Block::BLOCK_NORMAL:
 		Box{ m_centerPos, Define::BLOCK_SIZE }.draw(ColorF{ 0.8, 0.6, 0.4 }.removeSRGBCurve());
