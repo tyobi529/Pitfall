@@ -56,21 +56,7 @@ void GameScene::InitGame()
 	m_smpBlockUnits.clear();
 
 	Block::TYPE types[Define::BLOCK_HURDLE_NUM] = {};
-	for (int i = 0; i < Define::BLOCK_HURDLE_NUM; i++)
-	{
-		if (i < Define::BLOCK_HURDLE_HALL_NUM)
-		{
-			types[i] = Block::BLOCK_HALL;
-		}
-		else if (i < Define::BLOCK_HURDLE_HALL_NUM + Define::BLOCK_HURDLE_CENTER_NUM)
-		{
-			types[i] = Block::BLOCK_NONE;
-		}
-		else
-		{
-			types[i] = Block::BLOCK_HALL;
-		}
-	}
+	DecideBlockType(types, true);
 	for (int i = 0; i < Define::BLOCK_H_NUM; i++)
 	{
 		m_smpBlockUnits.push_back(std::make_unique<BlockUnit>());
@@ -218,9 +204,30 @@ void GameScene::update()
 		std::rotate(m_smpBlockUnits.begin(), m_smpBlockUnits.begin() + 1, m_smpBlockUnits.end());
 		m_difX -= 1.0f;
 
-		Block::TYPE types[Define::BLOCK_HURDLE_NUM] = {};
-		DecideBlockType(types);
-		m_smpBlockUnits[Define::BLOCK_H_NUM - 1]->Init(types);
+		if (m_count == 0)
+		{
+			Block::TYPE types[Define::BLOCK_HURDLE_NUM] = {};
+			DecideBlockType(types);
+			m_smpBlockUnits[Define::BLOCK_H_NUM - 1]->Init(types);
+
+			m_count++;
+		}
+		else
+		{
+			Block::TYPE types[Define::BLOCK_HURDLE_NUM] = {};
+			DecideBlockType(types, true);
+			m_smpBlockUnits[Define::BLOCK_H_NUM - 1]->Init(types);
+
+			if (m_count == 5)
+			{
+				m_count = 0;
+			}
+			else
+			{
+				m_count++;
+			}
+		}
+
 	}
 
 	for (int i = 0; i < Define::BLOCK_H_NUM; i++)
@@ -306,9 +313,8 @@ void GameScene::draw() const
 }
 
 
-void GameScene::DecideBlockType(Block::TYPE* pType)
+void GameScene::DecideBlockType(Block::TYPE* pType, bool isNone)
 {
-	//Block::TYPE types[Define::BLOCK_HURDLE_NUM] = {};
 	for (int i = 0; i < Define::BLOCK_HURDLE_NUM; i++)
 	{
 		if (i < Define::BLOCK_HURDLE_HALL_NUM)
@@ -317,14 +323,22 @@ void GameScene::DecideBlockType(Block::TYPE* pType)
 		}
 		else if (i < Define::BLOCK_HURDLE_HALL_NUM + Define::BLOCK_HURDLE_CENTER_NUM)
 		{
-			if (RandomBool())
+			if (isNone)
 			{
 				pType[i] = Block::BLOCK_NONE;
 			}
 			else
 			{
-				pType[i] = Block::BLOCK_NORMAL;
+				if (RandomBool())
+				{
+					pType[i] = Block::BLOCK_NONE;
+				}
+				else
+				{
+					pType[i] = Block::BLOCK_NORMAL;
+				}
 			}
+
 		}
 		else
 		{

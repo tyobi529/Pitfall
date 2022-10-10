@@ -23,7 +23,7 @@ public:
 
 	void InitGame();
 
-	void DecideBlockType(Block::TYPE* pType);
+	void DecideBlockType(Block::TYPE* pType, bool isNone = false);
 
 private:
 
