@@ -28,6 +28,7 @@ GameScene::GameScene(const InitData& init)
 
 	playerMesh = Mesh{ MeshData::Pyramid(1.0, 1.0) };
 
+
 	InitGame();
 
 }
@@ -45,6 +46,19 @@ void GameScene::InitGame()
 
 	m_smpWallManager.reset(new WallManager());
 
+	m_smpPlayer.reset(new Player());
+
+	//m_smpBlockUnit.reset(new BlockUnit());
+
+	for (int i = 0; i < Define::BLOCK_H_NUM; i++)
+	{
+		//float posX = 5.0f + i;
+		//m_smpLeftWalls.push_back(std::make_unique<Wall>(type, height, posY, 0.f));
+		//m_smpBlockUnit.push_back(std::make_unique<BlockUnit>(0));
+		m_blockUnits[i] = std::make_unique<BlockUnit>();
+		m_blockUnits[i]->Init(m_gameTime, Define::BLOCK_SIZE * i);
+	}
+
 }
 
 
@@ -56,8 +70,8 @@ void GameScene::update()
 	m_deltaTime = (float)Scene::DeltaTime() * m_timeSpeed;
 	m_gameTime += m_deltaTime;
 
-	float addSpeed = 0.02f;
-	m_timeSpeed += m_deltaTime * addSpeed;
+	//float addSpeed = 0.02f;
+	//m_timeSpeed += m_deltaTime * addSpeed;
 
 	//getData().UpdateTime(m_timeSpeed);
 
@@ -87,24 +101,38 @@ void GameScene::update()
 		eyePosition += (GetDirection(angle + 90_deg) * speed);
 	}
 
+	if (KeyUp.pressed())
+	{
+		eyePosition.y += speed;
+	}
+
+	if (KeyDown.pressed())
+	{
+		eyePosition.y -= speed;
+	}
+
 	if (KeyLeft.pressed())
 	{
-		angle -= (m_deltaTime * 30_deg);
+		eyePosition.x -= speed;
 
-		if (angle < 0_deg)
-		{
-			angle += 360_deg;
-		}
+		//angle -= (m_deltaTime * 30_deg);
+
+		//if (angle < 0_deg)
+		//{
+		//	angle += 360_deg;
+		//}
 	}
 
 	if (KeyRight.pressed())
 	{
-		angle += (m_deltaTime * 30_deg);
+		eyePosition.x += speed;
 
-		if (360_deg < angle)
-		{
-			angle -= 360_deg;
-		}
+		//angle += (m_deltaTime * 30_deg);
+
+		//if (360_deg < angle)
+		//{
+		//	angle -= 360_deg;
+		//}
 	}
 
 	// 位置・注目点情報を更新
@@ -143,30 +171,43 @@ void GameScene::update()
 
 
 
-	std::shared_ptr<Wall> smpWall = m_smpWallManager->GetPlayerWallType(isLeft);
-	Wall::TYPE type = smpWall->GetType();
-	switch (type)
-	{
-	case Wall::NORMAL:
-		Print << U"NORMAL";
-		break;
-	case Wall::DAMAGE:
-		Print << U"DAMAGE";
-		//InitGame();
-		return;
-		break;
-	case Wall::DASH:
-		Print << U"DASH";
-		break;
-	default:
-		break;
-	}
+	//std::shared_ptr<Wall> smpWall = m_smpWallManager->GetPlayerWallType(isLeft);
+	//Wall::TYPE type = smpWall->GetType();
+	//switch (type)
+	//{
+	//case Wall::NORMAL:
+	//	Print << U"NORMAL";
+	//	break;
+	//case Wall::DAMAGE:
+	//	Print << U"DAMAGE";
+	//	//InitGame();
+	//	return;
+	//	break;
+	//case Wall::DASH:
+	//	Print << U"DASH";
+	//	break;
+	//default:
+	//	break;
+	//}
 
 
 	//壁の位置更新
-	float deltaPosY = m_deltaTime * m_wallSpeed;
-	m_smpWallManager->UpdateWallPos(deltaPosY);
+	//float deltaPosY = m_deltaTime * m_wallSpeed;
+	//m_smpWallManager->UpdateWallPos(deltaPosY);
 
+	m_smpPlayer->update();
+
+	//m_smpBlockUnit->update();
+
+	//for (auto itr = m_smpBlockUnit.begin(); itr != m_smpBlockUnit.end(); itr++)
+	//{
+	//	(*itr)->update();
+	//}
+
+	for (int i = 0; i < Define::BLOCK_H_NUM; i++)
+	{
+		m_blockUnits[i]->UpdatePos(m_gameTime);
+	}
 }
 
 void GameScene::draw() const
@@ -180,35 +221,125 @@ void GameScene::draw() const
 	{
 
 		//デバッグ
+		//int length = 30;
+		//Line3D{ Vec3{-length, 0, 0}, Vec3{length, 0, 0} }.draw(ColorF(0, 0, 0, 1));
+		//Line3D{ Vec3{0, -length, 0}, Vec3{0, length, 0} }.draw(ColorF(0, 0, 0, 1));
+		//for (int i = 1; i < 10; i++) //縦線
+		//{
+		//	Line3D{ Vec3{i - 0.5f, -length, 0}, Vec3{i - 0.5f, length, 0} }.draw();
+		//	Line3D{ Vec3{-i + 0.5f, -length, 0}, Vec3{-i + 0.5f, length, 0} }.draw();
+		//}
+		//for (int i = 1; i < 10; i++) //横線
+		//{
+		//	Line3D{ Vec3{-length, i - 0.5f, 0}, Vec3{length, i - 0.5f, 0} }.draw();
+		//	Line3D{ Vec3{-length, -i + 0.5f, 0}, Vec3{length, -i + 0.5f, 0} }.draw();
+		//}
+
 		int length = 30;
 		Line3D{ Vec3{-length, 0, 0}, Vec3{length, 0, 0} }.draw(ColorF(0, 0, 0, 1));
 		Line3D{ Vec3{0, -length, 0}, Vec3{0, length, 0} }.draw(ColorF(0, 0, 0, 1));
-		for (int i = 1; i < 5; i++)
+		for (int i = 1; i < 10; i++) //縦線
 		{
 			Line3D{ Vec3{i, -length, 0}, Vec3{i, length, 0} }.draw();
 			Line3D{ Vec3{-i, -length, 0}, Vec3{-i, length, 0} }.draw();
 		}
-		for (int i = 1; i < 10; i++)
+		for (int i = 1; i < 10; i++) //横線
 		{
 			Line3D{ Vec3{-length, i, 0}, Vec3{length, i, 0} }.draw();
 			Line3D{ Vec3{-length, -i, 0}, Vec3{length, -i, 0} }.draw();
 		}
 
 		//プレイヤー
-		if (isLeft)
+		//if (isLeft)
+		//{
+		//	//Box::FromPoints(Vec3{ -playerPosX, 0, 0 }, Vec3{ -playerPosX + depthZ, depthZ, depthZ }).draw(ColorF{ 0.8, 0.9, 0.4 });
+		//	Box::FromPoints(Vec3{ -Define::PLAYER_POS.x, Define::PLAYER_POS.y, 0 }, Vec3{ -Define::PLAYER_POS.x + Define::DEPTH_Z, Define::PLAYER_POS.y + Define::DEPTH_Z, Define::DEPTH_Z }).draw(ColorF{ 0.8, 0.9, 0.4 });
+
+		//}
+		//else
+		//{
+		//	//Box::FromPoints(Vec3{ playerPosX, 0, 0 }, Vec3{ playerPosX - depthZ, depthZ, depthZ }).draw(ColorF{ 0.8, 0.9, 0.4 });
+		//	Box::FromPoints(Vec3{ Define::PLAYER_POS.x, Define::PLAYER_POS.y, 0 }, Vec3{ Define::PLAYER_POS.x - Define::DEPTH_Z, Define::PLAYER_POS.y + Define::DEPTH_Z, Define::DEPTH_Z }).draw(ColorF{ 0.8, 0.9, 0.4 });
+		//}
+
+		//m_smpWallManager->draw();
+
+		//Box::FromPoints(Vec3{ -Define::PLAYER_POS.x - 1.0f, i - 5.0f, 0 }, Vec3{ -Define::PLAYER_POS.x + Define::DEPTH_Z, Define::PLAYER_POS.y + Define::DEPTH_Z, Define::DEPTH_Z }).draw(ColorF{ 0.8, 0.9, 0.4 });
+		//Vec3 pos1 = Vec3{ -Define::PLAYER_POS.x - 0.5f , -10.0f, -0.5f };
+		//Vec3 pos2 = Vec3{ -Define::PLAYER_POS.x -0.5f - Define::WALL_WIDTH , 10.0f, 0.5f };
+		//Box::FromPoints(pos1, pos2).draw(ColorF{ 0.8, 0.9, 0.4 });
+
+		m_smpPlayer->draw();
+
+
+		//地面
+		//--下--
+		//{
+		//	//穴をあけられる分
+		//	Box::FromPoints(Vec3{ -Define::FIELD_RANGE_X , -Define::BLOCK_HALL_NUM * 2.0f, 0.0f },
+		//	Vec3{ Define::FIELD_RANGE_X , Define::GROUND_POS_Y, Define::DEPTH_Z }).draw(ColorF{ 0.8, 0.6, 0.4 });
+
+		//	Box::FromPoints(Vec3{ -Define::FIELD_RANGE_X , -Define::FIELD_RANGE_Y, 0.0f },
+		//		Vec3{ Define::FIELD_RANGE_X , Define::GROUND_POS_Y - Define::BLOCK_HALL_NUM * 1.0f, Define::DEPTH_Z }).draw(ColorF{ 0.8, 0.9, 0.4 });
+		//}
+		//
+		////--上--
+		//{
+		//	//穴をあけられる分
+		//	Vec3 hallPos1 = Vec3(-Define::FIELD_RANGE_X, Define::GROUND_POS_Y + Define::BLOCK_NUM_V - Define::BLOCK_HALL_NUM, 0.0f);
+		//	Vec3 hallPos2 = Vec3(Define::FIELD_RANGE_X, Define::GROUND_POS_Y + Define::BLOCK_NUM_V, Define::DEPTH_Z);
+		//	Box::FromPoints(hallPos1, hallPos2).draw(ColorF{ 0.8, 0.6, 0.4 });
+
+		//	Vec3 groundPos1 = Vec3(hallPos1.x, hallPos2.y, hallPos1.z);
+		//	Vec3 groundPos2 = Vec3()
+		//	pos1 = Vec3(-Define::FIELD_RANGE_X, Define::GROUND_POS_Y + Define::BLOCK_NUM_V - Define::BLOCK_HALL_NUM, 0.0f);
+		//	pos2 = Vec3(Define::FIELD_RANGE_X, Define::GROUND_POS_Y + Define::BLOCK_NUM_V, Define::DEPTH_Z);
+		//	Box::FromPoints(Vec3{ -Define::FIELD_RANGE_X , -Define::FIELD_RANGE_Y, 0.0f },
+		//		Vec3{ Define::FIELD_RANGE_X , Define::GROUND_POS_Y - Define::BLOCK_HALL_NUM * 1.0f, Define::DEPTH_Z }).draw(ColorF{ 0.8, 0.9, 0.4 });
+		//}
+
+		//フィールド（固定部分）
+		//下
+		for (int i = 0; i < Define::BLOCK_GROUND_BOTTOM_NUM; i++)
 		{
-			//Box::FromPoints(Vec3{ -playerPosX, 0, 0 }, Vec3{ -playerPosX + depthZ, depthZ, depthZ }).draw(ColorF{ 0.8, 0.9, 0.4 });
-			Box::FromPoints(Vec3{ -Define::PLAYER_POS.x, Define::PLAYER_POS.y, 0 }, Vec3{ -Define::PLAYER_POS.x + Define::DEPTH_Z, Define::PLAYER_POS.y + Define::DEPTH_Z, Define::DEPTH_Z }).draw(ColorF{ 0.8, 0.9, 0.4 });
-
+			for (int j = 0; j < Define::BLOCK_H_NUM; j++)
+			{
+				float posX = j * Define::BLOCK_SIZE + Define::BLOCK_SIZE / 2.0f;
+				float posY = Define::GROUND_POS_Y - i * Define::BLOCK_SIZE - Define::BLOCK_SIZE / 2.0f;
+				float posZ = Define::BLOCK_SIZE / 2.0f;
+				Box{ posX, posY, posZ, Define::BLOCK_SIZE}.draw(woodTexture);
+			}
 		}
-		else
+
+		//上
+		for (int i = 0; i < Define::BLOCK_GROUND_TOP_NUM; i++)
 		{
-			//Box::FromPoints(Vec3{ playerPosX, 0, 0 }, Vec3{ playerPosX - depthZ, depthZ, depthZ }).draw(ColorF{ 0.8, 0.9, 0.4 });
-			Box::FromPoints(Vec3{ Define::PLAYER_POS.x, Define::PLAYER_POS.y, 0 }, Vec3{ Define::PLAYER_POS.x - Define::DEPTH_Z, Define::PLAYER_POS.y + Define::DEPTH_Z, Define::DEPTH_Z }).draw(ColorF{ 0.8, 0.9, 0.4 });
+			float posY = Define::GROUND_POS_Y + Define::BLOCK_HURDLE_NUM * Define::BLOCK_SIZE
+				+ Define::BLOCK_SIZE * i + Define::BLOCK_SIZE / 2.0f;
+
+			for (int j = 0; j < Define::BLOCK_H_NUM; j++)
+			{
+				float posX = j * Define::BLOCK_SIZE + Define::BLOCK_SIZE / 2.0f;
+				//float posY = Define::GROUND_POS_Y - i * Define::BLOCK_SIZE - Define::BLOCK_SIZE / 2.0f;
+				//float posY = basePosY + Define::BLOCK_SIZE * j + Define::BLOCK_SIZE / 2.0f;
+
+				float posZ = Define::BLOCK_SIZE / 2.0f;
+				Box{ posX, posY, posZ, Define::BLOCK_SIZE }.draw(woodTexture);
+			}
 		}
 
-		m_smpWallManager->draw();
+		
+		
+		//m_smpBlockUnit->draw();
+		//for (auto itr = m_smpBlockUnit.begin(); itr != m_smpBlockUnit.end(); itr++)
+		//{
+		//	(*itr)->draw();
+		//}
 
+		for (int i = 0; i < Define::BLOCK_H_NUM; i++)
+		{
+			m_blockUnits[i]->draw();
+		}
 	}
 
 	// 3D シーンを 2D シーンに描画
@@ -221,6 +352,6 @@ void GameScene::draw() const
 
 
 	// 座標 (20, 40) を左上の基準位置にして、幅 400, 高さ 100 の長方形を描く
-	int size = 250;
-	Rect{ 0, Define::WIN_W - size, Define::WIN_H, size }.draw();
+	//int size = 250;
+	//Rect{ 0, Define::WIN_W - size, Define::WIN_H, size }.draw();
 }

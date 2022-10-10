@@ -5,8 +5,10 @@
 #include "Wall.h"
 
 #include "WallManager.h"
-//class Wall;
 
+#include "Player.h"
+
+#include "BlockUnit.h"
 
 // ゲームシーン
 class GameScene : public App::Scene
@@ -48,7 +50,7 @@ private:
 	const Texture uvChecker{ U"example/texture/uv.png", TextureDesc::MippedSRGB };
 	const MSRenderTexture renderTexture{ Scene::Size(), TextureFormat::R8G8B8A8_Unorm_SRGB, HasDepth::Yes };
 
-	Vec3 eyePosition{ 0, 0, -30 };
+	Vec3 eyePosition{ 6, 7, -35 };
 
 	double angle = 0_deg;
 	BasicCamera3D camera;
@@ -82,4 +84,17 @@ private:
 	float m_wallSpeed;
 
 	std::unique_ptr<WallManager> m_smpWallManager;
+
+	std::unique_ptr<Player> m_smpPlayer;
+
+	//std::unique_ptr<BlockUnit> m_smpBlockUnit;
+
+	//std::vector<std::unique_ptr<BlockUnit>> m_smpBlockUnit;
+
+	std::unique_ptr<BlockUnit> m_blockUnits[Define::BLOCK_H_NUM];
+
+
+	const Texture woodTexture{ U"example/texture/wood.jpg", TextureDesc::MippedSRGB };
+
+	int m_blockIndex;
 };
