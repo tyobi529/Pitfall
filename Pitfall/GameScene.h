@@ -23,6 +23,8 @@ public:
 
 	void InitGame();
 
+	void DecideBlockType(Block::TYPE* pType);
+
 private:
 
 	// ブロックのサイズ
@@ -100,4 +102,6 @@ private:
 	int m_blockIndex;
 
 	float m_difX;
+
+	int m_count;
 };

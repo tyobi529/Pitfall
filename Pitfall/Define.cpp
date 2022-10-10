@@ -32,7 +32,7 @@ const float Define::BLOCK_SIZE = 1.0f;
 
 const float Define::BLOCK_GENERATED_POS_X = Define::BLOCK_SIZE * BLOCK_H_NUM;
 
-const float Define::BLOCK_SPEED = 1.0f;
+const float Define::BLOCK_SPEED = 2.0f;
 
 //const int Define::BLOCK_NUM_V = 12; 
 //const int Define::BLOCK_HALL_NUM = 2; //穴が開けられる部分のブロックの数。

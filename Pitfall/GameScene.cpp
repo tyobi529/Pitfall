@@ -23,6 +23,7 @@ GameScene::GameScene(const InitData& init)
 	, eyePosition(Define::EYE_POS)
 	, m_blockIndex(0)
 	, m_difX(0)
+	, m_count(0)
 {
 
 
@@ -81,6 +82,7 @@ void GameScene::InitGame()
 	m_difX = 0;
 
 	m_blockIndex = 0;
+	m_count = 0;
 }
 
 
@@ -217,21 +219,7 @@ void GameScene::update()
 		m_difX -= 1.0f;
 
 		Block::TYPE types[Define::BLOCK_HURDLE_NUM] = {};
-		for (int i = 0; i < Define::BLOCK_HURDLE_NUM; i++)
-		{
-			if (i < Define::BLOCK_HURDLE_HALL_NUM)
-			{
-				types[i] = Block::BLOCK_HALL;
-			}
-			else if (i < Define::BLOCK_HURDLE_HALL_NUM + Define::BLOCK_HURDLE_CENTER_NUM)
-			{
-				types[i] = Block::BLOCK_NONE;
-			}
-			else
-			{
-				types[i] = Block::BLOCK_HALL;
-			}
-		}
+		DecideBlockType(types);
 		m_smpBlockUnits[Define::BLOCK_H_NUM - 1]->Init(types);
 	}
 
@@ -254,19 +242,19 @@ void GameScene::draw() const
 
 		//デバッグ
 
-		int length = 30;
-		Line3D{ Vec3{-length, 0, 0}, Vec3{length, 0, 0} }.draw(ColorF(0, 0, 0, 1));
-		Line3D{ Vec3{0, -length, 0}, Vec3{0, length, 0} }.draw(ColorF(0, 0, 0, 1));
-		for (int i = 1; i < 15; i++) //縦線
-		{
-			Line3D{ Vec3{i, -length, 0}, Vec3{i, length, 0} }.draw();
-			Line3D{ Vec3{-i, -length, 0}, Vec3{-i, length, 0} }.draw();
-		}
-		for (int i = 1; i < 15; i++) //横線
-		{
-			Line3D{ Vec3{-length, i, 0}, Vec3{length, i, 0} }.draw();
-			Line3D{ Vec3{-length, -i, 0}, Vec3{length, -i, 0} }.draw();
-		}
+		//int length = 30;
+		//Line3D{ Vec3{-length, 0, 0}, Vec3{length, 0, 0} }.draw(ColorF(0, 0, 0, 1));
+		//Line3D{ Vec3{0, -length, 0}, Vec3{0, length, 0} }.draw(ColorF(0, 0, 0, 1));
+		//for (int i = 1; i < 15; i++) //縦線
+		//{
+		//	Line3D{ Vec3{i, -length, 0}, Vec3{i, length, 0} }.draw();
+		//	Line3D{ Vec3{-i, -length, 0}, Vec3{-i, length, 0} }.draw();
+		//}
+		//for (int i = 1; i < 15; i++) //横線
+		//{
+		//	Line3D{ Vec3{-length, i, 0}, Vec3{length, i, 0} }.draw();
+		//	Line3D{ Vec3{-length, -i, 0}, Vec3{length, -i, 0} }.draw();
+		//}
 
 		//プレイヤー
 		//if (isLeft)
@@ -315,4 +303,34 @@ void GameScene::draw() const
 		Shader::LinearToScreen(renderTexture);
 	}
 
+}
+
+
+void GameScene::DecideBlockType(Block::TYPE* pType)
+{
+	//Block::TYPE types[Define::BLOCK_HURDLE_NUM] = {};
+	for (int i = 0; i < Define::BLOCK_HURDLE_NUM; i++)
+	{
+		if (i < Define::BLOCK_HURDLE_HALL_NUM)
+		{
+			pType[i] = Block::BLOCK_HALL;
+		}
+		else if (i < Define::BLOCK_HURDLE_HALL_NUM + Define::BLOCK_HURDLE_CENTER_NUM)
+		{
+			if (RandomBool())
+			{
+				pType[i] = Block::BLOCK_NONE;
+			}
+			else
+			{
+				pType[i] = Block::BLOCK_NORMAL;
+			}
+		}
+		else
+		{
+			pType[i] = Block::BLOCK_HALL;
+		}
+	}
+
+	//return pType;
 }
