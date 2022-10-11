@@ -25,6 +25,8 @@ public:
 
 	void DecideBlockType(Block::TYPE* pType, bool isNone = false);
 
+	void DrawStage() const;
+
 private:
 
 	// ブロックのサイズ
@@ -69,7 +71,6 @@ private:
 	int depthZ = 1;
 	int wallWidth = 3;
 
-	bool isLeft = true;
 
 	//std::vector<Wall*> m_pWalls;
 
@@ -104,4 +105,6 @@ private:
 	float m_difX;
 
 	int m_count;
+
+
 };

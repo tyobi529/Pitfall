@@ -29,6 +29,11 @@ public:
 
 	};
 
+	const static float LIMIT_POS_Y_STAGE_BOTTOM;
+	const static float LIMIT_POS_Y_HURDLE_BOTTOM;
+	const static float LIMIT_POS_Y_HURDLE_TOP;
+	const static float LIMIT_POS_Y_STAGE_TOP;
+
 
 	const static float GROUND_POS_Y;
 

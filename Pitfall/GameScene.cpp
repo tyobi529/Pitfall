@@ -3,6 +3,9 @@
 
 #include "Define.h"
 
+
+#define SIZE Define::BLOCK_SIZE
+
 Vec3 GetDirection(double angle)
 {
 	const Vec2 dir = Circular{ 1.0, angle };
@@ -61,7 +64,7 @@ void GameScene::InitGame()
 	{
 		m_smpBlockUnits.push_back(std::make_unique<BlockUnit>());
 		m_smpBlockUnits[i]->Init(types);
-		m_smpBlockUnits[i]->UpdatePos(Define::BLOCK_SIZE * i);
+		m_smpBlockUnits[i]->UpdatePos(SIZE * i);
 	}
 
 
@@ -155,11 +158,7 @@ void GameScene::update()
 
 
 
-	if (MouseL.up())
-	{
-		isLeft = !isLeft;
-	}
-	else if (MouseR.up())
+	if (MouseR.up())
 	{
 		// 右クリックでタイトル画面へ
 		changeScene(State::Title);
@@ -169,30 +168,12 @@ void GameScene::update()
 		return;
 	}
 
-	//if (isLeft)
-	//{
-	//	playerPos = Vec3(-5, 0, 0);
-	//}
-	//else
-	//{
-	//	playerPos = Vec3(5, 0, 0);
-	//}
-
-
-
 
 	//壁の位置更新
 	//float deltaPosY = m_deltaTime * m_wallSpeed;
 	//m_smpWallManager->UpdateWallPos(deltaPosY);
 
 	m_smpPlayer->update();
-
-	//m_smpBlockUnit->update();
-
-	//for (auto itr = m_smpBlockUnit.begin(); itr != m_smpBlockUnit.end(); itr++)
-	//{
-	//	(*itr)->update();
-	//}
 
 
 	//移動量計算
@@ -232,7 +213,7 @@ void GameScene::update()
 
 	for (int i = 0; i < Define::BLOCK_H_NUM; i++)
 	{
-		float posX = Define::BLOCK_SIZE * i - m_difX;
+		float posX = SIZE * i - m_difX;
 		m_smpBlockUnits[i]->UpdatePos(posX);
 	}
 }
@@ -249,58 +230,34 @@ void GameScene::draw() const
 
 		//デバッグ
 
-		//int length = 30;
-		//Line3D{ Vec3{-length, 0, 0}, Vec3{length, 0, 0} }.draw(ColorF(0, 0, 0, 1));
-		//Line3D{ Vec3{0, -length, 0}, Vec3{0, length, 0} }.draw(ColorF(0, 0, 0, 1));
-		//for (int i = 1; i < 15; i++) //縦線
-		//{
-		//	Line3D{ Vec3{i, -length, 0}, Vec3{i, length, 0} }.draw();
-		//	Line3D{ Vec3{-i, -length, 0}, Vec3{-i, length, 0} }.draw();
-		//}
-		//for (int i = 1; i < 15; i++) //横線
-		//{
-		//	Line3D{ Vec3{-length, i, 0}, Vec3{length, i, 0} }.draw();
-		//	Line3D{ Vec3{-length, -i, 0}, Vec3{length, -i, 0} }.draw();
-		//}
+		int length = 30;
+		Line3D{ Vec3{-length, 0, 0}, Vec3{length, 0, 0} }.draw(ColorF(0, 0, 0, 1));
+		Line3D{ Vec3{0, -length, 0}, Vec3{0, length, 0} }.draw(ColorF(0, 0, 0, 1));
+		for (int i = 1; i < 15; i++) //縦線
+		{
+			Line3D{ Vec3{i, -length, 0}, Vec3{i, length, 0} }.draw();
+			Line3D{ Vec3{-i, -length, 0}, Vec3{-i, length, 0} }.draw();
+		}
+		for (int i = 1; i < 15; i++) //横線
+		{
+			Line3D{ Vec3{-length, i, 0}, Vec3{length, i, 0} }.draw();
+			Line3D{ Vec3{-length, -i, 0}, Vec3{length, -i, 0} }.draw();
+		}
 
-		//プレイヤー
-		//if (isLeft)
-		//{
-		//	//Box::FromPoints(Vec3{ -playerPosX, 0, 0 }, Vec3{ -playerPosX + depthZ, depthZ, depthZ }).draw(ColorF{ 0.8, 0.9, 0.4 });
-		//	Box::FromPoints(Vec3{ -Define::PLAYER_POS.x, Define::PLAYER_POS.y, 0 }, Vec3{ -Define::PLAYER_POS.x + Define::DEPTH_Z, Define::PLAYER_POS.y + Define::DEPTH_Z, Define::DEPTH_Z }).draw(ColorF{ 0.8, 0.9, 0.4 });
 
-		//}
-		//else
-		//{
-		//	//Box::FromPoints(Vec3{ playerPosX, 0, 0 }, Vec3{ playerPosX - depthZ, depthZ, depthZ }).draw(ColorF{ 0.8, 0.9, 0.4 });
-		//	Box::FromPoints(Vec3{ Define::PLAYER_POS.x, Define::PLAYER_POS.y, 0 }, Vec3{ Define::PLAYER_POS.x - Define::DEPTH_Z, Define::PLAYER_POS.y + Define::DEPTH_Z, Define::DEPTH_Z }).draw(ColorF{ 0.8, 0.9, 0.4 });
-		//}
 
-		//m_smpWallManager->draw();
-
-		//Box::FromPoints(Vec3{ -Define::PLAYER_POS.x - 1.0f, i - 5.0f, 0 }, Vec3{ -Define::PLAYER_POS.x + Define::DEPTH_Z, Define::PLAYER_POS.y + Define::DEPTH_Z, Define::DEPTH_Z }).draw(ColorF{ 0.8, 0.9, 0.4 });
-		//Vec3 pos1 = Vec3{ -Define::PLAYER_POS.x - 0.5f , -10.0f, -0.5f };
-		//Vec3 pos2 = Vec3{ -Define::PLAYER_POS.x -0.5f - Define::WALL_WIDTH , 10.0f, 0.5f };
-		//Box::FromPoints(pos1, pos2).draw(ColorF{ 0.8, 0.9, 0.4 });
 
 		m_smpPlayer->draw();
 
 
-	
-		
-		//m_smpBlockUnit->draw();
-		//for (auto itr = m_smpBlockUnit.begin(); itr != m_smpBlockUnit.end(); itr++)
-		//{
-		//	(*itr)->draw();
-		//}
 
 		for (int i = 0; i < Define::BLOCK_H_NUM; i++)
 		{
 			m_smpBlockUnits[i]->draw();
 		}
 
-		//Box::FromPoints(Vec3{ 0, 0, 0 }, Vec3{ 20, 5, 1 }).draw(TextureAsset(U"uvChecker"));
-
+		
+		DrawStage();
 	}
 
 	// 3D シーンを 2D シーンに描画
@@ -347,4 +304,27 @@ void GameScene::DecideBlockType(Block::TYPE* pType, bool isNone)
 	}
 
 	//return pType;
+}
+
+
+void GameScene::DrawStage() const
+{
+	for (int i = 0; i < Define::BLOCK_H_NUM; i++)
+	{
+		float posX = SIZE * i - m_difX;
+
+		//上
+		for (int j = 0; j < Define::BLOCK_GROUND_TOP_NUM; j++)
+		{
+			float posY = Define::LIMIT_POS_Y_HURDLE_TOP + SIZE * j;
+			Box{ Vec3(posX + SIZE / 2.0f, posY + SIZE / 2.0f, SIZE / 2.0f), SIZE }.draw(TextureAsset(U"wood"));
+		}
+		//下
+		for (int j = 0; j < Define::BLOCK_GROUND_BOTTOM_NUM; j++)
+		{
+			float posY = Define::LIMIT_POS_Y_STAGE_BOTTOM + SIZE * j;
+			Box{ Vec3(posX + SIZE / 2.0f, posY + SIZE / 2.0f, SIZE / 2.0f), SIZE }.draw(TextureAsset(U"wood"));
+		}
+	}
+
 }
