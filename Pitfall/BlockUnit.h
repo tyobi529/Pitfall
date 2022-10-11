@@ -16,10 +16,15 @@ public:
 
 	void UpdatePos(float moveX);
 
+	//void SetType(int index, Block::TYPE type);
+
+	Block::TYPE GetBlockType(int index) { return m_smpBlocks[index]->GetType(); };
+
 private:
 
+	//Block::TYPE m_types[Define::BLOCK_HURDLE_NUM];
 
-	std::unique_ptr<Block> m_smpBlocks[Define::BLOCK_HURDLE_NUM];//真ん中の可変部分
+	std::unique_ptr<Block> m_smpBlocks[Define::BLOCK_HURDLE_NUM];
 
 
 };

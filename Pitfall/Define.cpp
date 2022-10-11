@@ -46,7 +46,7 @@ const float Define::BLOCK_SPEED = 2.0f;
 
 //player
 //const Vec3 Define::PLAYER_POS = Vec3(4, 0, 0); //右にいるときのプレイヤーの座標。右下手前の点。これを基準にwallも作る
-const float Define::PLAYER_POS_X = 4.0f; 
+const float Define::PLAYER_POS_X = Define::BLOCK_SIZE * (float)BLOCK_PLAYE_INDEX;
 
 const float Define::PLAYER_WIDTH = 1.0f; //プレイヤーの横幅（x方向の長さ）
 const float Define::DEPTH_Z = 1.0f; //奥行。wallと共通

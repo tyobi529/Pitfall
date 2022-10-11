@@ -27,6 +27,7 @@ GameScene::GameScene(const InitData& init)
 	, m_blockIndex(0)
 	, m_difX(0)
 	, m_count(0)
+	, m_playerTypes{}
 {
 
 
@@ -67,6 +68,21 @@ void GameScene::InitGame()
 		m_smpBlockUnits[i]->UpdatePos(SIZE * i);
 	}
 
+	//テスト
+	//types[3] = Block::BLOCK_NORMAL;
+	//m_smpBlockUnits[Define::BLOCK_PLAYE_INDEX + 1]->Init(types);
+	//types[3] = Block::BLOCK_NONE;
+	//types[2] = Block::BLOCK_NORMAL;
+	//m_smpBlockUnits[Define::BLOCK_PLAYE_INDEX + 2]->Init(types);
+	//
+
+	//プレイヤー
+	m_smpPlayerUnit = std::make_unique<BlockUnit>();
+	m_playerTypes[5] = Block::BLOCK_PLAYE_BODY;
+	m_playerTypes[7] = Block::BLOCK_PLAYE_BODY;
+	m_playerTypes[9] = Block::BLOCK_PLAYE_HEAD;
+	m_smpPlayerUnit->Init(m_playerTypes);
+
 
 	m_difX = 0;
 
@@ -86,13 +102,7 @@ void GameScene::update()
 	//float addSpeed = 0.02f;
 	//m_timeSpeed += m_deltaTime * addSpeed;
 
-	//getData().UpdateTime(m_timeSpeed);
-
-	//const float deltaTime = (float)Scene::DeltaTime();
-	//const float deltaTime = getData().gameTime;
-	//const float speed = (float)(m_deltaTime * 2.0);
 	const float speed = m_deltaTime * 2.0;
-
 
 	if (KeyW.pressed())
 	{
@@ -127,25 +137,11 @@ void GameScene::update()
 	if (KeyLeft.pressed())
 	{
 		eyePosition.x -= speed;
-
-		//angle -= (m_deltaTime * 30_deg);
-
-		//if (angle < 0_deg)
-		//{
-		//	angle += 360_deg;
-		//}
 	}
 
 	if (KeyRight.pressed())
 	{
 		eyePosition.x += speed;
-
-		//angle += (m_deltaTime * 30_deg);
-
-		//if (360_deg < angle)
-		//{
-		//	angle -= 360_deg;
-		//}
 	}
 
 	// 位置・注目点情報を更新
@@ -209,6 +205,49 @@ void GameScene::update()
 			}
 		}
 
+
+		//プレイヤー
+		//まずは横にスライド
+		Block::TYPE types[Define::BLOCK_HURDLE_NUM] = {};
+		for (int i = 0; i < Define::BLOCK_HURDLE_NUM; i++)
+		{
+			types[i] = m_smpBlockUnits[Define::BLOCK_PLAYE_INDEX]->GetBlockType(i);
+			if (m_playerTypes[i] != Block::BLOCK_NONE && types[i] != Block::BLOCK_NONE)
+			{
+				assert(false); //位置がかぶってスライドできない
+			}
+		}
+		for (int i = 0; i < Define::BLOCK_HURDLE_NUM; i++)
+		{
+			Block::TYPE type = m_playerTypes[i];
+			if (type != Block::BLOCK_NONE)
+			{
+				//元の位置を先に削除
+				m_playerTypes[i] = Block::BLOCK_NONE;
+				//下を確認
+				for (int j = i - 1; j >= 0; j--)
+				{
+					if (types[j] != Block::BLOCK_NONE)
+					{
+						//ブロックが存在する場合はその１つ上に移動
+						//真下にある場合は変化なし
+						m_playerTypes[j + 1] = type;
+						//移動先にブロックを入れる
+						types[j + 1] = type;
+						break;
+					}
+					if (j == 0)
+					{
+						m_playerTypes[0] = type;
+						//移動先にブロックを入れる
+						types[0] = m_playerTypes[0];
+						break;
+					}
+				}
+			}
+		}
+		m_smpPlayerUnit->Init(types);
+
 	}
 
 	for (int i = 0; i < Define::BLOCK_H_NUM; i++)
@@ -216,6 +255,8 @@ void GameScene::update()
 		float posX = SIZE * i - m_difX;
 		m_smpBlockUnits[i]->UpdatePos(posX);
 	}
+
+	m_smpPlayerUnit->UpdatePos(Define::PLAYER_POS_X);
 }
 
 void GameScene::draw() const
@@ -256,6 +297,7 @@ void GameScene::draw() const
 			m_smpBlockUnits[i]->draw();
 		}
 
+		m_smpPlayerUnit->draw();
 		
 		DrawStage();
 	}
@@ -276,7 +318,8 @@ void GameScene::DecideBlockType(Block::TYPE* pType, bool isNone)
 	{
 		if (i < Define::BLOCK_HURDLE_HALL_NUM)
 		{
-			pType[i] = Block::BLOCK_HALL;
+			//pType[i] = Block::BLOCK_HALL;
+			pType[i] = Block::BLOCK_NORMAL;
 		}
 		else if (i < Define::BLOCK_HURDLE_HALL_NUM + Define::BLOCK_HURDLE_CENTER_NUM)
 		{
@@ -299,7 +342,8 @@ void GameScene::DecideBlockType(Block::TYPE* pType, bool isNone)
 		}
 		else
 		{
-			pType[i] = Block::BLOCK_HALL;
+			//pType[i] = Block::BLOCK_HALL;
+			pType[i] = Block::BLOCK_NORMAL;
 		}
 	}
 
