@@ -28,6 +28,7 @@ GameScene::GameScene(const InitData& init)
 	, m_difX(0)
 	, m_count(0)
 	, m_playerTypes{}
+	, m_isDebug(false)
 {
 
 
@@ -54,7 +55,7 @@ void GameScene::InitGame()
 
 	m_smpWallManager.reset(new WallManager());
 
-	m_smpPlayer.reset(new Player());
+	//m_smpPlayer.reset(new Player());
 
 	//m_smpBlockUnit.reset(new BlockUnit());
 	m_smpBlockUnits.clear();
@@ -74,11 +75,13 @@ void GameScene::InitGame()
 	//types[3] = Block::BLOCK_NONE;
 	//types[2] = Block::BLOCK_NORMAL;
 	//m_smpBlockUnits[Define::BLOCK_PLAYE_INDEX + 2]->Init(types);
-	//
+	
 
 	//プレイヤー
 	m_smpPlayerUnit = std::make_unique<BlockUnit>();
-	m_playerTypes[5] = Block::BLOCK_PLAYE_BODY;
+	m_playerTypes[3] = Block::BLOCK_PLAYE_BODY;
+	m_playerTypes[4] = Block::BLOCK_PLAYE_BODY;
+	m_playerTypes[6] = Block::BLOCK_PLAYE_BODY;
 	m_playerTypes[7] = Block::BLOCK_PLAYE_BODY;
 	m_playerTypes[9] = Block::BLOCK_PLAYE_HEAD;
 	m_smpPlayerUnit->Init(m_playerTypes);
@@ -104,25 +107,6 @@ void GameScene::update()
 
 	const float speed = m_deltaTime * 2.0;
 
-	if (KeyW.pressed())
-	{
-		eyePosition += (GetDirection(angle) * speed);
-	}
-
-	if (KeyA.pressed())
-	{
-		eyePosition += (GetDirection(angle - 90_deg) * speed);
-	}
-
-	if (KeyS.pressed())
-	{
-		eyePosition += (-GetDirection(angle) * speed);
-	}
-
-	if (KeyD.pressed())
-	{
-		eyePosition += (GetDirection(angle + 90_deg) * speed);
-	}
 
 	if (KeyUp.pressed())
 	{
@@ -152,8 +136,39 @@ void GameScene::update()
 	Print << U"focusPosition: {:.1f}"_fmt(camera.getFocusPosition());
 	Graphics3D::SetCameraTransform(camera);
 
+	if (KeyD.up())
+	{
+		m_isDebug = !m_isDebug;
+	}
 
-
+	if (MouseL.up())
+	{
+		//プレイヤーのブロック増やす
+		for (int i = 0; i < Define::BLOCK_HURDLE_NUM; i++)
+		{
+			if (m_playerTypes[i] == Block::BLOCK_PLAYE_HEAD)
+			{
+				if (i == Define::BLOCK_HURDLE_NUM - 1)
+				{
+					//生成限界
+					break;
+				}
+				else if (m_smpBlockUnits[Define::BLOCK_PLAYE_INDEX]->GetBlockType(i + 1) != Block::BLOCK_NONE ||
+					m_smpBlockUnits[Define::BLOCK_PLAYE_INDEX + 1]->GetBlockType(i + 1) != Block::BLOCK_NONE)
+				{
+					//上にブロックがあれば生成しない。ここ書き方あってる？
+					break;
+				}
+				else
+				{
+					m_playerTypes[i] = Block::BLOCK_PLAYE_BODY;
+					m_playerTypes[i + 1] = Block::BLOCK_PLAYE_HEAD;
+					m_smpPlayerUnit->Init(m_playerTypes);
+					break;
+				}
+			}
+		}
+	}
 	if (MouseR.up())
 	{
 		// 右クリックでタイトル画面へ
@@ -169,7 +184,7 @@ void GameScene::update()
 	//float deltaPosY = m_deltaTime * m_wallSpeed;
 	//m_smpWallManager->UpdateWallPos(deltaPosY);
 
-	m_smpPlayer->update();
+	//m_smpPlayer->update();
 
 
 	//移動量計算
@@ -206,7 +221,7 @@ void GameScene::update()
 		}
 
 
-		//プレイヤー
+		//============ プレイヤー ============
 		//まずは横にスライド
 		Block::TYPE types[Define::BLOCK_HURDLE_NUM] = {};
 		for (int i = 0; i < Define::BLOCK_HURDLE_NUM; i++)
@@ -246,7 +261,21 @@ void GameScene::update()
 				}
 			}
 		}
-		m_smpPlayerUnit->Init(types);
+
+		//ぶつかったブロックを消す
+		for (int i = 0; i < Define::BLOCK_HURDLE_NUM; i++)
+		{
+			if (m_playerTypes[i] != Block::BLOCK_NONE)
+			{
+				if (m_smpBlockUnits[Define::BLOCK_PLAYE_INDEX + 1]->GetBlockType(i) != Block::BLOCK_NONE)
+				{
+					m_playerTypes[i] = Block::BLOCK_NONE;
+				}
+			}
+		}
+
+		m_smpPlayerUnit->Init(m_playerTypes);
+
 
 	}
 
@@ -270,25 +299,28 @@ void GameScene::draw() const
 	{
 
 		//デバッグ
-
-		int length = 30;
-		Line3D{ Vec3{-length, 0, 0}, Vec3{length, 0, 0} }.draw(ColorF(0, 0, 0, 1));
-		Line3D{ Vec3{0, -length, 0}, Vec3{0, length, 0} }.draw(ColorF(0, 0, 0, 1));
-		for (int i = 1; i < 15; i++) //縦線
+		if (m_isDebug)
 		{
-			Line3D{ Vec3{i, -length, 0}, Vec3{i, length, 0} }.draw();
-			Line3D{ Vec3{-i, -length, 0}, Vec3{-i, length, 0} }.draw();
+			int length = 30;
+			Line3D{ Vec3{-length, 0, 0}, Vec3{length, 0, 0} }.draw(ColorF(0, 0, 0, 1));
+			Line3D{ Vec3{0, -length, 0}, Vec3{0, length, 0} }.draw(ColorF(0, 0, 0, 1));
+			for (int i = 1; i < 15; i++) //縦線
+			{
+				Line3D{ Vec3{i, -length, 0}, Vec3{i, length, 0} }.draw();
+				Line3D{ Vec3{-i, -length, 0}, Vec3{-i, length, 0} }.draw();
+			}
+			for (int i = 1; i < 15; i++) //横線
+			{
+				Line3D{ Vec3{-length, i, 0}, Vec3{length, i, 0} }.draw();
+				Line3D{ Vec3{-length, -i, 0}, Vec3{length, -i, 0} }.draw();
+			}
 		}
-		for (int i = 1; i < 15; i++) //横線
-		{
-			Line3D{ Vec3{-length, i, 0}, Vec3{length, i, 0} }.draw();
-			Line3D{ Vec3{-length, -i, 0}, Vec3{length, -i, 0} }.draw();
-		}
 
 
 
 
-		m_smpPlayer->draw();
+
+		//m_smpPlayer->draw();
 
 
 

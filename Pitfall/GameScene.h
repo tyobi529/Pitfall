@@ -88,7 +88,7 @@ private:
 
 	std::unique_ptr<WallManager> m_smpWallManager;
 
-	std::unique_ptr<Player> m_smpPlayer;
+	//std::unique_ptr<Player> m_smpPlayer;
 
 	//std::unique_ptr<BlockUnit> m_smpBlockUnit;
 
@@ -108,5 +108,5 @@ private:
 
 	int m_count;
 
-
+	bool m_isDebug;
 };
