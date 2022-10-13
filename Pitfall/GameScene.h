@@ -97,10 +97,14 @@ private:
 	//std::unique_ptr<BlockUnit> m_blockUnits[Define::BLOCK_H_NUM];
 	std::vector<std::unique_ptr<BlockUnit>> m_smpBlockUnits; //rotateするためvector
 
-	std::unique_ptr<BlockUnit> m_smpPlayerUnit;
-	Block::TYPE m_playerTypes[Define::BLOCK_HURDLE_NUM];
+	//std::unique_ptr<BlockUnit> m_smpPlayerUnit;
+	//Block::TYPE m_playerTypes[Define::BLOCK_HURDLE_NUM];
+
 
 	const Texture woodTexture{ U"example/texture/wood.jpg", TextureDesc::MippedSRGB };
+
+
+	std::unique_ptr<Block> m_smpPlayerBlocks[Define::BLOCK_HURDLE_NUM];
 
 	int m_blockIndex;
 

@@ -7,7 +7,7 @@ BlockUnit::BlockUnit()
 {
 	for (int i = 0; i < Define::BLOCK_HURDLE_NUM; i++)
 	{
-		m_smpBlocks[i] = std::make_unique<Block>();
+		m_smpBlocks[i] = std::make_unique<Block>(i);
 	}
 }
 

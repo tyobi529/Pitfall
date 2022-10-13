@@ -41,6 +41,7 @@ public:
 	const static float BLOCK_GENERATED_POS_X;
 
 	const static float BLOCK_SPEED;
+	const static float BLOCK_FALL_SPEED;
 
 
 

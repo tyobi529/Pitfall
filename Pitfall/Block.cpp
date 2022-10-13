@@ -4,7 +4,8 @@
 #include "Define.h"
 
 
-Block::Block() :
+Block::Block(int index) :
+	m_index(index),
 	m_type(TYPE::BLOCK_NONE),
 	m_centerPos(Vec3(0, 0, 0))
 {
@@ -33,10 +34,10 @@ void Block::draw()
 	case Block::BLOCK_NORMAL:
 		Box{ m_centerPos, Define::BLOCK_SIZE }.draw(ColorF{ 0.8, 0.6, 0.4 }.removeSRGBCurve());
 		break;
-	case Block::BLOCK_PLAYE_HEAD:
+	case Block::BLOCK_PLAYER_HEAD:
 		Box{ m_centerPos, Define::BLOCK_SIZE }.draw(ColorF{ 0.2, 0.6, 0.4 }.removeSRGBCurve());
 		break;
-	case Block::BLOCK_PLAYE_BODY:
+	case Block::BLOCK_PLAYER_BODY:
 		Box{ m_centerPos, Define::BLOCK_SIZE }.draw(ColorF{ 0.6, 0.6, 0.3 }.removeSRGBCurve());
 		break;
 	default:
