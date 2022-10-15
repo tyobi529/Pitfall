@@ -10,7 +10,7 @@
 
 #include "BlockUnit.h"
 
-#include "PlayerBlock.h"
+//#include "PlayerBlock.h"
 
 // ゲームシーン
 class GameScene : public App::Scene
@@ -28,6 +28,7 @@ public:
 	void DecideBlockType(Block::TYPE* pType, bool isNone = false);
 
 	void DrawStage() const;
+
 
 private:
 
@@ -98,9 +99,17 @@ private:
 	const Texture woodTexture{ U"example/texture/wood.jpg", TextureDesc::MippedSRGB };
 
 
-	std::unique_ptr<Block> m_smpEnemyBlocks[Define::BLOCK_H_NUM][Define::BLOCK_HURDLE_NUM];
+	//std::unique_ptr<Block> m_smpEnemyBlocks[Define::BLOCK_H_NUM][Define::BLOCK_HURDLE_NUM];
+	std::shared_ptr<Block> m_smpEnemyBlocks[Define::BLOCK_H_NUM][Define::BLOCK_HURDLE_NUM];
+	//std::shared_ptr<Block> m_smpBlocks[Define::BLOCK_H_NUM][Define::BLOCK_HURDLE_NUM];
 
-	std::unique_ptr<PlayerBlock> m_smpPlayerBlocks[Define::BLOCK_HURDLE_NUM];
+
+	//std::unique_ptr<PlayerBlock> m_smpPlayerBlocks[Define::BLOCK_HURDLE_NUM];
+	//std::unique_ptr<Block> m_smpPlayerBlocks[Define::BLOCK_HURDLE_NUM];
+	std::shared_ptr<Block> m_smpPlayerBlocks[Define::BLOCK_HURDLE_NUM];
+
+	//Block* m_pPlayerBlocks;
+
 
 	int m_blockIndex;
 

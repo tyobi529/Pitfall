@@ -42,15 +42,16 @@ GameScene::GameScene(const InitData& init)
 	{
 		for (int j = 0; j < BLOCK_NUM; j++)
 		{
-			m_smpEnemyBlocks[i][j] = std::make_unique<Block>(i, j);
+			//m_smpEnemyBlocks[i][j] = std::make_unique<Block>(i, j);
+			m_smpEnemyBlocks[i][j] = std::make_shared<Block>(i, j);
 		}
 	}
 
 	for (int i = 0; i < BLOCK_NUM; i++)
 	{
 		//m_playerBlocks[i].reset(std::make_unique<Block>(i));
-		m_smpPlayerBlocks[i] = std::make_unique<PlayerBlock>(Define::BLOCK_PLAYE_INDEX, i);
-
+		//m_smpPlayerBlocks[i] = std::make_unique<PlayerBlock>(Define::BLOCK_PLAYE_INDEX, i);
+		m_smpPlayerBlocks[i] = std::make_unique<Block>(Define::BLOCK_PLAYE_INDEX, i);
 	}
 	
 
@@ -288,6 +289,9 @@ void GameScene::update()
 				if (m_smpEnemyBlocks[Define::BLOCK_PLAYE_INDEX + 1][i]->GetType() != Block::BLOCK_NONE)
 				{
 					m_smpPlayerBlocks[i]->SetType(Block::BLOCK_NONE);
+
+					m_smpEnemyBlocks[Define::BLOCK_PLAYE_INDEX][i]->SetType(Block::BLOCK_PLAYER_BODY);
+					m_smpEnemyBlocks[Define::BLOCK_PLAYE_INDEX][i]->SetMoveInfo(i);
 				}
 			}
 		}
@@ -297,16 +301,44 @@ void GameScene::update()
 	}
 
 
+	//for (int i = 0; i < Define::BLOCK_H_NUM; i++)
+	//{
+	//	for (int j = 0; j < BLOCK_NUM; j++)
+	//	{
+	//		m_smpEnemyBlocks[i][j]->SetCenterPos(m_difX);
+	//	}
+	//}
+
+	//縦移動計算
+	float fallValue = (BLOCK_NUM - 1) * m_difX;
+
 	for (int i = 0; i < Define::BLOCK_H_NUM; i++)
 	{
 		for (int j = 0; j < BLOCK_NUM; j++)
 		{
-			m_smpEnemyBlocks[i][j]->SetPos(m_difX);
+			//落下中
+			if (m_smpEnemyBlocks[i][j]->GetIsMove())
+			{
+				int preColIndex = m_smpEnemyBlocks[i][j]->GetPreColIndex();
+
+				float difY = SIZE * (preColIndex - i) + fallValue;
+				if (difY <= 0)
+				{
+					m_smpEnemyBlocks[i][j]->SetIsMove(false);
+					m_smpEnemyBlocks[i][j]->SetCenterPos(m_difX);
+				}
+				else
+				{
+					m_smpEnemyBlocks[i][j]->SetCenterPos(m_difX, difY);
+				}
+			}
+			else
+			{
+				m_smpEnemyBlocks[i][j]->SetCenterPos(m_difX);
+			}
 		}
 	}
 
-	//プレイヤーの縦移動計算
-	float fallValue = (BLOCK_NUM - 1) * m_difX;
 	for (int i = 0; i < BLOCK_NUM; i++)
 	{
 		//落下中
@@ -318,16 +350,16 @@ void GameScene::update()
 			if (difY <= 0)
 			{
 				m_smpPlayerBlocks[i]->SetIsMove(false);
-				m_smpPlayerBlocks[i]->SetPos();
+				m_smpPlayerBlocks[i]->SetCenterPos();
 			}
 			else
 			{
-				m_smpPlayerBlocks[i]->SetPos(0, difY);
+				m_smpPlayerBlocks[i]->SetCenterPos(0, difY);
 			}
 		}
 		else
 		{
-			m_smpPlayerBlocks[i]->SetPos();
+			m_smpPlayerBlocks[i]->SetCenterPos();
 		}
 
 	}
@@ -466,3 +498,4 @@ void GameScene::DrawStage() const
 	}
 
 }
+

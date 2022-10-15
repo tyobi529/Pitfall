@@ -21,15 +21,21 @@ public:
 	virtual void update();
 	void draw();
 
-	void SetType(TYPE type);
-
-	//void SetPos(Vec3 pos);
-
-
-	void SetPos(float difX = 0, float difY = 0);
-
-
 	TYPE GetType() { return m_type; };
+	void SetType(TYPE type) { m_type = type; };
+
+
+	void SetCenterPos(float difX = 0, float difY = 0);
+
+
+	void SetMoveInfo(int preColIndex);
+
+	void Init();
+
+	int GetPreColIndex() { return m_preColIndex; };
+
+	bool GetIsMove() { return m_isMove; };
+	void SetIsMove(bool isMove) { m_isMove = isMove; };
 
 protected:
 	const int m_rowIndex;
@@ -42,6 +48,15 @@ private:
 
 	//属性情報だけ持つ
 	TYPE m_type;
+
+
+
+	bool m_isMove;
+
+	int m_preColIndex;
+
+	//拡大
+	bool m_isExpand;
 
 
 
