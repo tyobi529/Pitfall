@@ -10,6 +10,8 @@
 
 #include "BlockUnit.h"
 
+#include "PlayerBlock.h"
+
 // ゲームシーン
 class GameScene : public App::Scene
 {
@@ -98,7 +100,7 @@ private:
 
 	std::unique_ptr<Block> m_smpEnemyBlocks[Define::BLOCK_H_NUM][Define::BLOCK_HURDLE_NUM];
 
-	std::unique_ptr<Block> m_smpPlayerBlocks[Define::BLOCK_HURDLE_NUM];
+	std::unique_ptr<PlayerBlock> m_smpPlayerBlocks[Define::BLOCK_HURDLE_NUM];
 
 	int m_blockIndex;
 

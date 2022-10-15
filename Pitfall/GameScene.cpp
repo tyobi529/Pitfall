@@ -3,7 +3,6 @@
 
 #include "Define.h"
 
-
 #define SIZE Define::BLOCK_SIZE
 #define BLOCK_NUM Define::BLOCK_HURDLE_NUM
 
@@ -50,7 +49,7 @@ GameScene::GameScene(const InitData& init)
 	for (int i = 0; i < BLOCK_NUM; i++)
 	{
 		//m_playerBlocks[i].reset(std::make_unique<Block>(i));
-		m_smpPlayerBlocks[i] = std::make_unique<Block>(Define::BLOCK_PLAYE_INDEX, i);
+		m_smpPlayerBlocks[i] = std::make_unique<PlayerBlock>(Define::BLOCK_PLAYE_INDEX, i);
 
 	}
 	
@@ -86,7 +85,7 @@ void GameScene::InitGame()
 	}
 
 
-	m_smpPlayerBlocks[4]->SetType(Block::BLOCK_PLAYER_HEAD);
+	m_smpPlayerBlocks[BLOCK_NUM - 3]->SetType(Block::BLOCK_PLAYER_HEAD);
 
 
 	m_difX = 0;
@@ -184,10 +183,10 @@ void GameScene::update()
 
 	//壁の位置更新
 	//移動量計算
-	m_difX += m_deltaTime * Define::BLOCK_SPEED;
+	m_difX -= m_deltaTime * Define::BLOCK_SPEED;
 
 	//更新
-	if (m_difX > 1.0f)
+	if (m_difX < -1.0f)
 	{
 		for (int i = 0; i < Define::BLOCK_H_NUM - 1; i++)
 		{
@@ -196,15 +195,9 @@ void GameScene::update()
 				m_smpEnemyBlocks[i][j]->SetType(m_smpEnemyBlocks[i + 1][j]->GetType());
 			}
 		}
-		//std::rotate(m_smpBlockUnits.begin(), m_smpBlockUnits.begin() + 1, m_smpBlockUnits.end());
 
-		m_difX -= 1.0f;
+		m_difX += 1.0f;
 
-		//リセット
-		//for (int i = 0; i < BLOCK_NUM; i++)
-		//{
-		//	m_smpEnemyBlocks[Define::BLOCK_H_NUM - 1][i]->SetType(Block::BLOCK_NONE);
-		//}
 
 		if (m_count == 0)
 		{
@@ -265,6 +258,9 @@ void GameScene::update()
 						m_smpPlayerBlocks[j + 1]->SetType(type);
 						//移動先にブロックを入れる
 						types[j + 1] = type;
+
+						//移動元情報入れる
+						m_smpPlayerBlocks[j + 1]->SetMoveInfo(i);
 						break;
 					}
 					if (j == 0)
@@ -272,6 +268,9 @@ void GameScene::update()
 						m_smpPlayerBlocks[0]->SetType(type);
 						//移動先にブロックを入れる
 						types[0] = type;
+
+						//移動元情報入れる
+						m_smpPlayerBlocks[0]->SetMoveInfo(i);
 						break;
 					}
 				}
@@ -296,6 +295,7 @@ void GameScene::update()
 
 	}
 
+
 	for (int i = 0; i < Define::BLOCK_H_NUM; i++)
 	{
 		for (int j = 0; j < BLOCK_NUM; j++)
@@ -304,13 +304,44 @@ void GameScene::update()
 		}
 	}
 
-
+	//プレイヤーの縦移動計算
+	float fallValue = (BLOCK_NUM - 1) * m_difX;
 	for (int i = 0; i < BLOCK_NUM; i++)
 	{
+		//落下中
+		if (m_smpPlayerBlocks[i]->GetIsMove())
+		{
+			int preColIndex = m_smpPlayerBlocks[i]->GetPreColIndex();
 
-		m_smpPlayerBlocks[i]->SetPos(0);
+			float difY = SIZE * (preColIndex - i) + fallValue;
+			if (difY <= 0)
+			{
+				m_smpPlayerBlocks[i]->SetIsMove(false);
+				m_smpPlayerBlocks[i]->SetPos();
+			}
+			else
+			{
+				m_smpPlayerBlocks[i]->SetPos(0, difY);
+			}
+		}
+		else
+		{
+			m_smpPlayerBlocks[i]->SetPos();
+		}
 
+		
+		////落下中
+		//if (m_smpPlayerBlocks[i]->GetIsMove(difY))
+		//{
+		//	m_smpPlayerBlocks[i]->SetPos(0, difY);
+		//}
+		//else
+		//{
+		//	m_smpPlayerBlocks[i]->SetPos(0);
+		//}
 	}
+
+
 }
 
 void GameScene::draw() const
@@ -414,7 +445,7 @@ void GameScene::DrawStage() const
 {
 	for (int i = 0; i < Define::BLOCK_H_NUM; i++)
 	{
-		float posX = SIZE * i - m_difX;
+		float posX = SIZE * i + m_difX;
 
 		//上
 		for (int j = 0; j < Define::BLOCK_GROUND_TOP_NUM; j++)

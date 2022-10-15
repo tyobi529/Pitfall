@@ -1,7 +1,6 @@
 ﻿#include "stdafx.h"
 #include "Block.h"
 
-#include "Define.h"
 
 #define SIZE Define::BLOCK_SIZE
 
@@ -48,11 +47,11 @@ void Block::SetType(TYPE type)
 	m_type = type;
 }
 
-void Block::SetPos(float difX)
+void Block::SetPos(float difX, float difY)
 {
 	//x, y, zをsizeの半分ずらす
-	float posX = SIZE * m_rowIndex - difX;
-	float posY = Define::LIMIT_POS_Y_HURDLE_BOTTOM + SIZE * m_colIndex;
+	float posX = SIZE * m_rowIndex + difX;
+	float posY = Define::LIMIT_POS_Y_HURDLE_BOTTOM + SIZE * m_colIndex + difY;
 	float posZ = 0;
 
 	float dif = Define::BLOCK_SIZE / 2.0f;
