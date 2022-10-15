@@ -7,7 +7,7 @@ BlockUnit::BlockUnit()
 {
 	for (int i = 0; i < Define::BLOCK_HURDLE_NUM; i++)
 	{
-		m_smpBlocks[i] = std::make_unique<Block>(i);
+		//m_smpBlocks[i] = std::make_unique<Block>(i);
 	}
 }
 
@@ -49,12 +49,12 @@ void BlockUnit::UpdatePos(float posX)
 
 	float posY = Define::LIMIT_POS_Y_HURDLE_BOTTOM;
 
-	for (int i = 0; i < Define::BLOCK_HURDLE_NUM; i++)
-	{
-		m_smpBlocks[i]->SetPos(Vec3(posX, posY, 0));
+	//for (int i = 0; i < Define::BLOCK_HURDLE_NUM; i++)
+	//{
+	//	m_smpBlocks[i]->SetPos(Vec3(posX, posY, 0));
 
-		posY += Define::BLOCK_SIZE;
-	}
+	//	posY += Define::BLOCK_SIZE;
+	//}
 
 }
 

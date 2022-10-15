@@ -37,10 +37,20 @@ GameScene::GameScene(const InitData& init)
 
 	playerMesh = Mesh{ MeshData::Pyramid(1.0, 1.0) };
 
+
+
+	for (int i = 0; i < Define::BLOCK_H_NUM; i++)
+	{
+		for (int j = 0; j < BLOCK_NUM; j++)
+		{
+			m_smpEnemyBlocks[i][j] = std::make_unique<Block>(i, j);
+		}
+	}
+
 	for (int i = 0; i < BLOCK_NUM; i++)
 	{
 		//m_playerBlocks[i].reset(std::make_unique<Block>(i));
-		m_smpPlayerBlocks[i] = std::make_unique<Block>(i);
+		m_smpPlayerBlocks[i] = std::make_unique<Block>(Define::BLOCK_PLAYE_INDEX, i);
 
 	}
 	
@@ -57,41 +67,24 @@ void GameScene::InitGame()
 
 	m_wallSpeed = Define::WALL_SPEED_FIRST;
 
-	//playerPos = Vec3(0, 0, 0);
 
 
 	m_smpWallManager.reset(new WallManager());
 
-	//m_smpPlayer.reset(new Player());
 
-	//m_smpBlockUnit.reset(new BlockUnit());
-	m_smpBlockUnits.clear();
+
 
 	Block::TYPE types[BLOCK_NUM] = {};
 	DecideBlockType(types, true);
 	for (int i = 0; i < Define::BLOCK_H_NUM; i++)
 	{
-		m_smpBlockUnits.push_back(std::make_unique<BlockUnit>());
-		m_smpBlockUnits[i]->Init(types);
-		m_smpBlockUnits[i]->UpdatePos(SIZE * i);
+		for (int j = 0; j < BLOCK_NUM; j++)
+		{
+			m_smpEnemyBlocks[i][j]->SetType(types[j]);
+
+		}
 	}
 
-	//テスト
-	//types[3] = Block::BLOCK_NORMAL;
-	//m_smpBlockUnits[Define::BLOCK_PLAYE_INDEX + 1]->Init(types);
-	//types[3] = Block::BLOCK_NONE;
-	//types[2] = Block::BLOCK_NORMAL;
-	//m_smpBlockUnits[Define::BLOCK_PLAYE_INDEX + 2]->Init(types);
-	
-
-	//プレイヤー
-	//m_smpPlayerUnit = std::make_unique<BlockUnit>();
-	//m_playerTypes[3] = Block::BLOCK_PLAYER_BODY;
-	//m_playerTypes[4] = Block::BLOCK_PLAYER_BODY;
-	//m_playerTypes[6] = Block::BLOCK_PLAYER_BODY;
-	//m_playerTypes[7] = Block::BLOCK_PLAYER_BODY;
-	//m_playerTypes[9] = Block::BLOCK_PLAYER_HEAD;
-	//m_smpPlayerUnit->Init(m_playerTypes);
 
 	m_smpPlayerBlocks[4]->SetType(Block::BLOCK_PLAYER_HEAD);
 
@@ -162,8 +155,8 @@ void GameScene::update()
 					//生成限界
 					break;
 				}
-				else if (m_smpBlockUnits[Define::BLOCK_PLAYE_INDEX]->GetBlockType(i + 1) != Block::BLOCK_NONE ||
-					m_smpBlockUnits[Define::BLOCK_PLAYE_INDEX + 1]->GetBlockType(i + 1) != Block::BLOCK_NONE)
+				else if (m_smpEnemyBlocks[Define::BLOCK_PLAYE_INDEX][i + 1]->GetType() != Block::BLOCK_NONE ||
+					m_smpEnemyBlocks[Define::BLOCK_PLAYE_INDEX + 1][i + 1]->GetType() != Block::BLOCK_NONE)
 				{
 					//上にブロックがあれば生成しない。ここ書き方あってる？
 					break;
@@ -171,9 +164,10 @@ void GameScene::update()
 				else
 				{
 					m_smpPlayerBlocks[i]->SetType(Block::BLOCK_PLAYER_BODY);
-					m_smpPlayerBlocks[i+1]->SetType(Block::BLOCK_PLAYER_HEAD);
+					m_smpPlayerBlocks[i + 1]->SetType(Block::BLOCK_PLAYER_HEAD);
 					break;
 				}
+
 			}
 		}
 	}
@@ -189,26 +183,37 @@ void GameScene::update()
 
 
 	//壁の位置更新
-	//float deltaPosY = m_deltaTime * m_wallSpeed;
-	//m_smpWallManager->UpdateWallPos(deltaPosY);
-
-	//m_smpPlayer->update();
-
-
 	//移動量計算
 	m_difX += m_deltaTime * Define::BLOCK_SPEED;
 
 	//更新
 	if (m_difX > 1.0f)
 	{
-		std::rotate(m_smpBlockUnits.begin(), m_smpBlockUnits.begin() + 1, m_smpBlockUnits.end());
+		for (int i = 0; i < Define::BLOCK_H_NUM - 1; i++)
+		{
+			for (int j = 0; j < BLOCK_NUM; j++)
+			{
+				m_smpEnemyBlocks[i][j]->SetType(m_smpEnemyBlocks[i + 1][j]->GetType());
+			}
+		}
+		//std::rotate(m_smpBlockUnits.begin(), m_smpBlockUnits.begin() + 1, m_smpBlockUnits.end());
+
 		m_difX -= 1.0f;
+
+		//リセット
+		//for (int i = 0; i < BLOCK_NUM; i++)
+		//{
+		//	m_smpEnemyBlocks[Define::BLOCK_H_NUM - 1][i]->SetType(Block::BLOCK_NONE);
+		//}
 
 		if (m_count == 0)
 		{
 			Block::TYPE types[BLOCK_NUM] = {};
 			DecideBlockType(types);
-			m_smpBlockUnits[Define::BLOCK_H_NUM - 1]->Init(types);
+			for (int i = 0; i < BLOCK_NUM; i++)
+			{
+				m_smpEnemyBlocks[Define::BLOCK_H_NUM - 1][i]->SetType(types[i]);
+			}
 
 			m_count++;
 		}
@@ -216,7 +221,10 @@ void GameScene::update()
 		{
 			Block::TYPE types[BLOCK_NUM] = {};
 			DecideBlockType(types, true);
-			m_smpBlockUnits[Define::BLOCK_H_NUM - 1]->Init(types);
+			for (int i = 0; i < BLOCK_NUM; i++)
+			{
+				m_smpEnemyBlocks[Define::BLOCK_H_NUM - 1][i]->SetType(types[i]);
+			}
 
 			if (m_count == 5)
 			{
@@ -234,7 +242,7 @@ void GameScene::update()
 		Block::TYPE types[BLOCK_NUM] = {};
 		for (int i = 0; i < BLOCK_NUM; i++)
 		{
-			types[i] = m_smpBlockUnits[Define::BLOCK_PLAYE_INDEX]->GetBlockType(i);
+			types[i] = m_smpEnemyBlocks[Define::BLOCK_PLAYE_INDEX][i]->GetType();
 			if (m_smpPlayerBlocks[i]->GetType() != Block::BLOCK_NONE && types[i] != Block::BLOCK_NONE)
 			{
 				assert(false); //位置がかぶってスライドできない
@@ -277,7 +285,7 @@ void GameScene::update()
 		{
 			if (m_smpPlayerBlocks[i]->GetType() != Block::BLOCK_NONE)
 			{
-				if (m_smpBlockUnits[Define::BLOCK_PLAYE_INDEX + 1]->GetBlockType(i) != Block::BLOCK_NONE)
+				if (m_smpEnemyBlocks[Define::BLOCK_PLAYE_INDEX + 1][i]->GetType() != Block::BLOCK_NONE)
 				{
 					m_smpPlayerBlocks[i]->SetType(Block::BLOCK_NONE);
 				}
@@ -290,20 +298,19 @@ void GameScene::update()
 
 	for (int i = 0; i < Define::BLOCK_H_NUM; i++)
 	{
-		float posX = SIZE * i - m_difX;
-		m_smpBlockUnits[i]->UpdatePos(posX);
+		for (int j = 0; j < BLOCK_NUM; j++)
+		{
+			m_smpEnemyBlocks[i][j]->SetPos(m_difX);
+		}
 	}
+
 
 	for (int i = 0; i < BLOCK_NUM; i++)
 	{
-		float posX = Define::PLAYER_POS_X;
 
-		float posY = Define::LIMIT_POS_Y_HURDLE_BOTTOM + SIZE * i;
-
-		m_smpPlayerBlocks[i]->SetPos(Vec3(posX, posY, 0));
+		m_smpPlayerBlocks[i]->SetPos(0);
 
 	}
-	//m_smpPlayerUnit->UpdatePos(Define::PLAYER_POS_X);
 }
 
 void GameScene::draw() const
@@ -337,17 +344,14 @@ void GameScene::draw() const
 
 
 
-
-		//m_smpPlayer->draw();
-
-
-
 		for (int i = 0; i < Define::BLOCK_H_NUM; i++)
 		{
-			m_smpBlockUnits[i]->draw();
+			for (int j = 0; j < BLOCK_NUM; j++)
+			{
+				m_smpEnemyBlocks[i][j]->draw();
+			}
 		}
 
-		//m_smpPlayerUnit->draw();
 
 		for (int i = 0; i < BLOCK_NUM; i++)
 		{

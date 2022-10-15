@@ -88,21 +88,15 @@ private:
 
 	std::unique_ptr<WallManager> m_smpWallManager;
 
-	//std::unique_ptr<Player> m_smpPlayer;
 
-	//std::unique_ptr<BlockUnit> m_smpBlockUnit;
+	//std::vector<std::unique_ptr<BlockUnit>> m_smpBlockUnits; //rotateするためvector
 
-	//std::vector<std::unique_ptr<BlockUnit>> m_smpBlockUnit;
-
-	//std::unique_ptr<BlockUnit> m_blockUnits[Define::BLOCK_H_NUM];
-	std::vector<std::unique_ptr<BlockUnit>> m_smpBlockUnits; //rotateするためvector
-
-	//std::unique_ptr<BlockUnit> m_smpPlayerUnit;
-	//Block::TYPE m_playerTypes[Define::BLOCK_HURDLE_NUM];
 
 
 	const Texture woodTexture{ U"example/texture/wood.jpg", TextureDesc::MippedSRGB };
 
+
+	std::unique_ptr<Block> m_smpEnemyBlocks[Define::BLOCK_H_NUM][Define::BLOCK_HURDLE_NUM];
 
 	std::unique_ptr<Block> m_smpPlayerBlocks[Define::BLOCK_HURDLE_NUM];
 
