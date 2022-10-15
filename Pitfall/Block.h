@@ -18,6 +18,7 @@ public:
 	Block(int rowIndex, int colIndex);
 	~Block();
 
+	virtual void update();
 	void draw();
 
 	void SetType(TYPE type);
@@ -35,6 +36,7 @@ protected:
 	const int m_colIndex;
 
 	Vec3 m_centerPos;
+	float m_size;
 
 private:
 

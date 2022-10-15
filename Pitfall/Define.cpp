@@ -40,8 +40,7 @@ const float Define::BLOCK_GENERATED_POS_X = Define::BLOCK_SIZE * (float)BLOCK_H_
 
 const float Define::BLOCK_SPEED = 2.0f;
 
-//1マス移動する間に(BLOCK_HURDLE_NUM - 1)マス分落下できる速度
-const float Define::BLOCK_FALL_SPEED = Define::BLOCK_SPEED * (float)(BLOCK_HURDLE_NUM - 1);
+const float Define::BLOCK_EXPAND_SPEED = 5.0f;
 
 
 

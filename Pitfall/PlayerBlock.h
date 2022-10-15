@@ -10,13 +10,15 @@ public:
 
 	void SetMoveInfo(int preColIndex);
 
-	//bool GetIsMove(float difY);
+
+
+	void update() override;
+
+	void Init();
 
 	bool GetIsMove() { return m_isMove; };
 	void SetIsMove(bool isMove) { m_isMove = isMove; };
 
-
-	//float GetDifY();
 
 	int GetPreColIndex() { return m_preColIndex; };
 
@@ -28,5 +30,7 @@ private:
 
 	int m_preColIndex;
 
+	//拡大
+	bool m_isExpand;
 };
 

@@ -163,6 +163,7 @@ void GameScene::update()
 				else
 				{
 					m_smpPlayerBlocks[i]->SetType(Block::BLOCK_PLAYER_BODY);
+					m_smpPlayerBlocks[i]->Init();
 					m_smpPlayerBlocks[i + 1]->SetType(Block::BLOCK_PLAYER_HEAD);
 					break;
 				}
@@ -329,16 +330,19 @@ void GameScene::update()
 			m_smpPlayerBlocks[i]->SetPos();
 		}
 
-		
-		////落下中
-		//if (m_smpPlayerBlocks[i]->GetIsMove(difY))
-		//{
-		//	m_smpPlayerBlocks[i]->SetPos(0, difY);
-		//}
-		//else
-		//{
-		//	m_smpPlayerBlocks[i]->SetPos(0);
-		//}
+	}
+
+	//ブロックのupdate
+	for (int i = 0; i < Define::BLOCK_H_NUM; i++)
+	{
+		for (int j = 0; j < BLOCK_NUM; j++)
+		{
+			m_smpEnemyBlocks[i][j]->update();
+		}
+	}
+	for (int i = 0; i < BLOCK_NUM; i++)
+	{
+		m_smpPlayerBlocks[i]->update();
 	}
 
 
