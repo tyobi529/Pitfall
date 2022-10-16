@@ -23,9 +23,9 @@ public:
 	void draw();
 	void SetCenterPos(float difX, float fallValue = 0);
 
-	//void SetType(int index, Block::TYPE type);
-
 	Block::TYPE GetBlockType(int index) { return m_smpBlocks[index]->GetType(); };
+
+	void SetPreIndex(int blockIndex, int preIndex) { m_preIndex[blockIndex] = preIndex; };
 
 private:
 	//int m_rowIndex; //逆だけど一旦
@@ -37,6 +37,6 @@ private:
 	std::shared_ptr<Block> m_smpBlocks[Define::BLOCK_HURDLE_NUM];
 
 	//std::pair<int, int> m_moveInfo;
-	//int m_preIndex[Define::BLOCK_HURDLE_NUM];
+	int m_preIndex[Define::BLOCK_HURDLE_NUM];
 };
 

@@ -7,15 +7,13 @@
 
 
 BlockUnit::BlockUnit() :
-	m_unitIndex(0)
+	m_unitIndex(0),
+	m_preIndex{}
 {
-	//for (int i = 0; i < Define::BLOCK_HURDLE_NUM; i++)
-	//{
-	//	m_smpBlocks[i] = std::make_unique<Block>(i);
-
-	//	//m_preIndex[i] = i;
-	//}
-
+	for (int i = 0; i < SIZE; i++)
+	{
+		m_preIndex[i] = i;
+	}
 }
 
 BlockUnit::~BlockUnit()
@@ -79,32 +77,36 @@ void BlockUnit::SetCenterPos(float difX, float fallValue)
 	{
 		float posY = Define::LIMIT_POS_Y_HURDLE_BOTTOM + Define::BLOCK_SIZE * i;
 
-		if (m_smpBlocks[i]->GetIsMove())
+		if (i != m_preIndex[i])
 		{
-			int preIndex = m_smpBlocks[i]->GetPreIndex();
-			//float difY = -(preIndex - i) * SIZE + fallValue;
-			float difY = (preIndex - i) * SIZE - fallValue;
-
+			//int preIndex = m_smpBlocks[i]->GetPreIndex();
+			float difY = (m_preIndex[i] - i) * SIZE - fallValue;
+			
 			if (difY <= 0)
 			{
-				m_smpBlocks[i]->SetIsMove(false);
+				//m_smpBlocks[i]->SetIsMove(false);
+				m_preIndex[i] = i;
 				difY = 0;
 			}
 
 			posY += difY;
 		}
 
-		m_smpBlocks[i]->SetCenterPos(posX, posY);
+		//if (m_smpBlocks[i]->GetIsMove())
+		//{
+		//	int preIndex = m_smpBlocks[i]->GetPreIndex();
+		//	float difY = (preIndex - i) * SIZE - fallValue;
 
-		//if (m_smpBlocks[i]->CheckMoveStatus(fallValue))
-		//{
-		//	posY -= fallValue;
-		//	m_smpBlocks[i]->SetCenterPos(posX, posY);
+		//	if (difY <= 0)
+		//	{
+		//		m_smpBlocks[i]->SetIsMove(false);
+		//		difY = 0;
+		//	}
+
+		//	posY += difY;
 		//}
-		//else
-		//{
-		//	m_smpBlocks[i]->SetCenterPos(posX, posY);
-		//}
+
+		m_smpBlocks[i]->SetCenterPos(posX, posY);
 
 
 	}

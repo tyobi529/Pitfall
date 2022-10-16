@@ -40,7 +40,7 @@ public:
 	bool GetIsMove() { return m_isMove; };
 	void SetIsMove(bool isMove) { m_isMove = isMove; };
 
-	bool CheckMoveStatus(float fallValue);
+	//bool CheckMoveStatus(float fallValue);
 
 protected:
 	//const int m_rowIndex;

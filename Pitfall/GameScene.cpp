@@ -91,10 +91,10 @@ void GameScene::InitGame()
 	}
 
 
-	for (int i = 3; i < BLOCK_NUM - 4; i++)
-	{
-		m_smpPlayerBlockUnit->GetBlock(i)->SetType(Block::BLOCK_PLAYER_BODY);
-	}
+	//for (int i = 3; i < BLOCK_NUM - 4; i++)
+	//{
+	//	m_smpPlayerBlockUnit->GetBlock(i)->SetType(Block::BLOCK_PLAYER_BODY);
+	//}
 	m_smpPlayerBlockUnit->GetBlock(BLOCK_NUM - 3)->SetType(Block::BLOCK_PLAYER_HEAD);
 	//m_smpPlayerBlockUnit->GetBlock(BLOCK_NUM - 3)->SetType(Block::BLOCK_PLAYER_HEAD);
 
@@ -156,38 +156,38 @@ void GameScene::update()
 	if (MouseL.up())
 	{
 		//プレイヤーのブロック増やす
+		int headIndex = -1;
+
 		for (int i = 0; i < BLOCK_NUM; i++)
 		{
-			std::shared_ptr<Block> smpPlayerBlock = m_smpPlayerBlockUnit->GetBlock(i);
-
-			if (smpPlayerBlock->GetType() == Block::BLOCK_PLAYER_HEAD)
+			if (m_smpPlayerBlockUnit->GetBlock(i)->GetType() == Block::BLOCK_PLAYER_HEAD)
 			{
-				//std::shared_ptr<BlockUnit> smpenemyBlockUnit = m_smpEnemyBlocks[Define::BLOCK_PLAYE_INDEX]->
-				std::shared_ptr<Block> smpCurrentEnemyBlock = m_smpEnemyBlockUnits[Define::BLOCK_PLAYE_INDEX]->GetBlock(i + 1);
-				std::shared_ptr<Block> smpNextEnemyBlock = m_smpEnemyBlockUnits[Define::BLOCK_PLAYE_INDEX + 1]->GetBlock(i + 1);
-
-				if (i == BLOCK_NUM - 1)
-				{
-					//生成限界
-					break;
-				}
-				else if (smpCurrentEnemyBlock->GetType() != Block::BLOCK_NONE ||
-					smpNextEnemyBlock->GetType() != Block::BLOCK_NONE)
-				{
-					//上にブロックがあれば生成しない。ここ書き方あってる？
-					break;
-				}
-				else
-				{
-					smpPlayerBlock->SetType(Block::BLOCK_PLAYER_BODY);
-					smpPlayerBlock->Init();
-					//1つ上に頭を移動
-					m_smpPlayerBlockUnit->GetBlock(i + 1)->SetType(Block::BLOCK_PLAYER_HEAD);
-					break;
-				}
-
+				headIndex = i;
+				break;
 			}
 		}
+
+		std::shared_ptr<Block> smpCurrentEnemyBlock = m_smpEnemyBlockUnits[Define::BLOCK_PLAYE_INDEX]->GetBlock(headIndex + 1);
+		std::shared_ptr<Block> smpNextEnemyBlock = m_smpEnemyBlockUnits[Define::BLOCK_PLAYE_INDEX + 1]->GetBlock(headIndex + 1);
+
+		if (headIndex == BLOCK_NUM - 1)
+		{
+			//生成限界
+		}
+		else if (smpCurrentEnemyBlock->GetType() != Block::BLOCK_NONE ||
+			smpNextEnemyBlock->GetType() != Block::BLOCK_NONE)
+		{
+			//上にブロックがあれば生成しない。ここ書き方あってる？
+		}
+		else
+		{
+			m_smpPlayerBlockUnit->GetBlock(headIndex)->Init();
+			m_smpPlayerBlockUnit->GetBlock(headIndex)->SetType(Block::BLOCK_PLAYER_BODY);
+			//1つ上に頭を移動
+			//m_smpPlayerBlockUnit->GetBlock(headIndex + 1)->Init();
+			m_smpPlayerBlockUnit->GetBlock(headIndex + 1)->SetType(Block::BLOCK_PLAYER_HEAD);
+		}
+
 	}
 	if (MouseR.up())
 	{
@@ -312,9 +312,10 @@ void GameScene::update()
 
 
 	//縦移動計算
-	float fallValue = (BLOCK_NUM - 1) * (-m_difX);
+	//float fallValue = (BLOCK_NUM - 1) * (-m_difX);
+	float fallValue = (BLOCK_NUM - 1) * m_difX * m_difX;
 
-	//テスト
+	//位置設定
 	for (int i = 0; i < UNIT_NUM; i++)
 	{
 		m_smpEnemyBlockUnits[i]->SetCenterPos(m_difX, fallValue);
@@ -322,57 +323,6 @@ void GameScene::update()
 	m_smpPlayerBlockUnit->SetCenterPos(0, fallValue);
 
 
-	//for (int i = 0; i < UNIT_NUM; i++)
-	//{
-	//	for (int j = 0; j < BLOCK_NUM; j++)
-	//	{
-	//		//落下中
-	//		if (m_smpEnemyBlocks[i][j]->GetIsMove())
-	//		{
-	//			int preColIndex = m_smpEnemyBlocks[i][j]->GetPreColIndex();
-
-	//			float difY = SIZE * (preColIndex - i) + fallValue;
-	//			if (difY <= 0)
-	//			{
-	//				m_smpEnemyBlocks[i][j]->SetIsMove(false);
-	//				m_smpEnemyBlocks[i][j]->SetCenterPos(m_difX);
-	//			}
-	//			else
-	//			{
-	//				m_smpEnemyBlocks[i][j]->SetCenterPos(m_difX, difY);
-	//			}
-	//		}
-	//		else
-	//		{
-	//			m_smpEnemyBlocks[i][j]->SetCenterPos(m_difX);
-	//		}
-	//	}
-	//}
-
-	//for (int i = 0; i < BLOCK_NUM; i++)
-	//{
-	//	//落下中
-	//	if (m_smpPlayerBlocks[i]->GetIsMove())
-	//	{
-	//		int preColIndex = m_smpPlayerBlocks[i]->GetPreColIndex();
-
-	//		float difY = SIZE * (preColIndex - i) + fallValue;
-	//		if (difY <= 0)
-	//		{
-	//			m_smpPlayerBlocks[i]->SetIsMove(false);
-	//			m_smpPlayerBlocks[i]->SetCenterPos();
-	//		}
-	//		else
-	//		{
-	//			m_smpPlayerBlocks[i]->SetCenterPos(0, difY);
-	//		}
-	//	}
-	//	else
-	//	{
-	//		m_smpPlayerBlocks[i]->SetCenterPos();
-	//	}
-
-	//}
 
 	//ブロックのupdate
 	for (int i = 0; i < UNIT_NUM; i++)
@@ -543,6 +493,7 @@ void GameScene::DropPlayerBlock(std::shared_ptr<BlockUnit> blockUnit, Block::TYP
 
 					//移動元情報入れる
 					blockUnit->GetBlock(j + 1)->SetMoveInfo(i);
+					blockUnit->SetPreIndex(j + 1, i);
 
 					//m_smpPlayerBlocks[j + 1]->SetMoveInfo(i);
 
@@ -557,6 +508,8 @@ void GameScene::DropPlayerBlock(std::shared_ptr<BlockUnit> blockUnit, Block::TYP
 
 					//移動元情報入れる
 					blockUnit->GetBlock(0)->SetMoveInfo(i);
+					blockUnit->SetPreIndex(0, i);
+
 					break;
 				}
 			}

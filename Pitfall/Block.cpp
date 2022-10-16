@@ -21,7 +21,7 @@ Block::~Block()
 
 void Block::Init()
 {
-	m_type = TYPE::BLOCK_NONE;
+	m_type = TYPE::BLOCK_NONE; //typeが消えるので注意
 	m_centerPos = Vec3(0, 0, 0);
 	m_size = Define::BLOCK_SIZE;
 	m_isMove = false;
@@ -82,21 +82,3 @@ void Block::SetMoveInfo(int preIndex)
 }
 
 
-bool Block::CheckMoveStatus(float fallValue)
-{
-	if (!m_isMove)
-	{
-		return false;
-	}
-	else
-	{
-		if (fallValue >= (m_preIndex - m_index) * SIZE)
-		{
-			m_isMove = false;
-		}
-
-		return m_isMove;
-	}
-
-
-}
