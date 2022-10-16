@@ -492,22 +492,19 @@ void GameScene::DropPlayerBlock(std::shared_ptr<BlockUnit> blockUnit, Block::TYP
 					types[j + 1] = type;
 
 					//移動元情報入れる
-					blockUnit->GetBlock(j + 1)->SetMoveInfo(i);
+					//blockUnit->GetBlock(j + 1)->SetMoveInfo(i);
 					blockUnit->SetPreIndex(j + 1, i);
-
-					//m_smpPlayerBlocks[j + 1]->SetMoveInfo(i);
 
 					break;
 				}
 				if (j == 0)
 				{
 					blockUnit->GetBlock(0)->SetType(type);
-					//m_smpPlayerBlocks[0]->SetType(type);
 					//移動先にブロックを入れる
 					types[0] = type;
 
 					//移動元情報入れる
-					blockUnit->GetBlock(0)->SetMoveInfo(i);
+					//blockUnit->GetBlock(0)->SetMoveInfo(i);
 					blockUnit->SetPreIndex(0, i);
 
 					break;

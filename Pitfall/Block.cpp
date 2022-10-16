@@ -7,9 +7,7 @@ Block::Block(int index) :
 	m_index(index),
 	m_type(TYPE::BLOCK_NONE),
 	m_centerPos(Vec3(0, 0, 0)),
-	m_size(Define::BLOCK_SIZE),
-	m_isMove(false),
-	m_preIndex(0)
+	m_size(Define::BLOCK_SIZE)
 {
 	Init();
 }
@@ -24,8 +22,6 @@ void Block::Init()
 	m_type = TYPE::BLOCK_NONE; //typeが消えるので注意
 	m_centerPos = Vec3(0, 0, 0);
 	m_size = Define::BLOCK_SIZE;
-	m_isMove = false;
-	m_preIndex = 0;
 }
 
 void Block::update()
@@ -64,21 +60,4 @@ void Block::SetCenterPos(float posX, float posY)
 	m_centerPos = Vec3(posX + dif, posY + dif, 0 + dif);
 
 }
-
-
-
-void Block::SetMoveInfo(int preIndex)
-{
-
-	if (preIndex == m_index)
-	{
-		m_isMove = false;
-	}
-	else
-	{
-		m_isMove = true;
-		m_preIndex = preIndex;
-	}
-}
-
 

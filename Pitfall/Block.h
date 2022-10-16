@@ -33,14 +33,6 @@ public:
 
 	void SetCenterPos(float posX, float posY);
 
-	void SetMoveInfo(int preIndex);
-
-	int GetPreIndex() { return m_preIndex; };
-
-	bool GetIsMove() { return m_isMove; };
-	void SetIsMove(bool isMove) { m_isMove = isMove; };
-
-	//bool CheckMoveStatus(float fallValue);
 
 protected:
 	//const int m_rowIndex;
@@ -53,13 +45,6 @@ private:
 
 	//属性情報だけ持つ
 	TYPE m_type;
-
-
-
-	bool m_isMove;
-
-	int m_preIndex;
-
 
 
 
