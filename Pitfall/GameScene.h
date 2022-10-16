@@ -29,6 +29,7 @@ public:
 
 	void DrawStage() const;
 
+	void DropPlayerBlock(std::shared_ptr<BlockUnit> blockUnit, Block::TYPE* types = nullptr);
 
 private:
 

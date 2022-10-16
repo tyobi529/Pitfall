@@ -3,6 +3,9 @@
 
 //#include "Define.h"
 
+#define SIZE Define::BLOCK_SIZE
+
+
 BlockUnit::BlockUnit() :
 	m_unitIndex(0)
 {
@@ -67,15 +70,43 @@ void BlockUnit::draw()
 	}
 }
 
-void BlockUnit::SetCenterPos(float difX, float difY)
+void BlockUnit::SetCenterPos(float difX, float fallValue)
 {
 	float posX = Define::BLOCK_SIZE * m_unitIndex + difX;
 
+
 	for (int i = 0; i < Define::BLOCK_HURDLE_NUM; i++)
 	{
-		float posY = Define::LIMIT_POS_Y_HURDLE_BOTTOM + Define::BLOCK_SIZE * i + difY;
+		float posY = Define::LIMIT_POS_Y_HURDLE_BOTTOM + Define::BLOCK_SIZE * i;
+
+		if (m_smpBlocks[i]->GetIsMove())
+		{
+			int preIndex = m_smpBlocks[i]->GetPreIndex();
+			//float difY = -(preIndex - i) * SIZE + fallValue;
+			float difY = (preIndex - i) * SIZE - fallValue;
+
+			if (difY <= 0)
+			{
+				m_smpBlocks[i]->SetIsMove(false);
+				difY = 0;
+			}
+
+			posY += difY;
+		}
 
 		m_smpBlocks[i]->SetCenterPos(posX, posY);
+
+		//if (m_smpBlocks[i]->CheckMoveStatus(fallValue))
+		//{
+		//	posY -= fallValue;
+		//	m_smpBlocks[i]->SetCenterPos(posX, posY);
+		//}
+		//else
+		//{
+		//	m_smpBlocks[i]->SetCenterPos(posX, posY);
+		//}
+
+
 	}
 }
 

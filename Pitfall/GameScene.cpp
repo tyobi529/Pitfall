@@ -91,8 +91,13 @@ void GameScene::InitGame()
 	}
 
 
-	//m_smpPlayerBlocks[BLOCK_NUM - 3]->SetType(Block::BLOCK_PLAYER_HEAD);
+	for (int i = 3; i < BLOCK_NUM - 4; i++)
+	{
+		m_smpPlayerBlockUnit->GetBlock(i)->SetType(Block::BLOCK_PLAYER_BODY);
+	}
 	m_smpPlayerBlockUnit->GetBlock(BLOCK_NUM - 3)->SetType(Block::BLOCK_PLAYER_HEAD);
+	//m_smpPlayerBlockUnit->GetBlock(BLOCK_NUM - 3)->SetType(Block::BLOCK_PLAYER_HEAD);
+
 
 	m_difX = 0;
 
@@ -215,26 +220,26 @@ void GameScene::update()
 
 		if (m_count == 0)
 		{
-			std::shared_ptr<BlockUnit> smpBlock = m_smpEnemyBlockUnits[UNIT_NUM - 1];
+			std::shared_ptr<BlockUnit> smpBlockUnit = m_smpEnemyBlockUnits[UNIT_NUM - 1];
 
 			Block::TYPE types[BLOCK_NUM] = {};
 			DecideBlockType(types, false);
 			for (int j = 0; j < BLOCK_NUM; j++)
 			{
-				smpBlock->GetBlock(j)->SetType(types[j]);
+				smpBlockUnit->GetBlock(j)->SetType(types[j]);
 			}
 
 			m_count++;
 		}
 		else
 		{
-			std::shared_ptr<BlockUnit> smpBlock = m_smpEnemyBlockUnits[UNIT_NUM - 1];
+			std::shared_ptr<BlockUnit> smpBlockUnit = m_smpEnemyBlockUnits[UNIT_NUM - 1];
 
 			Block::TYPE types[BLOCK_NUM] = {};
 			DecideBlockType(types, true);
 			for (int j = 0; j < BLOCK_NUM; j++)
 			{
-				smpBlock->GetBlock(j)->SetType(types[j]);
+				smpBlockUnit->GetBlock(j)->SetType(types[j]);
 			}
 
 			if (m_count == 5)
@@ -248,84 +253,74 @@ void GameScene::update()
 		}
 
 
-		////============ プレイヤー ============
-		////まずは横にスライド
-		//Block::TYPE types[BLOCK_NUM] = {};
-		//for (int i = 0; i < BLOCK_NUM; i++)
-		//{
-		//	types[i] = m_smpEnemyBlocks[Define::BLOCK_PLAYE_INDEX][i]->GetType();
-		//	if (m_smpPlayerBlocks[i]->GetType() != Block::BLOCK_NONE && types[i] != Block::BLOCK_NONE)
-		//	{
-		//		assert(false); //位置がかぶってスライドできない
-		//	}
-		//}
-		//for (int i = 0; i < BLOCK_NUM; i++)
-		//{
-		//	Block::TYPE type = m_smpPlayerBlocks[i]->GetType();
-		//	if (type != Block::BLOCK_NONE)
-		//	{
-		//		//元の位置を先に削除
-		//		m_smpPlayerBlocks[i]->SetType(Block::BLOCK_NONE);
-		//		//下を確認
-		//		for (int j = i - 1; j >= 0; j--)
-		//		{
-		//			if (types[j] != Block::BLOCK_NONE)
-		//			{
-		//				//ブロックが存在する場合はその１つ上に移動
-		//				//真下にある場合は変化なし
-		//				m_smpPlayerBlocks[j + 1]->SetType(type);
-		//				//移動先にブロックを入れる
-		//				types[j + 1] = type;
+		//============ プレイヤー ============
+		//まずは横にスライド
+		{
+			//スライド判定先
+			std::shared_ptr<BlockUnit> smpEnemyBlockUnit = m_smpEnemyBlockUnits[Define::BLOCK_PLAYE_INDEX];
 
-		//				//移動元情報入れる
-		//				m_smpPlayerBlocks[j + 1]->SetMoveInfo(i);
-		//				break;
-		//			}
-		//			if (j == 0)
-		//			{
-		//				m_smpPlayerBlocks[0]->SetType(type);
-		//				//移動先にブロックを入れる
-		//				types[0] = type;
+			Block::TYPE types[BLOCK_NUM] = {};
+			for (int i = 0; i < BLOCK_NUM; i++)
+			{
+				types[i] = smpEnemyBlockUnit->GetBlock(i)->GetType();
+				if (m_smpPlayerBlockUnit->GetBlock(i)->GetType() != Block::BLOCK_NONE && types[i] != Block::BLOCK_NONE)
+				{
+					assert(false); //位置がかぶってスライドできない
+				}
+			}
 
-		//				//移動元情報入れる
-		//				m_smpPlayerBlocks[0]->SetMoveInfo(i);
-		//				break;
-		//			}
-		//		}
-		//	}
-		//}
+			DropPlayerBlock(m_smpPlayerBlockUnit, types);
+		}
+
+		{
+			//おいていったプレイヤーブロックを落とす
+			DropPlayerBlock(m_smpEnemyBlockUnits[Define::BLOCK_PLAYE_INDEX - 1]);
+		}
+		
 
 
-		////ぶつかったブロックを消す
-		//for (int i = 0; i < BLOCK_NUM; i++)
-		//{
-		//	if (m_smpPlayerBlocks[i]->GetType() != Block::BLOCK_NONE)
-		//	{
-		//		if (m_smpEnemyBlocks[Define::BLOCK_PLAYE_INDEX + 1][i]->GetType() != Block::BLOCK_NONE)
-		//		{
-		//			m_smpPlayerBlocks[i]->SetType(Block::BLOCK_NONE);
+		//ぶつかったブロックを消す
+		{
+			//ぶつかる対象（プレイヤーの１つ先）
+			std::shared_ptr<BlockUnit> smpEnemyBlockUnit = m_smpEnemyBlockUnits[Define::BLOCK_PLAYE_INDEX + 1];
 
-		//			m_smpEnemyBlocks[Define::BLOCK_PLAYE_INDEX][i]->SetType(Block::BLOCK_PLAYER_BODY);
-		//			m_smpEnemyBlocks[Define::BLOCK_PLAYE_INDEX][i]->SetMoveInfo(i);
-		//		}
-		//	}
-		//}
+			for (int i = 0; i < BLOCK_NUM; i++)
+			{
+
+				if (m_smpPlayerBlockUnit->GetBlock(i)->GetType() != Block::BLOCK_NONE)
+				{
+
+					if (smpEnemyBlockUnit->GetBlock(i)->GetType() != Block::BLOCK_NONE)
+					{
+						m_smpPlayerBlockUnit->GetBlock(i)->SetType(Block::BLOCK_NONE);
+
+						m_smpEnemyBlockUnits[Define::BLOCK_PLAYE_INDEX]->GetBlock(i)->SetType(Block::BLOCK_PLAYER_BODY);
+
+						
+					}
+				}
+
+			}
+
+
+		}
+		
 
 	
 
 	}
 
 
-	for (int i = 0; i < UNIT_NUM; i++)
-	{
-		m_smpEnemyBlockUnits[i]->SetCenterPos(m_difX);
-	}
+	//縦移動計算
+	float fallValue = (BLOCK_NUM - 1) * (-m_difX);
 
 	//テスト
-	m_smpPlayerBlockUnit->SetCenterPos(0);
+	for (int i = 0; i < UNIT_NUM; i++)
+	{
+		m_smpEnemyBlockUnits[i]->SetCenterPos(m_difX, fallValue);
+	}
+	m_smpPlayerBlockUnit->SetCenterPos(0, fallValue);
 
-	//縦移動計算
-	//float fallValue = (BLOCK_NUM - 1) * m_difX;
 
 	//for (int i = 0; i < UNIT_NUM; i++)
 	//{
@@ -503,3 +498,68 @@ void GameScene::DrawStage() const
 
 }
 
+
+void GameScene::DropPlayerBlock(std::shared_ptr<BlockUnit> blockUnit, Block::TYPE* types)
+{
+	//Block::TYPE targetTypes[BLOCK_NUM] = {};
+
+	if (types == nullptr)
+	{
+		Block::TYPE emptyTypes[BLOCK_NUM] = {};
+		for (int i = 0; i < BLOCK_NUM; i++)
+		{
+			if (blockUnit->GetBlock(i)->GetType() == Block::BLOCK_PLAYER_HEAD ||
+				blockUnit->GetBlock(i)->GetType() == Block::BLOCK_PLAYER_BODY)
+			{
+				emptyTypes[i] = Block::BLOCK_NONE;
+			}
+			else
+			{
+				emptyTypes[i] = blockUnit->GetBlock(i)->GetType();
+			}
+		}
+		types = emptyTypes;
+	}
+
+
+
+	for (int i = 0; i < BLOCK_NUM; i++)
+	{
+		Block::TYPE type = blockUnit->GetBlock(i)->GetType();
+		if (type == Block::BLOCK_PLAYER_HEAD || type == Block::BLOCK_PLAYER_BODY)
+		{
+			//元の位置を先に削除
+			blockUnit->GetBlock(i)->SetType(Block::BLOCK_NONE);
+			//下を確認
+			for (int j = i - 1; j >= 0; j--)
+			{
+				if (types[j] != Block::BLOCK_NONE)
+				{
+					//ブロックが存在する場合はその１つ上に移動
+					//真下にある場合は変化なし
+					blockUnit->GetBlock(j + 1)->SetType(type);
+					//移動先にブロックを入れる
+					types[j + 1] = type;
+
+					//移動元情報入れる
+					blockUnit->GetBlock(j + 1)->SetMoveInfo(i);
+
+					//m_smpPlayerBlocks[j + 1]->SetMoveInfo(i);
+
+					break;
+				}
+				if (j == 0)
+				{
+					blockUnit->GetBlock(0)->SetType(type);
+					//m_smpPlayerBlocks[0]->SetType(type);
+					//移動先にブロックを入れる
+					types[0] = type;
+
+					//移動元情報入れる
+					blockUnit->GetBlock(0)->SetMoveInfo(i);
+					break;
+				}
+			}
+		}
+	}
+}

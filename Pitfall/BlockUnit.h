@@ -21,7 +21,7 @@ public:
 
 	void update();
 	void draw();
-	void SetCenterPos(float difX, float difY = 0);
+	void SetCenterPos(float difX, float fallValue = 0);
 
 	//void SetType(int index, Block::TYPE type);
 

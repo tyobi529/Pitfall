@@ -33,12 +33,14 @@ public:
 
 	void SetCenterPos(float posX, float posY);
 
-	void SetMoveInfo(int preColIndex);
+	void SetMoveInfo(int preIndex);
 
 	int GetPreIndex() { return m_preIndex; };
 
 	bool GetIsMove() { return m_isMove; };
 	void SetIsMove(bool isMove) { m_isMove = isMove; };
+
+	bool CheckMoveStatus(float fallValue);
 
 protected:
 	//const int m_rowIndex;

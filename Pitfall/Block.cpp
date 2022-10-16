@@ -67,15 +67,36 @@ void Block::SetCenterPos(float posX, float posY)
 
 
 
-void Block::SetMoveInfo(int preColIndex)
+void Block::SetMoveInfo(int preIndex)
 {
-	//if (preColIndex - m_colIndex == 0)
-	//{
-	//	m_isMove = false;
-	//}
-	//else
-	//{
-	//	m_isMove = true;
-	//	m_preColIndex = preColIndex;
-	//}
+
+	if (preIndex == m_index)
+	{
+		m_isMove = false;
+	}
+	else
+	{
+		m_isMove = true;
+		m_preIndex = preIndex;
+	}
+}
+
+
+bool Block::CheckMoveStatus(float fallValue)
+{
+	if (!m_isMove)
+	{
+		return false;
+	}
+	else
+	{
+		if (fallValue >= (m_preIndex - m_index) * SIZE)
+		{
+			m_isMove = false;
+		}
+
+		return m_isMove;
+	}
+
+
 }
