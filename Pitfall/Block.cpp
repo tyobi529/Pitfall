@@ -3,44 +3,37 @@
 
 #define SIZE Define::BLOCK_SIZE
 
-Block::Block(int rowIndex, int colIndex) :
-	m_rowIndex(rowIndex),
-	m_colIndex(colIndex),
+Block::Block(int index) :
+	m_index(index),
 	m_type(TYPE::BLOCK_NONE),
 	m_centerPos(Vec3(0, 0, 0)),
 	m_size(Define::BLOCK_SIZE),
 	m_isMove(false),
-	m_preColIndex(0),
-	m_isExpand(false)
+	m_preIndex(0)
 {
+	Init();
 }
 
 
 Block::~Block()
 {
-
 }
 
 void Block::Init()
 {
-	m_isExpand = true;
-	m_size = 0;
+	m_type = TYPE::BLOCK_NONE;
+	m_centerPos = Vec3(0, 0, 0);
+	m_size = Define::BLOCK_SIZE;
+	m_isMove = false;
+	m_preIndex = 0;
 }
 
 void Block::update()
 {
-	if (m_isExpand)
-	{
-		m_size += (float)Scene::DeltaTime() * Define::BLOCK_EXPAND_SPEED;
-		if (m_size > Define::BLOCK_SIZE)
-		{
-			m_size = Define::BLOCK_SIZE;
-			m_isExpand = false;
-		}
-	}
+
 }
 
-void Block::draw()
+void Block::draw() const
 {
 	switch (m_type)
 	{
@@ -64,15 +57,11 @@ void Block::draw()
 }
 
 
-void Block::SetCenterPos(float difX, float difY)
+void Block::SetCenterPos(float posX, float posY)
 {
 	//x, y, zをsizeの半分ずらす
-	float posX = Define::BLOCK_SIZE * m_rowIndex + difX;
-	float posY = Define::LIMIT_POS_Y_HURDLE_BOTTOM + Define::BLOCK_SIZE * m_colIndex + difY;
-	float posZ = 0;
-
 	float dif = Define::BLOCK_SIZE / 2.0f;
-	m_centerPos = Vec3(posX + Define::BLOCK_SIZE / 2.0f, posY + Define::BLOCK_SIZE / 2.0f, posZ + Define::BLOCK_SIZE / 2.0f);
+	m_centerPos = Vec3(posX + dif, posY + dif, 0 + dif);
 
 }
 
@@ -80,13 +69,13 @@ void Block::SetCenterPos(float difX, float difY)
 
 void Block::SetMoveInfo(int preColIndex)
 {
-	if (preColIndex - m_colIndex == 0)
-	{
-		m_isMove = false;
-	}
-	else
-	{
-		m_isMove = true;
-		m_preColIndex = preColIndex;
-	}
+	//if (preColIndex - m_colIndex == 0)
+	//{
+	//	m_isMove = false;
+	//}
+	//else
+	//{
+	//	m_isMove = true;
+	//	m_preColIndex = preColIndex;
+	//}
 }

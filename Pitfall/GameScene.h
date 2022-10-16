@@ -10,7 +10,7 @@
 
 #include "BlockUnit.h"
 
-//#include "PlayerBlock.h"
+#include "PlayerBlock.h"
 
 // ゲームシーン
 class GameScene : public App::Scene
@@ -100,13 +100,15 @@ private:
 
 
 	//std::unique_ptr<Block> m_smpEnemyBlocks[Define::BLOCK_H_NUM][Define::BLOCK_HURDLE_NUM];
-	std::shared_ptr<Block> m_smpEnemyBlocks[Define::BLOCK_H_NUM][Define::BLOCK_HURDLE_NUM];
+	//std::shared_ptr<Block> m_smpEnemyBlocks[Define::BLOCK_H_NUM][Define::BLOCK_HURDLE_NUM];
 	//std::shared_ptr<Block> m_smpBlocks[Define::BLOCK_H_NUM][Define::BLOCK_HURDLE_NUM];
+	//std::shared_ptr<BlockUnit> m_smpEnemyBlockUnits[Define::BLOCK_H_NUM];
 
-
+	std::vector<std::shared_ptr<BlockUnit>> m_smpEnemyBlockUnits;
 	//std::unique_ptr<PlayerBlock> m_smpPlayerBlocks[Define::BLOCK_HURDLE_NUM];
 	//std::unique_ptr<Block> m_smpPlayerBlocks[Define::BLOCK_HURDLE_NUM];
-	std::shared_ptr<Block> m_smpPlayerBlocks[Define::BLOCK_HURDLE_NUM];
+	//std::shared_ptr<PlayerBlock> m_smpPlayerBlocks[Define::BLOCK_HURDLE_NUM];
+	std::shared_ptr<BlockUnit> m_smpPlayerBlockUnit;
 
 	//Block* m_pPlayerBlocks;
 

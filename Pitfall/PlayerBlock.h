@@ -5,32 +5,20 @@
 class PlayerBlock : public Block
 {
 public:
-	PlayerBlock(int rowIndex, int colIndex);
+	PlayerBlock(int index);
 	~PlayerBlock();
 
-	void SetMoveInfo(int preColIndex);
-
-
+	void Init() override;
 
 	void update() override;
 
-	void Init();
-
-	bool GetIsMove() { return m_isMove; };
-	void SetIsMove(bool isMove) { m_isMove = isMove; };
-
-
-	int GetPreColIndex() { return m_preColIndex; };
 
 
 private:
 
-	bool m_isMove;
-	float m_maxDifY;
-
-	int m_preColIndex;
-
 	//拡大
 	bool m_isExpand;
+	//倍率
+	float m_sizeMag;
 };
 

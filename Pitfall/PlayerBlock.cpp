@@ -3,14 +3,12 @@
 
 #define SIZE Define::BLOCK_SIZE
 
-PlayerBlock::PlayerBlock(int rowIndex, int colIndex) :
-	Block(rowIndex, colIndex),
-	m_isMove(false),
-	m_maxDifY(0),
-	m_preColIndex(0),
-	m_isExpand(false)
+PlayerBlock::PlayerBlock(int index) :
+	Block(index),
+	m_isExpand(false),
+	m_sizeMag(1)
 {
-
+	Init();
 }
 
 
@@ -20,34 +18,30 @@ PlayerBlock::~PlayerBlock()
 
 void PlayerBlock::Init()
 {
+	Block::Init();
+
 	m_isExpand = true;
-	m_size = 0;
+	m_sizeMag = 0.0f;
 }
 
 void PlayerBlock::update()
 {
 	if (m_isExpand)
 	{
-		m_size += (float)Scene::DeltaTime() * Define::BLOCK_EXPAND_SPEED;
-		if (m_size > Define::BLOCK_SIZE)
+		//m_size += (float)Scene::DeltaTime() * Define::BLOCK_EXPAND_SPEED;
+		m_sizeMag += (float)Scene::DeltaTime() * Define::BLOCK_EXPAND_SPEED;
+
+		if (m_sizeMag >= 1.0f)
 		{
+			m_sizeMag = 1.0f;
 			m_size = Define::BLOCK_SIZE;
 			m_isExpand = false;
 		}
+		else
+		{
+			m_size = Define::BLOCK_SIZE * m_sizeMag;
+		}
 	}
-}
 
-void PlayerBlock::SetMoveInfo(int preColIndex)
-{
-	if (preColIndex - m_colIndex == 0)
-	{
-		m_isMove = false;
-	}
-	else
-	{
-		m_isMove = true;
-		m_maxDifY = (preColIndex - m_colIndex) * SIZE;
-		m_preColIndex = preColIndex;
-	}
 }
 

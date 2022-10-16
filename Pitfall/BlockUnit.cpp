@@ -1,36 +1,62 @@
 ﻿#include "stdafx.h"
 #include "BlockUnit.h"
 
-#include "Define.h"
+//#include "Define.h"
 
-BlockUnit::BlockUnit()
+BlockUnit::BlockUnit() :
+	m_unitIndex(0)
 {
-	for (int i = 0; i < Define::BLOCK_HURDLE_NUM; i++)
-	{
-		//m_smpBlocks[i] = std::make_unique<Block>(i);
-	}
+	//for (int i = 0; i < Define::BLOCK_HURDLE_NUM; i++)
+	//{
+	//	m_smpBlocks[i] = std::make_unique<Block>(i);
+
+	//	//m_preIndex[i] = i;
+	//}
+
 }
 
 BlockUnit::~BlockUnit()
 {
-	
 }
 
-
-void BlockUnit::Init(Block::TYPE* types)
+void BlockUnit::EnemyInit()
 {
-
 	for (int i = 0; i < Define::BLOCK_HURDLE_NUM; i++)
 	{
-		//m_smpBlocks[i] = std::make_unique<Block>(types[i]);
-		m_smpBlocks[i]->SetType(types[i]);
+		m_smpBlocks[i].reset();
+		m_smpBlocks[i] = std::make_shared<Block>(i);
 	}
-
 }
+
+void BlockUnit::PlayerInit()
+{
+	for (int i = 0; i < Define::BLOCK_HURDLE_NUM; i++)
+	{
+		m_smpBlocks[i].reset();
+		m_smpBlocks[i] = std::make_unique<PlayerBlock>(i);
+	}
+}
+
+
+//void BlockUnit::Init(Block::TYPE* types)
+//{
+//
+//	for (int i = 0; i < Define::BLOCK_HURDLE_NUM; i++)
+//	{
+//		//m_smpBlocks[i] = std::make_unique<Block>(types[i]);
+//		m_smpBlocks[i]->SetType(types[i]);
+//
+//		m_preIndex[i] = i;
+//	}
+//
+//}
 
 void BlockUnit::update()
 {
-
+	for (int i = 0; i < Define::BLOCK_HURDLE_NUM; i++)
+	{
+		m_smpBlocks[i]->update();
+	}
 }
 
 void BlockUnit::draw()
@@ -39,24 +65,64 @@ void BlockUnit::draw()
 	{
 		m_smpBlocks[i]->draw();
 	}
-
-
-
 }
 
-void BlockUnit::UpdatePos(float posX)
+void BlockUnit::SetCenterPos(float difX, float difY)
 {
+	float posX = Define::BLOCK_SIZE * m_unitIndex + difX;
 
-	float posY = Define::LIMIT_POS_Y_HURDLE_BOTTOM;
+	for (int i = 0; i < Define::BLOCK_HURDLE_NUM; i++)
+	{
+		float posY = Define::LIMIT_POS_Y_HURDLE_BOTTOM + Define::BLOCK_SIZE * i + difY;
 
-	//for (int i = 0; i < Define::BLOCK_HURDLE_NUM; i++)
-	//{
-	//	m_smpBlocks[i]->SetPos(Vec3(posX, posY, 0));
-
-	//	posY += Define::BLOCK_SIZE;
-	//}
-
+		m_smpBlocks[i]->SetCenterPos(posX, posY);
+	}
 }
+
+//void BlockUnit::SetCenterPos(float difX = 0, float fallValue = 0)
+//{
+//	for (int i = 0; i < Define::BLOCK_HURDLE_NUM; i++)
+//	{
+//		m_smpBlocks[i]->SetCenterPos(difX, difY);
+//	}
+//}
+
+
+//void BlockUnit::UpdatePos(float posX)
+//{
+//
+//	float posY = Define::LIMIT_POS_Y_HURDLE_BOTTOM;
+//
+//	//for (int i = 0; i < Define::BLOCK_HURDLE_NUM; i++)
+//	//{
+//	//	m_smpBlocks[i]->SetPos(Vec3(posX, posY, 0));
+//
+//	//	posY += Define::BLOCK_SIZE;
+//	//}
+//
+//	float difX = 1;
+//	float difY = 1;
+//	for (int i = 0; i < Define::BLOCK_HURDLE_NUM; i++)
+//	{
+//		if (m_preIndex[i] != i)
+//		{
+//			//移動しているブロック
+//
+//			float difY = Define::BLOCK_SIZE * (m_preIndex[i] - i) + fallValue;
+//			if (difY <= 0)
+//			{
+//				m_smpPlayerBlocks[i]->SetIsMove(false);
+//				m_smpPlayerBlocks[i]->SetCenterPos();
+//			}
+//			else
+//			{
+//				m_smpPlayerBlocks[i]->SetCenterPos(0, difY);
+//			}
+//
+//		}
+//	}
+//
+//}
 
 
 //void BlockUnit::SetType(int index, Block::TYPE type)
