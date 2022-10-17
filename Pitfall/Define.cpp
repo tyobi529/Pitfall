@@ -6,6 +6,9 @@ void Define::RegisterTexture()
 	TextureAsset::Register(U"wood", U"example/texture/wood.jpg");
 
 	TextureAsset::Register(U"uvChecker", U"example/texture/uv.png");
+
+	TextureAsset::Register(U"green", U"img/Green.png");
+
 }
 
 
@@ -38,7 +41,7 @@ const float Define::BLOCK_LIMIT_POS_X = 0.0f;
 
 const float Define::BLOCK_GENERATED_POS_X = Define::BLOCK_SIZE * (float)BLOCK_H_NUM;
 
-const float Define::BLOCK_SPEED = 2.0f;
+const float Define::BLOCK_SPEED = 3.0f;
 
 const float Define::BLOCK_EXPAND_SPEED = 5.0f;
 

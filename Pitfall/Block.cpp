@@ -21,7 +21,7 @@ void Block::Init()
 {
 	m_type = TYPE::BLOCK_NONE; //typeが消えるので注意
 	m_centerPos = Vec3(0, 0, 0);
-	m_size = Define::BLOCK_SIZE;
+	//m_size = Define::BLOCK_SIZE;
 }
 
 void Block::update()
@@ -39,7 +39,8 @@ void Block::draw() const
 		Box{ m_centerPos, m_size }.draw(TextureAsset(U"wood"));
 		break;
 	case Block::BLOCK_NORMAL:
-		Box{ m_centerPos, m_size }.draw(ColorF{ 0.8, 0.6, 0.4 }.removeSRGBCurve());
+		//Box{ m_centerPos, m_size }.draw(ColorF{ 0.8, 0.6, 0.4 }.removeSRGBCurve());
+		Box{ m_centerPos, m_size }.draw(TextureAsset(U"green"));
 		break;
 	case Block::BLOCK_PLAYER_HEAD:
 		Box{ m_centerPos, m_size }.draw(ColorF{ 0.2, 0.6, 0.4 }.removeSRGBCurve());

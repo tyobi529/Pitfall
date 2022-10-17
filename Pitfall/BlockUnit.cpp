@@ -68,9 +68,10 @@ void BlockUnit::draw()
 	}
 }
 
-void BlockUnit::SetCenterPos(float difX, float fallValue)
+void BlockUnit::SetCenterPos(float difX, float playerMoveX, float fallValue)
 {
-	float posX = Define::BLOCK_SIZE * m_unitIndex + difX;
+	//float posX = Define::BLOCK_SIZE * m_unitIndex + difX;
+	float posX = Define::BLOCK_SIZE * m_unitIndex + difX + playerMoveX;
 
 
 	for (int i = 0; i < Define::BLOCK_HURDLE_NUM; i++)

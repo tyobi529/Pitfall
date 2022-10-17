@@ -121,4 +121,7 @@ private:
 	int m_count;
 
 	bool m_isDebug;
+
+	bool m_isHit;
+	float m_playerMoveX;
 };

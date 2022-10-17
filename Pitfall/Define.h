@@ -6,6 +6,14 @@ class Define final {
 public:
 	static void RegisterTexture();
 
+
+	////可変
+	//float playerMoveValue;
+
+	//Define() :
+	//	playerMoveValue(0)
+	//{}
+
 	//===================================
 	const static int WIN_H;	//ウィンドウサイズ縦
 	const static int WIN_W;	//ウィンドウサイズ横
