@@ -32,6 +32,7 @@ GameScene::GameScene(const InitData& init)
 	, m_isDebug(false)
 	, m_isHit(false)
 	, m_playerMoveX(0)
+	, m_tapCount(0)
 {
 
 
@@ -86,6 +87,7 @@ void GameScene::InitGame()
 
 		Block::TYPE types[BLOCK_NUM] = {};
 		DecideBlockType(types, true);
+
 		for (int j = 0; j < BLOCK_NUM; j++)
 		{
 			smpBlock->GetBlock(j)->SetType(types[j]);
@@ -105,6 +107,8 @@ void GameScene::InitGame()
 
 	m_blockIndex = 0;
 	m_count = 0;
+
+	m_tapCount = 0;
 }
 
 
@@ -116,8 +120,8 @@ void GameScene::update()
 	m_deltaTime = (float)Scene::DeltaTime() * m_timeSpeed;
 	m_gameTime += m_deltaTime;
 
-	//float addSpeed = 0.02f;
-	//m_timeSpeed += m_deltaTime * addSpeed;
+	float addSpeed = 0.01f;
+	m_timeSpeed += m_deltaTime * addSpeed;
 
 	const float speed = m_deltaTime * 2.0;
 
@@ -144,6 +148,8 @@ void GameScene::update()
 
 	// 位置・注目点情報を更新
 	camera.setView(eyePosition, GetFocusPosition(eyePosition, angle));
+	//camera.setView(Vec3(eyePosition.x - m_playerMoveX, eyePosition.y, eyePosition.z), GetFocusPosition(eyePosition, angle));
+
 	Print << U"angle: {:.1f}°"_fmt(Math::ToDegrees(angle));
 	Print << U"direction: {:.2f}"_fmt(GetDirection(angle));
 	Print << U"eyePositon: {:.1f}"_fmt(camera.getEyePosition());
@@ -157,6 +163,8 @@ void GameScene::update()
 
 	if (MouseL.up())
 	{
+		//m_tapCount++;
+
 		//プレイヤーのブロック増やす
 		int headIndex = -1;
 
@@ -176,10 +184,13 @@ void GameScene::update()
 		{
 			//生成限界
 		}
-		else if (smpCurrentEnemyBlock->GetType() != Block::BLOCK_NONE ||
-			smpNextEnemyBlock->GetType() != Block::BLOCK_NONE)
+		else if (smpCurrentEnemyBlock->GetType() != Block::BLOCK_NONE)
 		{
 			//上にブロックがあれば生成しない。ここ書き方あってる？
+		}
+		else if (smpNextEnemyBlock->GetType() != Block::BLOCK_NONE)
+		{
+
 		}
 		else
 		{
@@ -202,11 +213,68 @@ void GameScene::update()
 	}
 
 
+	////プレイヤーのブロック増やす
+	//while (m_tapCount > 0)
+	//{
+	//	int headIndex = -1;
+
+	//	for (int i = 0; i < BLOCK_NUM; i++)
+	//	{
+	//		if (m_smpPlayerBlockUnit->GetBlock(i)->GetType() == Block::BLOCK_PLAYER_HEAD)
+	//		{
+	//			headIndex = i;
+	//			break;
+	//		}
+	//	}
+
+	//	std::shared_ptr<Block> smpCurrentEnemyBlock = m_smpEnemyBlockUnits[Define::BLOCK_PLAYE_INDEX]->GetBlock(headIndex + 1);
+	//	std::shared_ptr<Block> smpNextEnemyBlock = m_smpEnemyBlockUnits[Define::BLOCK_PLAYE_INDEX + 1]->GetBlock(headIndex + 1);
+
+	//	if (headIndex == BLOCK_NUM - 1)
+	//	{
+	//		//生成限界
+	//		break;
+	//	}
+	//	else if (smpCurrentEnemyBlock->GetType() != Block::BLOCK_NONE ||
+	//		smpNextEnemyBlock->GetType() != Block::BLOCK_NONE)
+	//	{
+	//		//上にブロックがあれば生成しない。ここ書き方あってる？
+	//		break;
+	//	}
+	//	else
+	//	{
+	//		m_tapCount--;
+
+	//		m_smpPlayerBlockUnit->GetBlock(headIndex)->Init();
+	//		m_smpPlayerBlockUnit->GetBlock(headIndex)->SetType(Block::BLOCK_PLAYER_BODY);
+	//		//1つ上に頭を移動
+	//		//m_smpPlayerBlockUnit->GetBlock(headIndex + 1)->Init();
+	//		m_smpPlayerBlockUnit->GetBlock(headIndex + 1)->SetType(Block::BLOCK_PLAYER_HEAD);
+	//	}
+
+
+	//}
+
+	
+
+
 	//壁の位置更新
 	//移動量計算
 	if (m_isHit)
 	{
+		eyePosition.x -= m_deltaTime * Define::BLOCK_SPEED;
 		m_playerMoveX -= m_deltaTime * Define::BLOCK_SPEED;
+
+		if (Define::PLAYER_POS_X + m_playerMoveX < 3)
+		{
+			//GameOver
+			//タイトル画面へ
+			changeScene(State::Title);
+
+			getData().lastGameScore = m_score;
+
+			return;
+		}
 
 		//ぶつかったブロックを消す
 		{
@@ -265,10 +333,20 @@ void GameScene::update()
 
 		if (m_count == 0)
 		{
+
+
 			std::shared_ptr<BlockUnit> smpBlockUnit = m_smpEnemyBlockUnits[UNIT_NUM - 1];
 
 			Block::TYPE types[BLOCK_NUM] = {};
-			DecideBlockType(types, false);
+			if (RandomBool(0.1))
+			{
+				//10%で穴
+				DecideBlockType(types, false, true);
+			}
+			else
+			{
+				DecideBlockType(types, false);
+			}
 			for (int j = 0; j < BLOCK_NUM; j++)
 			{
 				smpBlockUnit->GetBlock(j)->SetType(types[j]);
@@ -287,7 +365,7 @@ void GameScene::update()
 				smpBlockUnit->GetBlock(j)->SetType(types[j]);
 			}
 
-			if (m_count == 2)
+			if (m_count == 3)
 			{
 				m_count = 0;
 			}
@@ -436,6 +514,10 @@ void GameScene::draw() const
 		m_smpPlayerBlockUnit->draw();
 		
 		DrawStage();
+
+
+		//cylinder24.draw(5, 5, 0, uvChecker);
+
 	}
 
 	// 3D シーンを 2D シーンに描画
@@ -448,7 +530,7 @@ void GameScene::draw() const
 }
 
 
-void GameScene::DecideBlockType(Block::TYPE* pType, bool isNone)
+void GameScene::DecideBlockType(Block::TYPE* pType, bool isNone, bool isHall)
 {
 	for (int i = 0; i < BLOCK_NUM; i++)
 	{
@@ -499,6 +581,10 @@ void GameScene::DecideBlockType(Block::TYPE* pType, bool isNone)
 		}
 	}
 
+	if (isHall)
+	{
+		pType[1] = Block::BLOCK_NONE;
+	}
 	//return pType;
 }
 
@@ -522,6 +608,19 @@ void GameScene::DrawStage() const
 			Box{ Vec3(posX + SIZE / 2.0f, posY + SIZE / 2.0f, SIZE / 2.0f), SIZE }.draw(TextureAsset(U"wood"));
 		}
 	}
+
+	//壁
+	for (int i = 0; i < 5; i++)
+	{
+		for (int j = 0; j < BLOCK_NUM; j++)
+		{
+			float posX = -SIZE * 2 + SIZE * i;
+			float posY = Define::LIMIT_POS_Y_HURDLE_BOTTOM + SIZE * j;
+
+			Box{ Vec3(posX + SIZE / 2.0f, posY + SIZE / 2.0f, SIZE / 2.0f), SIZE }.draw(ColorF(0.3, 0.3, 0.3));
+		}
+	}
+
 
 }
 

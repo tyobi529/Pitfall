@@ -25,7 +25,7 @@ public:
 
 	void InitGame();
 
-	void DecideBlockType(Block::TYPE* pType, bool isNone = false);
+	void DecideBlockType(Block::TYPE* pType, bool isNone = false, bool isHall = false);
 
 	void DrawStage() const;
 
@@ -124,4 +124,9 @@ private:
 
 	bool m_isHit;
 	float m_playerMoveX;
+
+	int m_tapCount;
+
+	//const Mesh cylinder24{ MeshData::Cylinder(Vec3{0,0,0}, 0.5, 1, 24u) };
+
 };

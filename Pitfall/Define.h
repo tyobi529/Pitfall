@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "Siv3D.hpp"
 
 class Define final {
 	
@@ -32,9 +33,9 @@ public:
 
 		BLOCK_HURDLE_NUM = BLOCK_HURDLE_CENTER_NUM + 2 * BLOCK_HURDLE_HALL_NUM,
 		BLOCK_V_NUM = BLOCK_GROUND_BOTTOM_NUM + BLOCK_HURDLE_NUM + BLOCK_GROUND_TOP_NUM,
-		BLOCK_H_NUM = 15, //横に並ぶすべてのブロックの数
+		BLOCK_H_NUM = 20, //横に並ぶすべてのブロックの数
 
-		BLOCK_PLAYE_INDEX = 5, //プレイヤーがいるブロックのindex（x方向）
+		BLOCK_PLAYE_INDEX = 6, //プレイヤーがいるブロックのindex（x方向）
 	};
 
 	const static float LIMIT_POS_Y_STAGE_BOTTOM;
