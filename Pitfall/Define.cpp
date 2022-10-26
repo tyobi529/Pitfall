@@ -9,6 +9,12 @@ void Define::RegisterTexture()
 
 	TextureAsset::Register(U"green", U"img/Green.png");
 
+	//25×25
+	TextureAsset::Register(U"normal", U"img/normal.png");
+	TextureAsset::Register(U"head", U"img/head.png");
+
+//https://www.peko-step.com/tool/alphachannel.html
+
 }
 
 
@@ -17,11 +23,11 @@ const int   Define::WIN_W = 960;		//ウィンドウサイズ横
 
 
 //カメラ位置
-const Vec3 Define::EYE_POS = Vec3(7.5f, 10, -35);
+const Vec3 Define::EYE_POS = Vec3(7.5f, 13, -40);
 
 const float Define::BLOCK_SIZE = 1.0f;
 
-const float Define::LIMIT_POS_Y_STAGE_BOTTOM = 0.0f;
+const float Define::LIMIT_POS_Y_STAGE_BOTTOM = 3.0f;
 const float Define::LIMIT_POS_Y_HURDLE_BOTTOM = LIMIT_POS_Y_STAGE_BOTTOM + Define::BLOCK_SIZE * (float)Define::BLOCK_GROUND_BOTTOM_NUM;
 const float Define::LIMIT_POS_Y_HURDLE_TOP = LIMIT_POS_Y_STAGE_BOTTOM + Define::BLOCK_SIZE * (float)(Define::BLOCK_GROUND_BOTTOM_NUM + Define::BLOCK_HURDLE_NUM);
 const float Define::LIMIT_POS_Y_STAGE_TOP = LIMIT_POS_Y_STAGE_BOTTOM + Define::BLOCK_SIZE * (float)Define::BLOCK_V_NUM;

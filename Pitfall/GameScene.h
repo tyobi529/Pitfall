@@ -12,6 +12,8 @@
 
 #include "PlayerBlock.h"
 
+#include "StageManager.h"
+
 // ゲームシーン
 class GameScene : public App::Scene
 {
@@ -25,7 +27,7 @@ public:
 
 	void InitGame();
 
-	void DecideBlockType(Block::TYPE* pType, bool isNone = false, bool isHall = false);
+	//void DecideBlockType(Block::TYPE* pType, bool isNone = false, bool isHall = false);
 
 	void DrawStage() const;
 
@@ -127,6 +129,11 @@ private:
 
 	int m_tapCount;
 
+	float m_fallTime;
+	float m_fallValue;
+
 	//const Mesh cylinder24{ MeshData::Cylinder(Vec3{0,0,0}, 0.5, 1, 24u) };
+
+	std::unique_ptr<StageManager> m_smpStageManager;
 
 };
