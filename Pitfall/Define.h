@@ -35,7 +35,9 @@ public:
 		BLOCK_V_NUM = BLOCK_GROUND_BOTTOM_NUM + BLOCK_HURDLE_NUM + BLOCK_GROUND_TOP_NUM,
 		BLOCK_H_NUM = 20, //横に並ぶすべてのブロックの数
 
-		BLOCK_PLAYE_INDEX = 4, //プレイヤーがいるブロックのindex（x方向）
+		BLOCK_PLAYE_INDEX = 0, //プレイヤーがいるブロックのindex（x方向）
+		BLOCK_ENEMY_INDEX = 3, //プレイヤーがいるブロックのindex（x方向）
+
 	};
 
 	const static float LIMIT_POS_Y_STAGE_BOTTOM;

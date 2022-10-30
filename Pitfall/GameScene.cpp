@@ -27,19 +27,16 @@ GameScene::GameScene(const InitData& init)
 	, m_wallSpeed(0)
 	, eyePosition(Define::EYE_POS)
 	, m_blockIndex(0)
-	, m_difX(0)
 	, m_count(0)
-	, m_isDebug(false)
-	, m_isHit(false)
-	, m_playerMoveX(0)
+	, m_isDebug(true)
 	, m_tapCount(0)
+	, m_timeCount(0)
 	, m_fallTime(0)
 	, m_fallValue(0)
 {
 
-
-	//camera = BasicCamera3D{ renderTexture.size(), 30_deg, Vec3{ 0, 16, -32 }, GetFocusPosition(eyePosition, angle) };
-	camera = BasicCamera3D{ renderTexture.size(), 30_deg, eyePosition, GetFocusPosition(eyePosition, angle) };
+	//camera = BasicCamera3D{ renderTexture.size(), 30_deg, eyePosition, GetFocusPosition(eyePosition, angle) };
+	camera = BasicCamera3D{ renderTexture.size(), 28_deg, eyePosition, GetFocusPosition(eyePosition, angle) };
 
 	playerMesh = Mesh{ MeshData::Pyramid(1.0, 1.0) };
 
@@ -65,55 +62,23 @@ void GameScene::InitGame()
 	m_smpWallManager.reset(new WallManager());
 
 	//==== ブロック生成 =======
-	m_smpEnemyBlockUnits.clear();
 	m_smpPlayerBlockUnit.reset();
-
-	for (int i = 0; i < UNIT_NUM; i++)
-	{
-		m_smpEnemyBlockUnits.push_back(std::make_shared<BlockUnit>());
-		m_smpEnemyBlockUnits[i]->EnemyInit();
-		m_smpEnemyBlockUnits[i]->SetUnitIndex(i);
-	}
-
 	m_smpPlayerBlockUnit = std::make_shared<BlockUnit>();
 	m_smpPlayerBlockUnit->PlayerInit();
 	m_smpPlayerBlockUnit->SetUnitIndex(Define::BLOCK_PLAYE_INDEX);
+	m_smpPlayerBlockUnit->GetBlock(BLOCK_NUM - 1)->SetType(Block::BLOCK_PLAYER_HEAD);
+	DropPlayerBlock(m_smpPlayerBlockUnit);
 
+	m_smpEnemyBlockUnit.reset();
+	m_smpEnemyBlockUnit = std::make_shared<BlockUnit>();
+	m_smpEnemyBlockUnit->EnemyInit();
+	m_smpEnemyBlockUnit->SetUnitIndex(Define::BLOCK_ENEMY_INDEX);
+	m_smpEnemyBlockUnit->GetBlock(4)->SetType(Block::BLOCK_NORMAL);
 
 	//=====================
 
-	//==== ブロック種類設定 =======
-	for (int i = 0; i < UNIT_NUM; i++)
-	{
-		std::shared_ptr<BlockUnit> smpBlock = m_smpEnemyBlockUnits[i];
-
-		//Block::TYPE types[BLOCK_NUM] = {};
-		//DecideBlockType(types, true);
-
-		for (int j = 0; j < BLOCK_NUM; j++)
-		{
-			//smpBlock->GetBlock(j)->SetType(types[j]);
-			smpBlock->GetBlock(j)->SetType(Block::BLOCK_NONE);
-
-		}
-
-		//smpBlock->GetBlock(0)->SetType(Block::BLOCK_NORMAL);
-
-	}
-
-	//m_smpEnemyBlockUnits[10]->GetBlock(0)->SetType(Block::BLOCK_NONE);
-
-	//for (int i = 3; i < BLOCK_NUM - 4; i++)
-	//{
-	//	m_smpPlayerBlockUnit->GetBlock(i)->SetType(Block::BLOCK_PLAYER_BODY);
-	//}
-	//m_smpPlayerBlockUnit->GetBlock(0)->SetType(Block::BLOCK_PLAYER_HEAD);
-	m_smpPlayerBlockUnit->GetBlock(BLOCK_NUM - 1)->SetType(Block::BLOCK_PLAYER_HEAD);
-
-	//m_smpPlayerBlockUnit->GetBlock(BLOCK_NUM - 3)->SetType(Block::BLOCK_PLAYER_HEAD);
 
 
-	m_difX = 0;
 
 	m_blockIndex = 0;
 	m_count = 0;
@@ -195,23 +160,20 @@ void GameScene::update()
 			return;
 		}
 
-		std::shared_ptr<Block> smpCurrentEnemyBlock = m_smpEnemyBlockUnits[Define::BLOCK_PLAYE_INDEX]->GetBlock(headIndex + 1);
-		std::shared_ptr<Block> smpNextEnemyBlock = m_smpEnemyBlockUnits[Define::BLOCK_PLAYE_INDEX + 1]->GetBlock(headIndex + 1);
 
-
-		if (smpCurrentEnemyBlock->GetType() != Block::BLOCK_NONE)
-		{
-			//上にブロックがあれば生成しない。ここ書き方あってる？
-			return;
-		}
-		else if (smpNextEnemyBlock->GetType() != Block::BLOCK_NONE &&
-			!m_isHit)
-		{
-			//右上にブロックがあれば生成しない。
-			//hit中ならok
-			return;
-		}
-		else
+		//if (smpCurrentEnemyBlock->GetType() != Block::BLOCK_NONE)
+		//{
+		//	//上にブロックがあれば生成しない。ここ書き方あってる？
+		//	return;
+		//}
+		//else if (smpNextEnemyBlock->GetType() != Block::BLOCK_NONE &&
+		//	!m_isHit)
+		//{
+		//	//右上にブロックがあれば生成しない。
+		//	//hit中ならok
+		//	return;
+		//}
+		//else
 		{
 			m_smpPlayerBlockUnit->GetBlock(headIndex)->Init();
 			m_smpPlayerBlockUnit->GetBlock(headIndex)->SetType(Block::BLOCK_PLAYER_BODY);
@@ -232,280 +194,52 @@ void GameScene::update()
 	}
 
 
-	////プレイヤーのブロック増やす
-	//while (m_tapCount > 0)
-	//{
-	//	int headIndex = -1;
-
-	//	for (int i = 0; i < BLOCK_NUM; i++)
-	//	{
-	//		if (m_smpPlayerBlockUnit->GetBlock(i)->GetType() == Block::BLOCK_PLAYER_HEAD)
-	//		{
-	//			headIndex = i;
-	//			break;
-	//		}
-	//	}
-
-	//	std::shared_ptr<Block> smpCurrentEnemyBlock = m_smpEnemyBlockUnits[Define::BLOCK_PLAYE_INDEX]->GetBlock(headIndex + 1);
-	//	std::shared_ptr<Block> smpNextEnemyBlock = m_smpEnemyBlockUnits[Define::BLOCK_PLAYE_INDEX + 1]->GetBlock(headIndex + 1);
-
-	//	if (headIndex == BLOCK_NUM - 1)
-	//	{
-	//		//生成限界
-	//		break;
-	//	}
-	//	else if (smpCurrentEnemyBlock->GetType() != Block::BLOCK_NONE ||
-	//		smpNextEnemyBlock->GetType() != Block::BLOCK_NONE)
-	//	{
-	//		//上にブロックがあれば生成しない。ここ書き方あってる？
-	//		break;
-	//	}
-	//	else
-	//	{
-	//		m_tapCount--;
-
-	//		m_smpPlayerBlockUnit->GetBlock(headIndex)->Init();
-	//		m_smpPlayerBlockUnit->GetBlock(headIndex)->SetType(Block::BLOCK_PLAYER_BODY);
-	//		//1つ上に頭を移動
-	//		//m_smpPlayerBlockUnit->GetBlock(headIndex + 1)->Init();
-	//		m_smpPlayerBlockUnit->GetBlock(headIndex + 1)->SetType(Block::BLOCK_PLAYER_HEAD);
-	//	}
 
 
-	//}
-
-	
-
-
-	//壁の位置更新
-	//移動量計算
-	if (m_isHit)
+	m_timeCount += Scene::DeltaTime();
+	if (m_timeCount > 3)
 	{
-		eyePosition.x -= m_deltaTime * Define::BLOCK_SPEED;
-		m_playerMoveX -= m_deltaTime * Define::BLOCK_SPEED;
-
-		if (Define::PLAYER_POS_X + m_playerMoveX < -1)
-		{
-			//GameOver
-			//タイトル画面へ
-			changeScene(State::Title);
-
-			getData().lastGameScore = m_score;
-
-			return;
-		}
-
-		//ぶつかったブロックを消す
-		{
-			//ぶつかる対象（プレイヤーの１つ先）
-			std::shared_ptr<BlockUnit> smpEnemyBlockUnit = m_smpEnemyBlockUnits[Define::BLOCK_PLAYE_INDEX + 1];
-
-			for (int i = 0; i < BLOCK_NUM; i++)
-			{
-				if (m_smpPlayerBlockUnit->GetBlock(i)->GetType() == Block::BLOCK_PLAYER_HEAD)
-				{
-					if (smpEnemyBlockUnit->GetBlock(i)->GetType() != Block::BLOCK_NONE)
-					{
-						m_isHit = true;
-					}
-					else
-					{
-						m_isHit = false;
-					}
-				}
-				else if (m_smpPlayerBlockUnit->GetBlock(i)->GetType() == Block::BLOCK_PLAYER_BODY)
-				{
-
-					if (smpEnemyBlockUnit->GetBlock(i)->GetType() != Block::BLOCK_NONE)
-					{
-						m_smpPlayerBlockUnit->GetBlock(i)->SetType(Block::BLOCK_NONE);
-
-						m_smpEnemyBlockUnits[Define::BLOCK_PLAYE_INDEX]->GetBlock(i)->SetType(Block::BLOCK_PLAYER_BODY);
-
-
-					}
-				}
-
-			}
-
-
-		}
-
-	}
-	else
-	{
-		m_difX -= m_deltaTime * Define::BLOCK_SPEED;
-	}
-
-
-
-	//更新
-	if (m_difX < -1.0f)
-	{
-		//横方向のindexをずらす
-		std::rotate(m_smpEnemyBlockUnits.begin(), m_smpEnemyBlockUnits.begin() + 1, m_smpEnemyBlockUnits.end());
-		//unitIndex更新
-		for (int i = 0; i < UNIT_NUM; i++)
-		{
-			m_smpEnemyBlockUnits[i]->SetUnitIndex(i);
-		}
-
-		m_difX += 1.0f;
-
-
-		if (m_count == 0)
-		{
-
-
-			std::shared_ptr<BlockUnit> smpBlockUnit = m_smpEnemyBlockUnits[UNIT_NUM - 1];
-
-			Block::TYPE types[BLOCK_NUM] = {};
-			m_smpStageManager->SetNextBlockUnit(types);
-			//if (RandomBool(0.1))
-			//{
-			//	//10%で穴
-			//	DecideBlockType(types, false, true);
-			//}
-			//else
-			//{
-			//	DecideBlockType(types, false);
-			//}
-			for (int j = 0; j < BLOCK_NUM; j++)
-			{
-				smpBlockUnit->GetBlock(j)->SetType(types[j]);
-			}
-
-			m_count++;
-		}
-		else
-		{
-			std::shared_ptr<BlockUnit> smpBlockUnit = m_smpEnemyBlockUnits[UNIT_NUM - 1];
-
-			Block::TYPE types[BLOCK_NUM] = {};
-			//DecideBlockType(types, true);
-			m_smpStageManager->SetNextBlockUnit(types);
-
-			for (int j = 0; j < BLOCK_NUM; j++)
-			{
-				smpBlockUnit->GetBlock(j)->SetType(types[j]);
-			}
-
-			if (m_count == 3)
-			{
-				m_count = 0;
-			}
-			else
-			{
-				m_count++;
-			}
-		}
-
-
-		//============ プレイヤー ============
-		//まずは横にスライド
-		{
-			//スライド判定先
-			std::shared_ptr<BlockUnit> smpEnemyBlockUnit = m_smpEnemyBlockUnits[Define::BLOCK_PLAYE_INDEX];
-
-			Block::TYPE types[BLOCK_NUM] = {};
-			for (int i = 0; i < BLOCK_NUM; i++)
-			{
-				types[i] = smpEnemyBlockUnit->GetBlock(i)->GetType();
-				if (m_smpPlayerBlockUnit->GetBlock(i)->GetType() != Block::BLOCK_NONE && types[i] != Block::BLOCK_NONE)
-				{
-					assert(false); //位置がかぶってスライドできない
-				}
-			}
-
-			DropPlayerBlock(m_smpPlayerBlockUnit, types);
-		}
-
-		{
-			//おいていったプレイヤーブロックを落とす
-			DropPlayerBlock(m_smpEnemyBlockUnits[Define::BLOCK_PLAYE_INDEX - 1]);
-		}
-		
 		//落下量初期化
 		m_fallTime = 0;
 		m_fallValue = 0;
+		m_timeCount = 0;
 
 
-		//ぶつかったブロックを消す
+		//m_smpPlayerBlockUnit->GetBlock(1)->SetType(Block::BLOCK_NONE);
+		//m_smpPlayerBlockUnit->GetBlock(2)->SetType(Block::BLOCK_NONE);
+
+		for (int i = 0; i < Define::BLOCK_HURDLE_NUM; i++)
 		{
-			//ぶつかる対象（プレイヤーの１つ先）
-			std::shared_ptr<BlockUnit> smpEnemyBlockUnit = m_smpEnemyBlockUnits[Define::BLOCK_PLAYE_INDEX + 1];
-
-			for (int i = 0; i < BLOCK_NUM; i++)
+			if (m_smpEnemyBlockUnit->GetBlock(i)->GetType() != Block::BLOCK_NONE)
 			{
-				if (m_smpPlayerBlockUnit->GetBlock(i)->GetType() == Block::BLOCK_PLAYER_HEAD)
-				{
-					if (smpEnemyBlockUnit->GetBlock(i)->GetType() != Block::BLOCK_NONE)
-					{
-						m_isHit = true;
-					}
-					else
-					{
-						m_isHit = false;
-					}
-				}
-				else if (m_smpPlayerBlockUnit->GetBlock(i)->GetType() == Block::BLOCK_PLAYER_BODY)
-				{
-
-					if (smpEnemyBlockUnit->GetBlock(i)->GetType() != Block::BLOCK_NONE)
-					{
-						m_smpPlayerBlockUnit->GetBlock(i)->SetType(Block::BLOCK_NONE);
-
-						m_smpEnemyBlockUnits[Define::BLOCK_PLAYE_INDEX]->GetBlock(i)->SetType(Block::BLOCK_PLAYER_BODY);
-
-						
-					}
-				}
-
+				m_smpPlayerBlockUnit->GetBlock(i)->SetType(Block::BLOCK_NONE);
+				m_smpEnemyBlockUnit->GetBlock(i)->SetType(Block::BLOCK_NONE);
 			}
+		}
 
+		DropPlayerBlock(m_smpPlayerBlockUnit);
 
+		m_smpEnemyBlockUnit->GetBlock(0)->SetType(Block::BLOCK_NORMAL);
+		m_smpEnemyBlockUnit->GetBlock(1)->SetType(Block::BLOCK_NORMAL);
+
+		for (int i = 0; i < 4; i++)
+		{
+			int index = Random(2, Define::BLOCK_HURDLE_NUM - 1);
+			m_smpEnemyBlockUnit->GetBlock(index)->SetType(Block::BLOCK_NORMAL);
 		}
 		
-
-	
-
 	}
-
 
 	//仮
 	m_fallTime += Scene::DeltaTime() * Define::BLOCK_SPEED;
 	m_fallValue = (BLOCK_NUM - 1) * (m_fallTime * m_fallTime);
 
-	//縦移動計算
-	//float fallValue = (BLOCK_NUM - 1) * (-m_difX);
-	//float fallValue = (BLOCK_NUM - 1) * m_difX * m_difX;
-	//fallValue = (BLOCK_NUM - 1) * m_difX * m_difX;
 
-
-	//位置設定
-	//for (int i = 0; i < UNIT_NUM; i++)
-	//{
-	//	m_smpEnemyBlockUnits[i]->SetCenterPos(m_difX, fallValue);
-	//}
-	//m_smpPlayerBlockUnit->SetCenterPos(0, fallValue);
-
-	for (int i = 0; i < UNIT_NUM; i++)
-	{
-		m_smpEnemyBlockUnits[i]->SetCenterPos(m_difX, m_playerMoveX, m_fallValue);
-	}
-	m_smpPlayerBlockUnit->SetCenterPos(0, m_playerMoveX, m_fallValue);
-
-
-
-	//ブロックのupdate
-	for (int i = 0; i < UNIT_NUM; i++)
-	{
-		m_smpEnemyBlockUnits[i]->update();
-	}
-
+	m_smpPlayerBlockUnit->SetCenterPos(0, m_fallValue);
 	m_smpPlayerBlockUnit->update();
 
-
+	m_smpEnemyBlockUnit->SetCenterPos(0, m_fallValue);
+	m_smpEnemyBlockUnit->update();
 
 }
 
@@ -538,19 +272,11 @@ void GameScene::draw() const
 		}
 
 
-
-
-		for (int i = 0; i < UNIT_NUM; i++)
-		{
-			m_smpEnemyBlockUnits[i]->draw();
-		}
-
 		m_smpPlayerBlockUnit->draw();
-		
+		m_smpEnemyBlockUnit->draw();
+
 		DrawStage();
 
-
-		//cylinder24.draw(5, 5, 0, uvChecker);
 
 	}
 
@@ -612,41 +338,40 @@ void GameScene::DrawStage() const
 {
 	for (int i = 0; i < UNIT_NUM; i++)
 	{
-		float posX = SIZE * i + m_difX;
+		float posX = SIZE * i;
+
+		if (i == 0)
+		{
+			//上
+			for (int j = 0; j < Define::BLOCK_GROUND_TOP_NUM; j++)
+			{
+				float posY = Define::LIMIT_POS_Y_HURDLE_TOP + SIZE * j;
+				Box{ Vec3(posX, posY, 0), SIZE }.draw(TextureAsset(U"wood"));
+			}
+			//下
+			for (int j = 0; j < Define::BLOCK_GROUND_BOTTOM_NUM; j++)
+			{
+				float posY = Define::LIMIT_POS_Y_STAGE_BOTTOM + SIZE * j;
+				Box{ Vec3(posX, posY, 0), SIZE }.draw(TextureAsset(U"wood"));
+			}
+			continue;
+		}
 
 		//上
 		for (int j = 0; j < Define::BLOCK_GROUND_TOP_NUM; j++)
 		{
 			float posY = Define::LIMIT_POS_Y_HURDLE_TOP + SIZE * j;
-			Box{ Vec3(posX + SIZE / 2.0f, posY + SIZE / 2.0f, SIZE / 2.0f), SIZE }.draw(TextureAsset(U"wood"));
-			//Box{ Vec3(posX + SIZE / 2.0f, posY + SIZE / 2.0f, SIZE / 2.0f), SIZE }.draw(TextureAsset(U"normal"));
+			Box{ Vec3(posX, posY, 0), SIZE }.draw(TextureAsset(U"wood"));
+			Box{ Vec3(-posX, posY, 0), SIZE }.draw(TextureAsset(U"wood"));
 		}
 		//下
 		for (int j = 0; j < Define::BLOCK_GROUND_BOTTOM_NUM; j++)
 		{
 			float posY = Define::LIMIT_POS_Y_STAGE_BOTTOM + SIZE * j;
-			Box{ Vec3(posX + SIZE / 2.0f, posY + SIZE / 2.0f, SIZE / 2.0f), SIZE }.draw(TextureAsset(U"wood"));
-			//Box{ Vec3(posX + SIZE / 2.0f, posY + SIZE / 2.0f, SIZE / 2.0f), SIZE }.draw(TextureAsset(U"normal"));
-
+			Box{ Vec3(posX, posY, 0), SIZE }.draw(TextureAsset(U"wood"));
+			Box{ Vec3(-posX, posY, 0), SIZE }.draw(TextureAsset(U"wood"));
 		}
 	}
-
-	//壁
-	for (int i = 0; i < 5; i++)
-	{
-		for (int j = 0; j < BLOCK_NUM; j++)
-		{
-			float posX = -1.0f - SIZE * i;
-			float posY = Define::LIMIT_POS_Y_HURDLE_BOTTOM + SIZE * j;
-
-			Box{ Vec3(posX + SIZE / 2.0f, posY + SIZE / 2.0f, SIZE / 2.0f), SIZE }.draw(ColorF(0.3, 0.3, 0.3));
-		}
-	}
-
-	//float posX = -1.0f;
-	//float posY = Define::LIMIT_POS_Y_HURDLE_BOTTOM - 1.0f;
-	//Box{ Vec3(posX + SIZE / 2.0f, posY + SIZE / 2.0f, SIZE / 2.0f), SIZE }.draw(ColorF(157.0f / 255.0f, 204.0f / 255.0f, 224.0f / 255.0f));
-
 
 
 }

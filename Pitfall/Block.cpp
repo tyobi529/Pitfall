@@ -64,7 +64,8 @@ void Block::draw() const
 void Block::SetCenterPos(float posX, float posY)
 {
 	//x, y, zをsizeの半分ずらす
-	float dif = Define::BLOCK_SIZE / 2.0f;
+	//float dif = Define::BLOCK_SIZE / 2.0f;
+	float dif = 0;
 	m_centerPos = Vec3(posX + dif, posY + dif, 0 + dif);
 
 }

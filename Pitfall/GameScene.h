@@ -107,10 +107,11 @@ private:
 	//std::shared_ptr<Block> m_smpBlocks[Define::BLOCK_H_NUM][Define::BLOCK_HURDLE_NUM];
 	//std::shared_ptr<BlockUnit> m_smpEnemyBlockUnits[Define::BLOCK_H_NUM];
 
-	std::vector<std::shared_ptr<BlockUnit>> m_smpEnemyBlockUnits;
+	//std::vector<std::shared_ptr<BlockUnit>> m_smpEnemyBlockUnits;
 	//std::unique_ptr<PlayerBlock> m_smpPlayerBlocks[Define::BLOCK_HURDLE_NUM];
 	//std::unique_ptr<Block> m_smpPlayerBlocks[Define::BLOCK_HURDLE_NUM];
 	//std::shared_ptr<PlayerBlock> m_smpPlayerBlocks[Define::BLOCK_HURDLE_NUM];
+	std::shared_ptr<BlockUnit> m_smpEnemyBlockUnit;
 	std::shared_ptr<BlockUnit> m_smpPlayerBlockUnit;
 
 	//Block* m_pPlayerBlocks;
@@ -118,14 +119,10 @@ private:
 
 	int m_blockIndex;
 
-	float m_difX;
 
 	int m_count;
 
 	bool m_isDebug;
-
-	bool m_isHit;
-	float m_playerMoveX;
 
 	int m_tapCount;
 
@@ -134,6 +131,7 @@ private:
 
 	//const Mesh cylinder24{ MeshData::Cylinder(Vec3{0,0,0}, 0.5, 1, 24u) };
 
+	float m_timeCount;
 	std::unique_ptr<StageManager> m_smpStageManager;
 
 };

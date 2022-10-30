@@ -21,7 +21,7 @@ public:
 
 	void update();
 	void draw();
-	void SetCenterPos(float difX, float playerMoveX, float fallValue = 0);
+	void SetCenterPos(float difX, float fallValue = 0);
 
 	Block::TYPE GetBlockType(int index) { return m_smpBlocks[index]->GetType(); };
 
