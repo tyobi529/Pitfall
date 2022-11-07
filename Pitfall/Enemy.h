@@ -15,7 +15,10 @@ public:
 	void draw() const;
 
 	//１秒ごとに呼ぶ
-	void CoundDown();
+	bool CountDown();
+
+	const bool GetIsValid() { return m_isValid; };
+	void SetIsValid(bool isValid) { m_isValid = isValid; };
 
 private:
 	bool m_isValid; //trueで有効。pool用

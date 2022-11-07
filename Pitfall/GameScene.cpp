@@ -42,8 +42,8 @@ GameScene::GameScene(const InitData& init)
 	playerMesh = Mesh{ MeshData::Pyramid(1.0, 1.0) };
 
 
-
-
+	m_smpEnemyManager.reset();
+	m_smpEnemyManager = std::make_unique<EnemyManager>();
 
 
 	InitGame();
@@ -78,14 +78,16 @@ void GameScene::InitGame()
 
 	//=====================
 
+	m_smpEnemyManager->GenerateEnemy(4, 1, Scene::Time());
+	m_smpEnemyManager->GenerateEnemy(3, 2, Scene::Time());
 
-	m_smpEnemy.reset();
-	m_smpEnemy = std::make_unique<Enemy>();
-	m_smpEnemy->Init(4, 1, Scene::Time());
+	//m_smpEnemy.reset();
+	//m_smpEnemy = std::make_unique<Enemy>();
+	//m_smpEnemy->Init(4, 1, Scene::Time());
 
-	m_smpEnemy2.reset();
-	m_smpEnemy2 = std::make_unique<Enemy>();
-	m_smpEnemy2->Init(7, 2, Scene::Time());
+	//m_smpEnemy2.reset();
+	//m_smpEnemy2 = std::make_unique<Enemy>();
+	//m_smpEnemy2->Init(7, 2, Scene::Time());
 
 
 	m_blockIndex = 0;
@@ -107,8 +109,9 @@ void GameScene::update()
 		m_nextEverySecondTime += 1.0f;
 		updateEverySecond();
 	}
-	m_smpEnemy->update();
-	m_smpEnemy2->update();
+	//m_smpEnemy->update();
+	//m_smpEnemy2->update();
+	m_smpEnemyManager->update();
 
 	//ゲーム中動かさないがデバック用にカメラの移動
 	ClearPrint();
@@ -263,8 +266,10 @@ void GameScene::update()
 
 void GameScene::updateEverySecond()
 {
-	m_smpEnemy->CoundDown();
-	m_smpEnemy2->CoundDown();
+	//m_smpEnemy->CountDown();
+	//m_smpEnemy2->CountDown();
+
+	m_smpEnemyManager->CountDown();
 
 }
 
@@ -303,8 +308,11 @@ void GameScene::draw() const
 
 		DrawStage();
 
-		m_smpEnemy->draw();
-		m_smpEnemy2->draw();
+		//m_smpEnemy->draw();
+		//m_smpEnemy2->draw();
+
+		m_smpEnemyManager->draw();
+
 
 	}
 

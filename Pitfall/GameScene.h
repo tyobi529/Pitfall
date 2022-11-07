@@ -15,6 +15,7 @@
 #include "StageManager.h"
 
 #include "Enemy.h"
+#include "EnemyManager.h"
 
 // ゲームシーン
 class GameScene : public App::Scene
@@ -138,8 +139,11 @@ private:
 	float m_timeCount;
 	std::unique_ptr<StageManager> m_smpStageManager;
 
-	std::unique_ptr<Enemy> m_smpEnemy;
-	std::unique_ptr<Enemy> m_smpEnemy2;
+	std::unique_ptr<EnemyManager> m_smpEnemyManager;
+
+
+	//std::unique_ptr<Enemy> m_smpEnemy;
+	//std::unique_ptr<Enemy> m_smpEnemy2;
 
 	float m_nextEverySecondTime;
 

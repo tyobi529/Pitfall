@@ -42,13 +42,13 @@ void Enemy::draw() const
 	Box{ m_pos, 1.0f }.draw(ColorF{ 0.8, 0.6, 0.4 }.removeSRGBCurve());
 }
 
-void Enemy::CoundDown()
+bool Enemy::CountDown()
 {
 	m_count -= m_speed;
 
-	if (m_count == 0)
-	{
-		int a = 0;
-	}
+	if (m_count < 0)
+		assert(false);
+
+	return (m_count == 0);
 };
 
