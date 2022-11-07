@@ -33,6 +33,7 @@ GameScene::GameScene(const InitData& init)
 	, m_timeCount(0)
 	, m_fallTime(0)
 	, m_fallValue(0)
+	, m_nextEverySecondTime(0)
 {
 
 	//camera = BasicCamera3D{ renderTexture.size(), 30_deg, eyePosition, GetFocusPosition(eyePosition, angle) };
@@ -78,6 +79,13 @@ void GameScene::InitGame()
 	//=====================
 
 
+	m_smpEnemy.reset();
+	m_smpEnemy = std::make_unique<Enemy>();
+	m_smpEnemy->Init(4, 1, Scene::Time());
+
+	m_smpEnemy2.reset();
+	m_smpEnemy2 = std::make_unique<Enemy>();
+	m_smpEnemy2->Init(7, 2, Scene::Time());
 
 
 	m_blockIndex = 0;
@@ -86,12 +94,22 @@ void GameScene::InitGame()
 	m_tapCount = 0;
 
 	m_smpStageManager = std::make_unique<StageManager>();
+
+	m_nextEverySecondTime = Scene::Time() + 1.0f;
 }
 
 
 
 void GameScene::update()
 {
+	if (Scene::Time() >= m_nextEverySecondTime)
+	{
+		m_nextEverySecondTime += 1.0f;
+		updateEverySecond();
+	}
+	m_smpEnemy->update();
+	m_smpEnemy2->update();
+
 	//ゲーム中動かさないがデバック用にカメラの移動
 	ClearPrint();
 	m_deltaTime = (float)Scene::DeltaTime() * m_timeSpeed;
@@ -243,8 +261,16 @@ void GameScene::update()
 
 }
 
+void GameScene::updateEverySecond()
+{
+	m_smpEnemy->CoundDown();
+	m_smpEnemy2->CoundDown();
+
+}
+
 void GameScene::draw() const
 {
+
 	//Scene::SetBackground(ColorF{ 0.2 });
 	FontAsset(U"GameSceneScore")(m_score).draw(10, 10);
 
@@ -277,6 +303,8 @@ void GameScene::draw() const
 
 		DrawStage();
 
+		m_smpEnemy->draw();
+		m_smpEnemy2->draw();
 
 	}
 

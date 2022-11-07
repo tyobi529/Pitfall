@@ -82,5 +82,10 @@ public:
 
 	//===================================
 
+	//TODO
+	const static int START_POS_X;
+	const static int END_POS_X;
+
+	const static float BOTTOM_POS_Y;
 
 };

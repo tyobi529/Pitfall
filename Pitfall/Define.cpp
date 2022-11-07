@@ -23,7 +23,7 @@ const int   Define::WIN_W = 960;		//ウィンドウサイズ横
 
 
 //カメラ位置
-const Vec3 Define::EYE_POS = Vec3(0, 10, -25);
+const Vec3 Define::EYE_POS = Vec3(2, 12, -35);
 
 const float Define::BLOCK_SIZE = 1.0f;
 
@@ -69,3 +69,9 @@ const float Define::WALL_WIDTH = 3.0f; //壁の横幅（x方向の長さ）
 const float Define::WALL_SPEED_FIRST = 3.0f; //最初の壁の落下速度
 
 //===================================
+
+//TODO
+const int Define::START_POS_X = 11;
+const int Define::END_POS_X = 1;
+
+const float Define::BOTTOM_POS_Y = LIMIT_POS_Y_STAGE_BOTTOM + Define::BLOCK_SIZE * (float)Define::BLOCK_GROUND_BOTTOM_NUM;

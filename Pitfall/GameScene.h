@@ -14,6 +14,8 @@
 
 #include "StageManager.h"
 
+#include "Enemy.h"
+
 // ゲームシーン
 class GameScene : public App::Scene
 {
@@ -22,8 +24,10 @@ public:
 	GameScene(const InitData& init);
 
 	void update() override;
+	void updateEverySecond(); //1秒に一回実行
 
 	void draw() const override;
+
 
 	void InitGame();
 
@@ -133,5 +137,10 @@ private:
 
 	float m_timeCount;
 	std::unique_ptr<StageManager> m_smpStageManager;
+
+	std::unique_ptr<Enemy> m_smpEnemy;
+	std::unique_ptr<Enemy> m_smpEnemy2;
+
+	float m_nextEverySecondTime;
 
 };
