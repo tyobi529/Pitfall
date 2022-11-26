@@ -92,4 +92,8 @@ public:
 
 	const static float BOTTOM_POS_Y;
 
+	const static int SPEED_LEVEL_MIN;
+	const static int SPEED_LEVEL_MAX;
+	const static float SPEED_PER_LEVEL;
+
 };

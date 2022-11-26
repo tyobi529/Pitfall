@@ -75,3 +75,8 @@ const int Define::END_POS_X = 1;
 const int Define::START_POS_X = END_POS_X + Define::ENEMY_MOVE_COUNT;
 
 const float Define::BOTTOM_POS_Y = LIMIT_POS_Y_STAGE_BOTTOM + Define::BLOCK_SIZE * (float)Define::BLOCK_GROUND_BOTTOM_NUM;
+
+const int Define::SPEED_LEVEL_MIN = 1;
+const int Define::SPEED_LEVEL_MAX = 3;//スピード3段階
+const float Define::SPEED_PER_LEVEL = 0.5f; //1段階で上がるスピード
+

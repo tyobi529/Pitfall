@@ -10,7 +10,7 @@ public:
 	~Enemy();
 
 	//void Init(int heightNum, int speed, float startTime);
-	void Init(float speed);
+	void Init(bool isValid, int speedLevel = 0);
 
 	void UpdatePos(float difTime);
 
@@ -26,20 +26,30 @@ public:
 	const bool GetIsValid() { return m_isValid; };
 	//const bool GetIsHit() { return m_isHit; };
 
+	const float GetSpeedLevel() { return m_speedLevel; };
+
+
 	const int GetHeightNum() { return m_heightNum; };
 	void SetHeightNum(int heightNum) { m_heightNum = heightNum; };
 
 	void SetIsValid(bool isValid) { m_isValid = isValid; };
+
+	//TODO デバッグ用
+	void SetColor(float r) { m_color = ColorF{ r, 0.6, 0.4 }; };
 
 private:
 
 	//Initで指定
 	bool m_isValid; //trueで有効。pool用
 	float m_endTime; //m_startTime + count * 1s
-	float m_speed; //1秒にm_speed分m_countを減らす
+	//float m_speed; //1秒にm_speed分m_countを減らす
+	int m_speedLevel; //1秒にm_speed分m_countを減らす
+
 
 	int m_heightNum; //下からの番号
 	Vec3 m_pos;
+
+	ColorF m_color;
 
 	//不要
 	//int m_count; //1秒に1減らす。0の時衝突？小さいほどスピード早い

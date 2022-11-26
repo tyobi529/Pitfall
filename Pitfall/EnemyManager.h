@@ -15,9 +15,9 @@ public:
 	void update();
 	void draw() const;
 
-	void CountDown();
+	void updateEverySecond();
 
-	void UpdateHitIndex();
+	void UpdateHitStatus();
 	const int* const GetHitStatus(){ return m_hitStatus; };
 
 	void Explosion();
@@ -49,6 +49,9 @@ public:
 
 		void draw() const
 		{
+			if (!m_isValid)
+				return;
+
 			for (int i = 0; i < Define::BLOCK_NUM; i++)
 			{
 				m_smpEnemies[i].draw();
@@ -58,11 +61,29 @@ public:
 
 		void UpdateEnemyPos()
 		{
+			if (!m_isValid)
+				return;
+
 			float difTime = m_endTime - Scene::Time();
 			for (int i = 0; i < Define::BLOCK_NUM; i++)
 			{
 				m_smpEnemies[i].UpdatePos(difTime);
 			}
+		};
+
+		//１秒ごとに呼ぶ
+		void CountDown()
+		{
+			if (!m_isValid)
+				return;
+
+			m_count--;
+
+			//TODO
+			//if (m_count == 0)
+			//{
+			//	m_isValid = false;
+			//}
 		};
 
 		//void Init()
@@ -84,7 +105,6 @@ private:
 
 	//std::shared_ptr<EnemyUnit> m_smpEnemyUnits[5];
 	Array<std::shared_ptr<EnemyUnit>> m_smpEnemyUnitArray;
-
 
 };
 

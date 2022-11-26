@@ -77,8 +77,8 @@ void GameScene::InitGame()
 	//m_smpEnemyManager->GenerateEnemy(4, 1, Scene::Time());
 	//m_smpEnemyManager->GenerateEnemy(3, 2, Scene::Time());
 
-	std::shared_ptr<EnemyManager::EnemyUnit> smpEnemyUnit = m_smpEnemyManager->GetEnemyUnit();
-	m_smpEnemyManager->EnemyUnitInit(smpEnemyUnit, Scene::Time());
+	//std::shared_ptr<EnemyManager::EnemyUnit> smpEnemyUnit = m_smpEnemyManager->GetEnemyUnit();
+	//m_smpEnemyManager->EnemyUnitInit(smpEnemyUnit, Scene::Time());
 
 	m_blockIndex = 0;
 	m_count = 0;
@@ -96,8 +96,8 @@ void GameScene::update()
 {
 	if (Scene::Time() >= m_nextEverySecondTime)
 	{
-		m_nextEverySecondTime += 1.0f;
 		updateEverySecond();
+		m_nextEverySecondTime += 1.0f;
 	}
 
 	m_smpEnemyManager->update();
@@ -228,9 +228,21 @@ void GameScene::updateEverySecond()
 	m_timeCount = 0;
 
 
-	m_smpEnemyManager->CountDown();
-	m_smpEnemyManager->UpdateHitIndex();
+	m_smpEnemyManager->updateEverySecond();
+	//m_smpEnemyManager->UpdateHitIndex();
 
+
+	//const int* hitStatus = m_smpEnemyManager->GetHitStatus();
+	//for (int i = 0; i < BLOCK_NUM; i++)
+	//{
+	//	if (hitStatus[i] == 1)
+	//	{
+	//		m_smpPlayerBlockUnit->GetBlock(i)->SetType(Block::BLOCK_NONE);
+	//	}
+
+	//}
+
+	//衝突判定
 	const int* hitStatus = m_smpEnemyManager->GetHitStatus();
 	for (int i = 0; i < BLOCK_NUM; i++)
 	{
@@ -275,6 +287,18 @@ void GameScene::updateEverySecond()
 
 	m_smpEnemyManager->Explosion();
 
+
+	//新しく生成
+	if (m_generateCount == 1)
+	{
+		m_generateCount = 0;
+		std::shared_ptr<EnemyManager::EnemyUnit> smpEnemyUnit = m_smpEnemyManager->GetEnemyUnit();
+		m_smpEnemyManager->EnemyUnitInit(smpEnemyUnit, m_nextEverySecondTime);
+	}
+	else
+	{
+		m_generateCount++;
+	}
 }
 
 void GameScene::draw() const
