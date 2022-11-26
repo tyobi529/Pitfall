@@ -116,7 +116,7 @@ private:
 	//std::unique_ptr<PlayerBlock> m_smpPlayerBlocks[Define::BLOCK_HURDLE_NUM];
 	//std::unique_ptr<Block> m_smpPlayerBlocks[Define::BLOCK_HURDLE_NUM];
 	//std::shared_ptr<PlayerBlock> m_smpPlayerBlocks[Define::BLOCK_HURDLE_NUM];
-	std::shared_ptr<BlockUnit> m_smpEnemyBlockUnit;
+	//std::shared_ptr<BlockUnit> m_smpEnemyBlockUnit;
 	std::shared_ptr<BlockUnit> m_smpPlayerBlockUnit;
 
 	//Block* m_pPlayerBlocks;
@@ -146,5 +146,7 @@ private:
 	//std::unique_ptr<Enemy> m_smpEnemy2;
 
 	float m_nextEverySecondTime;
+
+	int m_generateCount;
 
 };

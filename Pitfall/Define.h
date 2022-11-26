@@ -36,8 +36,11 @@ public:
 		BLOCK_H_NUM = 20, //横に並ぶすべてのブロックの数
 
 		BLOCK_PLAYE_INDEX = 0, //プレイヤーがいるブロックのindex（x方向）
-		BLOCK_ENEMY_INDEX = 3, //プレイヤーがいるブロックのindex（x方向）
+		//BLOCK_ENEMY_INDEX = 3, //プレイヤーがいるブロックのindex（x方向）
 
+		ENEMY_MOVE_COUNT = 12,
+
+		BLOCK_NUM = BLOCK_HURDLE_NUM,
 	};
 
 	const static float LIMIT_POS_Y_STAGE_BOTTOM;
@@ -85,6 +88,7 @@ public:
 	//TODO
 	const static int START_POS_X;
 	const static int END_POS_X;
+
 
 	const static float BOTTOM_POS_Y;
 

@@ -71,7 +71,7 @@ const float Define::WALL_SPEED_FIRST = 3.0f; //最初の壁の落下速度
 //===================================
 
 //TODO
-const int Define::START_POS_X = 11;
 const int Define::END_POS_X = 1;
+const int Define::START_POS_X = END_POS_X + Define::ENEMY_MOVE_COUNT;
 
 const float Define::BOTTOM_POS_Y = LIMIT_POS_Y_STAGE_BOTTOM + Define::BLOCK_SIZE * (float)Define::BLOCK_GROUND_BOTTOM_NUM;

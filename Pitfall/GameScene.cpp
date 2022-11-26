@@ -34,6 +34,7 @@ GameScene::GameScene(const InitData& init)
 	, m_fallTime(0)
 	, m_fallValue(0)
 	, m_nextEverySecondTime(0)
+	, m_generateCount(0)
 {
 
 	//camera = BasicCamera3D{ renderTexture.size(), 30_deg, eyePosition, GetFocusPosition(eyePosition, angle) };
@@ -70,25 +71,14 @@ void GameScene::InitGame()
 	m_smpPlayerBlockUnit->GetBlock(BLOCK_NUM - 1)->SetType(Block::BLOCK_PLAYER_HEAD);
 	DropPlayerBlock(m_smpPlayerBlockUnit);
 
-	m_smpEnemyBlockUnit.reset();
-	m_smpEnemyBlockUnit = std::make_shared<BlockUnit>();
-	m_smpEnemyBlockUnit->EnemyInit();
-	m_smpEnemyBlockUnit->SetUnitIndex(Define::BLOCK_ENEMY_INDEX);
-	m_smpEnemyBlockUnit->GetBlock(4)->SetType(Block::BLOCK_NORMAL);
 
 	//=====================
 
-	m_smpEnemyManager->GenerateEnemy(4, 1, Scene::Time());
-	m_smpEnemyManager->GenerateEnemy(3, 2, Scene::Time());
+	//m_smpEnemyManager->GenerateEnemy(4, 1, Scene::Time());
+	//m_smpEnemyManager->GenerateEnemy(3, 2, Scene::Time());
 
-	//m_smpEnemy.reset();
-	//m_smpEnemy = std::make_unique<Enemy>();
-	//m_smpEnemy->Init(4, 1, Scene::Time());
-
-	//m_smpEnemy2.reset();
-	//m_smpEnemy2 = std::make_unique<Enemy>();
-	//m_smpEnemy2->Init(7, 2, Scene::Time());
-
+	std::shared_ptr<EnemyManager::EnemyUnit> smpEnemyUnit = m_smpEnemyManager->GetEnemyUnit();
+	m_smpEnemyManager->EnemyUnitInit(smpEnemyUnit, Scene::Time());
 
 	m_blockIndex = 0;
 	m_count = 0;
@@ -109,8 +99,7 @@ void GameScene::update()
 		m_nextEverySecondTime += 1.0f;
 		updateEverySecond();
 	}
-	//m_smpEnemy->update();
-	//m_smpEnemy2->update();
+
 	m_smpEnemyManager->update();
 
 	//ゲーム中動かさないがデバック用にカメラの移動
@@ -218,38 +207,7 @@ void GameScene::update()
 
 
 	m_timeCount += Scene::DeltaTime();
-	if (m_timeCount > 3)
-	{
-		//落下量初期化
-		m_fallTime = 0;
-		m_fallValue = 0;
-		m_timeCount = 0;
-
-
-		//m_smpPlayerBlockUnit->GetBlock(1)->SetType(Block::BLOCK_NONE);
-		//m_smpPlayerBlockUnit->GetBlock(2)->SetType(Block::BLOCK_NONE);
-
-		for (int i = 0; i < Define::BLOCK_HURDLE_NUM; i++)
-		{
-			if (m_smpEnemyBlockUnit->GetBlock(i)->GetType() != Block::BLOCK_NONE)
-			{
-				m_smpPlayerBlockUnit->GetBlock(i)->SetType(Block::BLOCK_NONE);
-				m_smpEnemyBlockUnit->GetBlock(i)->SetType(Block::BLOCK_NONE);
-			}
-		}
-
-		DropPlayerBlock(m_smpPlayerBlockUnit);
-
-		m_smpEnemyBlockUnit->GetBlock(0)->SetType(Block::BLOCK_NORMAL);
-		m_smpEnemyBlockUnit->GetBlock(1)->SetType(Block::BLOCK_NORMAL);
-
-		for (int i = 0; i < 4; i++)
-		{
-			int index = Random(2, Define::BLOCK_HURDLE_NUM - 1);
-			m_smpEnemyBlockUnit->GetBlock(index)->SetType(Block::BLOCK_NORMAL);
-		}
-		
-	}
+	
 
 	//仮
 	m_fallTime += Scene::DeltaTime() * Define::BLOCK_SPEED;
@@ -259,17 +217,63 @@ void GameScene::update()
 	m_smpPlayerBlockUnit->SetCenterPos(0, m_fallValue);
 	m_smpPlayerBlockUnit->update();
 
-	m_smpEnemyBlockUnit->SetCenterPos(0, m_fallValue);
-	m_smpEnemyBlockUnit->update();
 
 }
 
 void GameScene::updateEverySecond()
 {
-	//m_smpEnemy->CountDown();
-	//m_smpEnemy2->CountDown();
+	//落下量初期化
+	m_fallTime = 0;
+	m_fallValue = 0;
+	m_timeCount = 0;
+
 
 	m_smpEnemyManager->CountDown();
+	m_smpEnemyManager->UpdateHitIndex();
+
+	const int* hitStatus = m_smpEnemyManager->GetHitStatus();
+	for (int i = 0; i < BLOCK_NUM; i++)
+	{
+		if (hitStatus[i] == 1)
+		{
+			m_smpPlayerBlockUnit->GetBlock(i)->SetType(Block::BLOCK_NONE);
+		}
+
+	}
+
+	DropPlayerBlock(m_smpPlayerBlockUnit);
+
+
+	//m_generateCount++;
+	//if (m_generateCount == 3)
+	//{
+	//	m_generateCount = 0;
+
+	//	//新たに生成
+	//	Array<int32> index;
+	//	for (int i = 0; i < BLOCK_NUM; i++)
+	//	{
+	//		index << i;
+	//	}
+
+	//	Array<int32> generateIndex = index.choice(3);
+
+	//	for (auto itr = generateIndex.begin(); itr != generateIndex.end(); itr++)
+	//	{
+	//		if (RandomBool())
+	//		{
+	//			m_smpEnemyManager->GenerateEnemy(*itr, 1, Scene::Time());
+	//		}
+	//		else
+	//		{
+	//			m_smpEnemyManager->GenerateEnemy(*itr, 2, Scene::Time());
+	//		}
+	//	}
+	//}
+
+
+
+	m_smpEnemyManager->Explosion();
 
 }
 
@@ -304,12 +308,8 @@ void GameScene::draw() const
 
 
 		m_smpPlayerBlockUnit->draw();
-		m_smpEnemyBlockUnit->draw();
 
 		DrawStage();
-
-		//m_smpEnemy->draw();
-		//m_smpEnemy2->draw();
 
 		m_smpEnemyManager->draw();
 
