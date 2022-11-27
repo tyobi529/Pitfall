@@ -37,6 +37,7 @@ public:
 
 
 private:
+	int m_headIndex;
 	//int m_rowIndex; //逆だけど一旦
 	int m_unitIndex;
 

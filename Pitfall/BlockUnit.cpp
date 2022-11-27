@@ -10,7 +10,8 @@ BlockUnit::BlockUnit() :
 	m_unitIndex(0),
 	m_preIndex{},
 	m_fallTime(0),
-	m_fallValue(0)
+	m_fallValue(0),
+	m_headIndex(0)
 {
 	for (int i = 0; i < SIZE; i++)
 	{
@@ -24,6 +25,8 @@ BlockUnit::~BlockUnit()
 
 void BlockUnit::EnemyInit()
 {
+	m_headIndex = 0;
+
 	for (int i = 0; i < Define::BLOCK_HURDLE_NUM; i++)
 	{
 		m_smpBlocks[i].reset();
@@ -33,11 +36,16 @@ void BlockUnit::EnemyInit()
 
 void BlockUnit::PlayerInit()
 {
+
 	for (int i = 0; i < Define::BLOCK_HURDLE_NUM; i++)
 	{
 		m_smpBlocks[i].reset();
 		m_smpBlocks[i] = std::make_unique<PlayerBlock>(i);
 	}
+
+	m_headIndex = 0;
+	m_smpBlocks[0]->SetType(Block::BLOCK_PLAYER_HEAD);
+
 }
 
 
@@ -90,6 +98,14 @@ void BlockUnit::update()
 
 void BlockUnit::draw()
 {
+	//ワイヤーフレームの描画
+	//for (int i = 0; i < Define::BLOCK_NUM; i++)
+	//{
+	//	float posY = Define::LIMIT_POS_Y_HURDLE_BOTTOM + Define::BLOCK_SIZE * i;
+	//	Box{ 0, posY + 0, 0 , 1 }.draw(ColorF{ 0.8, 0.6, 0.4 }.removeSRGBCurve());
+	//}
+
+
 	for (int i = 0; i < Define::BLOCK_HURDLE_NUM; i++)
 	{
 		m_smpBlocks[i]->draw();
@@ -151,30 +167,38 @@ void BlockUnit::SetCenterPos(float difX, float fallValue)
 
 void BlockUnit::CreateBlock()
 {
-	int headIndex = -1;
+	//int headIndex = -1;
 
-	for (int i = 0; i < Define::BLOCK_NUM; i++)
-	{
-		if (m_smpBlocks[i]->GetType() == Block::BLOCK_PLAYER_HEAD)
-		{
-			headIndex = i;
-			break;
-		}
-	}
+	//for (int i = 0; i < Define::BLOCK_NUM; i++)
+	//{
+	//	if (m_smpBlocks[i]->GetType() == Block::BLOCK_PLAYER_HEAD)
+	//	{
+	//		headIndex = i;
+	//		break;
+	//	}
+	//}
 
-	if (headIndex == Define::BLOCK_NUM - 1)
+	//if (headIndex == Define::BLOCK_NUM - 1)
+	//{
+	//	//生成限界
+	//	return;
+	//}
+
+
+	if (m_headIndex == Define::BLOCK_NUM - 1)
 	{
 		//生成限界
 		return;
 	}
 
 
-	m_smpBlocks[headIndex]->Init();
-	m_smpBlocks[headIndex]->SetType(Block::BLOCK_PLAYER_BODY);
+	m_smpBlocks[m_headIndex]->Init();
+	m_smpBlocks[m_headIndex]->SetType(Block::BLOCK_PLAYER_BODY);
 
 	//1つ上に頭を移動
-	m_smpBlocks[headIndex + 1]->SetType(Block::BLOCK_PLAYER_HEAD);
-
+	int newHeadIndex = m_headIndex + 1;
+	m_smpBlocks[newHeadIndex]->SetType(Block::BLOCK_PLAYER_HEAD);
+	m_headIndex = newHeadIndex;
 
 }
 
@@ -244,6 +268,11 @@ void BlockUnit::DropBlock()
 						//移動元情報入れる
 						m_preIndex[j + 1] = i;
 
+						if (type == Block::BLOCK_PLAYER_HEAD)
+						{
+							m_headIndex = j + 1;
+						}
+
 						break;
 					}
 					if (j == 0)
@@ -254,6 +283,11 @@ void BlockUnit::DropBlock()
 
 						//移動元情報入れる
 						m_preIndex[0] = i;
+
+						if (type == Block::BLOCK_PLAYER_HEAD)
+						{
+							m_headIndex = 0;
+						}
 
 						break;
 					}

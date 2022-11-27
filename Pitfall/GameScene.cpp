@@ -68,8 +68,7 @@ void GameScene::InitGame()
 	m_smpPlayerBlockUnit = std::make_shared<BlockUnit>();
 	m_smpPlayerBlockUnit->PlayerInit();
 	m_smpPlayerBlockUnit->SetUnitIndex(Define::BLOCK_PLAYE_INDEX);
-	m_smpPlayerBlockUnit->GetBlock(BLOCK_NUM - 1)->SetType(Block::BLOCK_PLAYER_HEAD);
-	//DropPlayerBlock(m_smpPlayerBlockUnit);
+	//m_smpPlayerBlockUnit->GetBlock(BLOCK_NUM - 1)->SetType(Block::BLOCK_PLAYER_HEAD);
 	m_smpPlayerBlockUnit->DropBlock();
 
 	//=====================
