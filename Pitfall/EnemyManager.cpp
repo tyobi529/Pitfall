@@ -226,7 +226,7 @@ void EnemyManager::EnemyUnitInit(std::shared_ptr<EnemyUnit> smpEnemyUnit, float 
 
 			smpEnemyUnit->m_smpEnemies[i].Init(true, speedLevel);
 			//TODO
-			smpEnemyUnit->m_smpEnemies[i].SetColor(color_r);
+			//smpEnemyUnit->m_smpEnemies[i].SetColor(color_r);
 
 		}
 		else

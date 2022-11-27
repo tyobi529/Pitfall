@@ -37,6 +37,9 @@ void Enemy::Init(bool isValid, int speedLevel)
 	m_isValid = isValid;
 	m_speedLevel = speedLevel;
 
+	//TODO
+	SetColor(0.2f * speedLevel);
+
 	//m_pos = Vec3(Define::START_POS_X, Define::BOTTOM_POS_Y + heightNum * Define::BLOCK_SIZE, 0.0f);
 }
 
