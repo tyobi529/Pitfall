@@ -44,7 +44,7 @@ void BlockUnit::PlayerInit()
 	}
 
 	m_headIndex = 0;
-	m_smpBlocks[0]->SetType(Block::BLOCK_PLAYER_HEAD);
+	m_smpBlocks[m_headIndex]->SetType(Block::BLOCK_PLAYER_HEAD);
 
 }
 
@@ -216,55 +216,34 @@ void BlockUnit::CheckHit(const int* hitStatus)
 
 void BlockUnit::DropBlock()
 {
-	Block::TYPE* types;
-
-	Block::TYPE emptyTypes[Define::BLOCK_NUM] = {};
-	for (int i = 0; i < Define::BLOCK_NUM; i++)
-	{
-		if (m_smpBlocks[i]->GetType() == Block::BLOCK_PLAYER_HEAD ||
-			m_smpBlocks[i]->GetType() == Block::BLOCK_PLAYER_BODY)
-		{
-			emptyTypes[i] = Block::BLOCK_NONE;
-		}
-		else
-		{
-			emptyTypes[i] = m_smpBlocks[i]->GetType();
-		}
-	}
-	types = emptyTypes;
-
-
 
 	for (int i = 0; i < Define::BLOCK_NUM; i++)
 	{
 		Block::TYPE type = m_smpBlocks[i]->GetType();
-		if (type == Block::BLOCK_PLAYER_HEAD || type == Block::BLOCK_PLAYER_BODY)
+
+		if (type != Block::BLOCK_NONE)
 		{
-			//元の位置を先に削除
-			m_smpBlocks[i]->SetType(Block::BLOCK_NONE);
-
-			if (i == 0) //一番下
+			if (i == 0) //一番下は移動なし
 			{
-				m_smpBlocks[0]->SetType(type);
-				//移動先にブロックを入れる
-				types[0] = type;
-
-				//移動元情報入れる
-				m_preIndex[0] = i;
+				continue;
 			}
 			else
 			{
 				//下を確認
 				for (int j = i - 1; j >= 0; j--)
 				{
-					if (types[j] != Block::BLOCK_NONE)
+					if (m_smpBlocks[j]->GetType() != Block::BLOCK_NONE)
 					{
-						//ブロックが存在する場合はその１つ上に移動
-						//真下にある場合は変化なし
-						m_smpBlocks[j + 1]->SetType(type);
-						//移動先にブロックを入れる
-						types[j + 1] = type;
+						if (j == i - 1)
+						{
+							//真下にブロックがある場合は変化なし
+							break;
+						}
 
+						//ブロックが存在する場合はその１つ上に移動
+						m_smpBlocks[j + 1]->SetType(type);
+						//元の位置を消す
+						m_smpBlocks[i]->SetType(Block::BLOCK_NONE);
 						//移動元情報入れる
 						m_preIndex[j + 1] = i;
 
@@ -275,12 +254,13 @@ void BlockUnit::DropBlock()
 
 						break;
 					}
+
+					//一番下までブロックが無かった場合
 					if (j == 0)
 					{
 						m_smpBlocks[0]->SetType(type);
-						//移動先にブロックを入れる
-						types[0] = type;
-
+						//元の位置を消す
+						m_smpBlocks[i]->SetType(Block::BLOCK_NONE);
 						//移動元情報入れる
 						m_preIndex[0] = i;
 
@@ -297,4 +277,5 @@ void BlockUnit::DropBlock()
 
 		}
 	}
+
 }
