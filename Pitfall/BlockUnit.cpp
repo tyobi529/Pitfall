@@ -65,10 +65,9 @@ void BlockUnit::PlayerInit()
 void BlockUnit::update()
 {
 	m_fallTime += Scene::DeltaTime();
-	float tmp = m_fallTime / 0.5f;
+	float tmp = m_fallTime * 3.0f;
 	//m_fallValue = (BLOCK_NUM - 1) * (m_fallTime * m_fallTime);
 	m_fallValue = (Define::BLOCK_NUM - 1) * (tmp * tmp);
-
 
 	for (int i = 0; i < Define::BLOCK_NUM; i++)
 	{
@@ -87,7 +86,7 @@ void BlockUnit::update()
 			posY += difY;
 		}
 
-		m_smpBlocks[i]->SetCenterPos(0, posY);
+		m_smpBlocks[i]->SetPosition(0, posY);
 	}
 
 	for (int i = 0; i < Define::BLOCK_HURDLE_NUM; i++)
@@ -157,7 +156,7 @@ void BlockUnit::SetCenterPos(float difX, float fallValue)
 		//	posY += difY;
 		//}
 
-		m_smpBlocks[i]->SetCenterPos(posX, posY);
+		m_smpBlocks[i]->SetPosition(posX, posY);
 
 
 	}

@@ -1,8 +1,9 @@
 ﻿#pragma once
 
+#include "Object.h"
 #include "Define.h"
 
-class Block
+class Block : public Object
 {
 public:
 
@@ -33,15 +34,9 @@ public:
 	void SetType(TYPE type) { m_type = type; };
 
 
-	void SetCenterPos(float posX, float posY);
-
-
 protected:
-	//const int m_rowIndex;
 	const int m_index; //下から何番目か
 
-	Vec3 m_centerPos;
-	float m_size;
 
 private:
 
