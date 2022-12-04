@@ -49,6 +49,8 @@ GameScene::GameScene(const InitData& init)
 
 	InitGame();
 
+	Player* pPlayer = new Player();
+	int a = 0;
 }
 
 void GameScene::InitGame()

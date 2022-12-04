@@ -2,14 +2,29 @@
 #include "Player.h"
 
 #include "Define.h"
+#include "Block.h"
 
-Player::Player() :
-	m_isLeft(true),
-	m_blockNum(0)
+Player::Player()
 {
-	//m_pos.x = -m_pos.x;
+	m_smpBlockUnit.reset();
+	std::shared_ptr<ObjectUnit> smpObjectUnit = std::make_shared<ObjectUnit>();
 
-	//m_blockNum = 3;
+	for (int i = 0; i < Define::BLOCK_NUM; i++)
+	{
+		std::shared_ptr<Block> smpBlock = std::make_shared<Block>();
+		smpObjectUnit->SetObject(i, smpBlock);
+	}
+
+	int a = 0;
+
+	//m_smpBlockUnit = std::make_shared<BlockUnit>();
+
+	//m_smpPlayerBlockUnit.reset();
+	//m_smpPlayerBlockUnit = std::make_shared<BlockUnit>();
+	//m_smpPlayerBlockUnit->PlayerInit();
+	//m_smpPlayerBlockUnit->SetUnitIndex(Define::BLOCK_PLAYE_INDEX);
+	////m_smpPlayerBlockUnit->GetBlock(BLOCK_NUM - 1)->SetType(Block::BLOCK_PLAYER_HEAD);
+	//m_smpPlayerBlockUnit->DropBlock();
 }
 
 Player::~Player()
@@ -19,27 +34,10 @@ Player::~Player()
 
 void Player::update()
 {
-	//if (MouseL.up())
-	//{
-	//	m_blockNum++;
-	//}
+
 }
 
 void Player::draw()
 {
-
-	//Vec3 playerPos = Vec3(Define::PLAYER_POS_X, Define::GROUND_POS_Y + Define::BLOCK_HURDLE_HALL_NUM * 2, 0.0f);
-	//for (int i = 0; i < m_blockNum; i++)
-	//{
-	//	Vec3 pos1 = playerPos;
-	//	Vec3 pos2 = Vec3(pos1.x + Define::PLAYER_WIDTH, pos1.y + Define::PLAYER_WIDTH, pos1.z + Define::DEPTH_Z);
-	//	//Box::FromPoints(pos1, pos2).draw(ColorF{ 0.8, 0.6, 0.4 });
-	//	Box::FromPoints(pos1, pos2).draw(woodTexture);
-	//	playerPos.y += Define::PLAYER_WIDTH;
-	//}
-
-	//Vec3 headPos1 = playerPos;
-	//Vec3 headPos2 = Vec3(headPos1.x + Define::PLAYER_WIDTH, headPos1.y + Define::PLAYER_WIDTH, headPos1.z + Define::DEPTH_Z);
-	//Box::FromPoints(headPos1, headPos2).draw(ColorF{ 0.4, 0.9, 0.2 });
 
 }

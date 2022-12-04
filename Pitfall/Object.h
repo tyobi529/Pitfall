@@ -34,20 +34,52 @@ struct ObjectUnit
 {
 public:
 
-	ObjectUnit(){};
+	ObjectUnit()
+	{
+		Init();
+	};
 
-	virtual ~ObjectUnit() = 0 {}; //純粋仮想デストラクタの定義が必要
+	virtual ~ObjectUnit(){}; //純粋仮想デストラクタの定義が必要
 
-	Object* GetObject(int index)
+	//Object* GetObject(int index)
+	//{
+	//	if (0 <= index && index < Define::BLOCK_NUM)
+	//		return &m_objects[index];
+	//	else
+	//		return nullptr;
+	//};
+
+	void Init()
+	{
+		for (int i = 0; i < Define::BLOCK_NUM; i++)
+			m_smpObjects[i].reset();
+	}
+
+	std::shared_ptr<Object> GetObject(int index)
 	{
 		if (0 <= index && index < Define::BLOCK_NUM)
-			return &m_objects[index];
+			return m_smpObjects[index];
 		else
 			return nullptr;
 	};
 
+	bool SetObject(int index, std::shared_ptr<Object> smpObject)
+	{
+		if (0 <= index && index < Define::BLOCK_NUM)
+		{
+			m_smpObjects[index] = smpObject;
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
 private:
-	Object m_objects[Define::BLOCK_NUM];
+	//Object* m_objects[Define::BLOCK_NUM];
+	std::shared_ptr<Object> m_smpObjects[Define::BLOCK_NUM];
+
 
 	//virtual void update() {};
 	//virtual void draw() const = 0;
