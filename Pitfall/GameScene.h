@@ -8,8 +8,6 @@
 
 #include "Player.h"
 
-#include "BlockUnit.h"
-
 #include "PlayerBlock.h"
 
 #include "StageManager.h"
@@ -117,7 +115,10 @@ private:
 	//std::unique_ptr<Block> m_smpPlayerBlocks[Define::BLOCK_HURDLE_NUM];
 	//std::shared_ptr<PlayerBlock> m_smpPlayerBlocks[Define::BLOCK_HURDLE_NUM];
 	//std::shared_ptr<BlockUnit> m_smpEnemyBlockUnit;
-	std::shared_ptr<BlockUnit> m_smpPlayerBlockUnit;
+	//std::shared_ptr<BlockUnit> m_smpPlayerBlockUnit;
+
+	std::shared_ptr<Player> m_smpPlayer;
+
 
 	//Block* m_pPlayerBlocks;
 

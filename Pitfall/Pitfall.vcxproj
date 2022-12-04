@@ -114,7 +114,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Block.cpp" />
-    <ClCompile Include="BlockUnit.cpp" />
     <ClCompile Include="Define.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyManager.cpp" />
@@ -326,7 +325,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Block.h" />
-    <ClInclude Include="BlockUnit.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="Define.h" />
     <ClInclude Include="Enemy.h" />

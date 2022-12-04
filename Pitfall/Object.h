@@ -39,15 +39,7 @@ public:
 		Init();
 	};
 
-	virtual ~ObjectUnit(){}; //純粋仮想デストラクタの定義が必要
-
-	//Object* GetObject(int index)
-	//{
-	//	if (0 <= index && index < Define::BLOCK_NUM)
-	//		return &m_objects[index];
-	//	else
-	//		return nullptr;
-	//};
+	virtual ~ObjectUnit(){}; 
 
 	void Init()
 	{
@@ -76,13 +68,9 @@ public:
 		}
 	}
 
+
+
 private:
-	//Object* m_objects[Define::BLOCK_NUM];
 	std::shared_ptr<Object> m_smpObjects[Define::BLOCK_NUM];
-
-
-	//virtual void update() {};
-	//virtual void draw() const = 0;
-
 
 };

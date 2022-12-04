@@ -165,9 +165,6 @@
     <ClCompile Include="Block.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BlockUnit.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="PlayerBlock.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -834,9 +831,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Block.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BlockUnit.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PlayerBlock.h">
