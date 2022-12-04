@@ -5,7 +5,7 @@
 class PlayerBlock : public Block
 {
 public:
-	PlayerBlock(int index);
+	PlayerBlock();
 	~PlayerBlock();
 
 	void Init() override;

@@ -30,7 +30,7 @@ void BlockUnit::EnemyInit()
 	for (int i = 0; i < Define::BLOCK_HURDLE_NUM; i++)
 	{
 		m_smpBlocks[i].reset();
-		m_smpBlocks[i] = std::make_shared<Block>(i);
+		m_smpBlocks[i] = std::make_shared<Block>();
 	}
 }
 
@@ -40,7 +40,7 @@ void BlockUnit::PlayerInit()
 	for (int i = 0; i < Define::BLOCK_HURDLE_NUM; i++)
 	{
 		m_smpBlocks[i].reset();
-		m_smpBlocks[i] = std::make_unique<PlayerBlock>(i);
+		m_smpBlocks[i] = std::make_unique<PlayerBlock>();
 	}
 
 	m_headIndex = 0;

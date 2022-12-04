@@ -3,8 +3,7 @@
 
 #define SIZE Define::BLOCK_SIZE
 
-Block::Block(int index) : Object()
-	, m_index(index)
+Block::Block() : Object()
 	, m_type(TYPE::BLOCK_NONE)
 {
 	Init();

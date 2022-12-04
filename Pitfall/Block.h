@@ -19,7 +19,7 @@ public:
 	};
 
 
-	Block(int index);
+	Block();
 
 	~Block();
 
@@ -35,7 +35,7 @@ public:
 
 
 protected:
-	const int m_index; //下から何番目か
+	//const int m_index; //下から何番目か
 
 
 private:

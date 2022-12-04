@@ -3,7 +3,7 @@
 
 #define SIZE Define::BLOCK_SIZE
 
-PlayerBlock::PlayerBlock(int index) : Block(index)
+PlayerBlock::PlayerBlock() : Block()
 	, m_isExpand(false)
 	, m_sizeMag(0)
 {
