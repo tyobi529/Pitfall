@@ -341,7 +341,7 @@ void GameScene::DrawStage() const
 			float posY = Define::LIMIT_POS_Y_STAGE_BOTTOM + SIZE * j;
 			Box{ Vec3(posX, posY, 0), SIZE }.draw(TextureAsset(U"wood"));
 			Box{ Vec3(-posX, posY, 0), SIZE }.draw(TextureAsset(U"wood"));
-		}
+		} 
 	}
 
 

@@ -7,22 +7,16 @@ Player::Player() :
 	m_headIndex(0)
 {
 	m_smpBlockUnit.reset();
-	//std::shared_ptr<BlockUnit> smpObjectUnit = std::make_shared<BlockUnit>();
 	m_smpBlockUnit = std::make_shared<ObjectUnit>();
 
 	for (int i = 0; i < Define::BLOCK_NUM; i++)
 	{
-		//std::shared_ptr<Block> smpBlock = std::make_shared<Block>();
-		//if (!m_smpBlockUnit->SetObject(i, smpBlock))
-		//	assert(false);
-
 		std::shared_ptr<PlayerBlock> smpBlock = std::make_shared<PlayerBlock>();
 		smpBlock->Init();
 		if (!m_smpBlockUnit->SetObject(i, smpBlock))
 			assert(false);
 
 	}
-
 
 	m_headIndex = 0;
 	std::shared_ptr<Object> smpObject = m_smpBlockUnit->GetObject(0);
