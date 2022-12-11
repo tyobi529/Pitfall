@@ -17,8 +17,8 @@ EnemyManager::EnemyManager()
 	//最初に5個メモリを確保
 	for (int i = 0; i < 5; i++)
 	{
-		std::shared_ptr<EnemyUnit> smpEnemyUnit = std::make_unique<EnemyUnit>();
-		m_smpEnemyUnitArray << smpEnemyUnit;
+		std::shared_ptr<Enemy> smpEnemy = std::make_unique<Enemy>();
+		m_smpEnemyArray << smpEnemy;
 	}
 
 }
@@ -40,9 +40,21 @@ void EnemyManager::update()
 	//}
 
 	//位置更新
-	for (auto itr = m_smpEnemyUnitArray.begin(); itr != m_smpEnemyUnitArray.end(); itr++)
+	for (auto itr = m_smpEnemyArray.begin(); itr != m_smpEnemyArray.end(); itr++)
 	{
-		(*itr)->UpdateEnemyPos();
+		//(*itr)->UpdateEnemyPos();
+
+		(*itr)->update();
+
+
+		//if (!m_isValid)
+		//	return;
+
+		//float difTime = m_endTime - Scene::Time();
+		//for (int i = 0; i < Define::BLOCK_NUM; i++)
+		//{
+		//	m_smpEnemies[i].UpdatePos(difTime);
+		//}
 	}
 
 }
@@ -59,7 +71,7 @@ void EnemyManager::draw() const
 	//}
 
 
-	for (auto itr = m_smpEnemyUnitArray.begin(); itr != m_smpEnemyUnitArray.end(); itr++)
+	for (auto itr = m_smpEnemyArray.begin(); itr != m_smpEnemyArray.end(); itr++)
 	{
 		(*itr)->draw();
 	}
@@ -87,9 +99,9 @@ void EnemyManager::updateEverySecond()
 	//	}
 	//}
 
-	for (auto itr = m_smpEnemyUnitArray.begin(); itr != m_smpEnemyUnitArray.end(); itr++)
+	for (auto itr = m_smpEnemyArray.begin(); itr != m_smpEnemyArray.end(); itr++)
 	{
-		(*itr)->CountDown();
+		(*itr)->updateEverySecond();
 	}
 
 	UpdateHitStatus();
@@ -105,7 +117,7 @@ void EnemyManager::UpdateHitStatus()
 	}
 
 	//有効なものだけ操作
-	for (auto itr = m_smpEnemyUnitArray.begin(); itr != m_smpEnemyUnitArray.end(); itr++)
+	for (auto itr = m_smpEnemyArray.begin(); itr != m_smpEnemyArray.end(); itr++)
 	{
 		if ((*itr)->m_isValid)
 		{
@@ -113,10 +125,13 @@ void EnemyManager::UpdateHitStatus()
 			{
 				for (int i = 0; i < Define::BLOCK_NUM; i++)
 				{
-					if ((*itr)->m_smpEnemies[i].GetIsValid())
-					{
-						m_hitStatus[i] = 1; //TODO １固定
-					}
+
+					//std::shared_ptr<EnemyBlock> smpEnemyBlock = std::static_pointer_cast<EnemyBlock>((*itr)->m_smpBlockUnit->GetObject(i));
+					m_hitStatus[i] = (*itr)->m_smpBlockUnit->GetObject(i)->GetType();
+					//if ((*itr)->m_smpEnemies[i].GetIsValid())
+					//{
+					//	m_hitStatus[i] = 1; //TODO １固定
+					//}
 				}
 
 				//無効に
@@ -164,10 +179,10 @@ void EnemyManager::Explosion()
 //
 //}
 
-std::shared_ptr<EnemyManager::EnemyUnit> EnemyManager::GetEnemyUnit()
+std::shared_ptr<Enemy> EnemyManager::GetEnemy()
 {
 	//無効なものを探す
-	for (auto itr = m_smpEnemyUnitArray.begin(); itr != m_smpEnemyUnitArray.end(); itr++)
+	for (auto itr = m_smpEnemyArray.begin(); itr != m_smpEnemyArray.end(); itr++)
 	{
 		if (!(*itr)->m_isValid)
 		{
@@ -176,16 +191,16 @@ std::shared_ptr<EnemyManager::EnemyUnit> EnemyManager::GetEnemyUnit()
 	}
 
 	//無効なものが無い場合生成
-	std::shared_ptr<EnemyUnit> smpEnemyUnit = std::make_unique<EnemyUnit>();
-	m_smpEnemyUnitArray << smpEnemyUnit;
-	return smpEnemyUnit;
+	std::shared_ptr<Enemy> smpEnemy = std::make_unique<Enemy>();
+	m_smpEnemyArray << smpEnemy;
+	return smpEnemy;
 }
 
-void EnemyManager::EnemyUnitInit(std::shared_ptr<EnemyUnit> smpEnemyUnit, float startTime)
+void EnemyManager::EnemyInit(std::shared_ptr<Enemy> smpEnemy, float startTime)
 {
-	smpEnemyUnit->m_isValid = true;
-	smpEnemyUnit->m_count = 10; //TODO
-	smpEnemyUnit->m_endTime = startTime + smpEnemyUnit->m_count * 1.0f;
+	smpEnemy->m_isValid = true;
+	smpEnemy->m_count = 10; //TODO
+	smpEnemy->m_endTime = startTime + smpEnemy->m_count * 1.0f;
 
 	float color_r = Random(0.0f, 1.0f);
 
@@ -195,16 +210,24 @@ void EnemyManager::EnemyUnitInit(std::shared_ptr<EnemyUnit> smpEnemyUnit, float 
 		{
 			//同じレーンにオブジェクトがあるか判定する
 			int limitSpeedLevel = 0;
-			for (auto itr = m_smpEnemyUnitArray.begin(); itr != m_smpEnemyUnitArray.end(); itr++)
+			for (auto itr = m_smpEnemyArray.begin(); itr != m_smpEnemyArray.end(); itr++)
 			{
 				if ((*itr)->m_isValid)
 				{
-					if ((*itr)->m_smpEnemies[i].GetIsValid())
+					if ((*itr)->m_smpBlockUnit->GetObject(i)->GetType() != Block::BLOCK_NONE)
 					{
-						int speedLevel = (*itr)->m_smpEnemies[i].GetSpeedLevel();
+						std::shared_ptr<EnemyBlock> smpEnemyBlock = std::static_pointer_cast<EnemyBlock>((*itr)->m_smpBlockUnit->GetObject(i));
+						int speedLevel = smpEnemyBlock->m_speedLevel;
 						if (speedLevel > limitSpeedLevel)
 							limitSpeedLevel = speedLevel;
 					}
+
+					//if ((*itr)->m_smpEnemies[i].GetIsValid())
+					//{
+					//	int speedLevel = (*itr)->m_smpEnemies[i].GetSpeedLevel();
+					//	if (speedLevel > limitSpeedLevel)
+					//		limitSpeedLevel = speedLevel;
+					//}
 				}
 			}
 
@@ -224,14 +247,22 @@ void EnemyManager::EnemyUnitInit(std::shared_ptr<EnemyUnit> smpEnemyUnit, float 
 			//int tmp = Random(1, 3);
 			//float speed = 0.5f * tmp;
 
-			smpEnemyUnit->m_smpEnemies[i].Init(true, speedLevel);
+			std::shared_ptr<EnemyBlock> smpEnemyBlock = std::static_pointer_cast<EnemyBlock>(smpEnemy->m_smpBlockUnit->GetObject(i));
+			float posY = Define::LIMIT_POS_Y_HURDLE_BOTTOM + Define::BLOCK_SIZE * i;
+			smpEnemyBlock->SetPosition(1000, posY); //初期位置指定
+			smpEnemyBlock->SetSize(1.0f); //初期サイズ指定
+			smpEnemyBlock->SetType(Block::BLOCK_NORMAL);
+			smpEnemyBlock->m_speedLevel = speedLevel;
+
+			//smpEnemyUnit->m_smpEnemies[i].Init(true, speedLevel);
 			//TODO
 			//smpEnemyUnit->m_smpEnemies[i].SetColor(color_r);
 
 		}
 		else
 		{
-			smpEnemyUnit->m_smpEnemies[i].Init(false);
+			std::shared_ptr<EnemyBlock> smpEnemyBlock = std::static_pointer_cast<EnemyBlock>(smpEnemy->m_smpBlockUnit->GetObject(i));
+			smpEnemyBlock->SetType(Block::BLOCK_NONE);
 		}
 	}
 

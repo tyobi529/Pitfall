@@ -3,28 +3,13 @@
 
 #define SIZE Define::BLOCK_SIZE
 
-Block::Block() : Object()
-	, m_type(TYPE::BLOCK_NONE)
-{
-	Init();
-}
-
-
-Block::~Block()
+Block::Block() :
+	m_pos(Vec3(0, 0, 0)),
+	m_size(0),
+	m_type(TYPE::BLOCK_NONE)
 {
 }
 
-void Block::Init()
-{
-	m_type = TYPE::BLOCK_NONE; //typeが消えるので注意
-	m_pos = Vec3(0, 0, 0);
-	//m_size = Define::BLOCK_SIZE;
-}
-
-void Block::update()
-{
-
-}
 
 void Block::draw() const
 {
@@ -57,4 +42,14 @@ void Block::draw() const
 	}
 }
 
+void Block::SetPosition(float x, float y, float z)
+{
+	float posX = x;
+	//y,zは指定していないなら元の値を使う
+	float posY = m_pos.y;
+	if (y != -1) posY = y;
+	float posZ = m_pos.z;
+	if (z != -1) posZ = y;
 
+	m_pos = Vec3(posX, posY, posZ);
+}

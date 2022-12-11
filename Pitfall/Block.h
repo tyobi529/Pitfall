@@ -1,14 +1,13 @@
 ﻿#pragma once
 
-#include "Object.h"
 #include "Define.h"
 
-class Block : public Object
+class Block
 {
 public:
 
 	enum TYPE {
-		BLOCK_NONE, //何もない
+		BLOCK_NONE = 0, //何もない
 		BLOCK_GROUND, //固定の地面部分
 		BLOCK_NORMAL,
 		BLOCK_HEAD,
@@ -21,25 +20,27 @@ public:
 
 	Block();
 
-	~Block();
+	virtual ~Block() {};
 
 
-	virtual void Init();
+	virtual void Init() {};
 
 
-	virtual void update();
+	virtual void update() {};
 	void draw() const;
+
+	void SetPosition(float x, float y = -1, float z = -1);
+	void SetSize(float value) { m_size = value; };
 
 	TYPE GetType() { return m_type; };
 	void SetType(TYPE type) { m_type = type; };
 
 
 protected:
-	//const int m_index; //下から何番目か
-
+	float m_size;
 
 private:
-
+	Vec3 m_pos;
 	//属性情報だけ持つ
 	TYPE m_type;
 
@@ -47,3 +48,49 @@ private:
 
 };
 
+
+
+struct BlockUnit
+{
+public:
+
+	BlockUnit()
+	{
+		Init();
+	};
+
+	virtual ~BlockUnit() {};
+
+	void Init()
+	{
+		for (int i = 0; i < Define::BLOCK_NUM; i++)
+			m_smpObjects[i].reset();
+	}
+
+	std::shared_ptr<Block> GetObject(int index)
+	{
+		if (0 <= index && index < Define::BLOCK_NUM)
+			return m_smpObjects[index];
+		else
+			return nullptr;
+	};
+
+	bool SetObject(int index, std::shared_ptr<Block> smpObject)
+	{
+		if (0 <= index && index < Define::BLOCK_NUM)
+		{
+			m_smpObjects[index] = smpObject;
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+
+
+private:
+	std::shared_ptr<Block> m_smpObjects[Define::BLOCK_NUM];
+
+};

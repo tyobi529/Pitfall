@@ -177,6 +177,9 @@
     <ClCompile Include="EnemyManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="EnemyBlock.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="App\icon.ico">
@@ -845,7 +848,7 @@
     <ClInclude Include="EnemyManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Object.h">
+    <ClInclude Include="EnemyBlock.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

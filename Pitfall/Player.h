@@ -18,9 +18,9 @@ public:
 	void DropBlock();
 	void CheckHit(const int* hitStatus);
 
+	std::shared_ptr<BlockUnit> m_smpBlockUnit;
 
 private:
-	std::shared_ptr<ObjectUnit> m_smpBlockUnit;
 
 	int m_preIndex[Define::BLOCK_NUM];
 	int m_headIndex;

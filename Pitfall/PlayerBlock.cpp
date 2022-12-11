@@ -17,8 +17,6 @@ PlayerBlock::~PlayerBlock()
 
 void PlayerBlock::Init()
 {
-	Block::Init();
-
 	m_isExpand = true;
 	m_sizeMag = 0.0f;
 }

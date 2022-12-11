@@ -7,7 +7,7 @@ Player::Player() :
 	m_headIndex(0)
 {
 	m_smpBlockUnit.reset();
-	m_smpBlockUnit = std::make_shared<ObjectUnit>();
+	m_smpBlockUnit = std::make_shared<BlockUnit>();
 
 	for (int i = 0; i < Define::BLOCK_NUM; i++)
 	{
@@ -19,7 +19,7 @@ Player::Player() :
 	}
 
 	m_headIndex = 0;
-	std::shared_ptr<Object> smpObject = m_smpBlockUnit->GetObject(0);
+	std::shared_ptr<Block> smpObject = m_smpBlockUnit->GetObject(0);
 	std::shared_ptr<PlayerBlock> smpBlock = std::static_pointer_cast<PlayerBlock>(smpObject);
 	smpBlock->SetType(Block::BLOCK_PLAYER_HEAD);
 
@@ -107,7 +107,7 @@ void Player::DropBlock()
 {
 	for (int i = 0; i < Define::BLOCK_NUM; i++)
 	{
-		std::shared_ptr<Object> smpObject = m_smpBlockUnit->GetObject(i);
+		std::shared_ptr<Block> smpObject = m_smpBlockUnit->GetObject(i);
 		std::shared_ptr<PlayerBlock> smpBlock = std::static_pointer_cast<PlayerBlock>(smpObject);
 
 

@@ -116,6 +116,7 @@
     <ClCompile Include="Block.cpp" />
     <ClCompile Include="Define.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemyBlock.cpp" />
     <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -328,9 +329,9 @@
     <ClInclude Include="Common.h" />
     <ClInclude Include="Define.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemyBlock.h" />
     <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="GameScene.h" />
-    <ClInclude Include="Object.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerBlock.h" />
     <ClInclude Include="StageManager.h" />

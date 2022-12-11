@@ -202,9 +202,13 @@ void GameScene::updateEverySecond()
 	//新しく生成
 	if (m_generateCount == 1)
 	{
+		//m_generateCount = 0;
+		//std::shared_ptr<EnemyManager::EnemyUnit> smpEnemyUnit = m_smpEnemyManager->GetEnemyUnit();
+		//m_smpEnemyManager->EnemyUnitInit(smpEnemyUnit, m_nextEverySecondTime);
+
 		m_generateCount = 0;
-		std::shared_ptr<EnemyManager::EnemyUnit> smpEnemyUnit = m_smpEnemyManager->GetEnemyUnit();
-		m_smpEnemyManager->EnemyUnitInit(smpEnemyUnit, m_nextEverySecondTime);
+		std::shared_ptr<Enemy> smpEnemy = m_smpEnemyManager->GetEnemy();
+		m_smpEnemyManager->EnemyInit(smpEnemy, m_nextEverySecondTime);
 	}
 	else
 	{
