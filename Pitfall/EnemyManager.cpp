@@ -251,7 +251,21 @@ void EnemyManager::EnemyInit(std::shared_ptr<Enemy> smpEnemy, float startTime)
 			float posY = Define::LIMIT_POS_Y_HURDLE_BOTTOM + Define::BLOCK_SIZE * i;
 			smpEnemyBlock->SetPosition(1000, posY); //初期位置指定
 			smpEnemyBlock->SetSize(1.0f); //初期サイズ指定
-			smpEnemyBlock->SetType(Block::BLOCK_NORMAL);
+			switch (speedLevel)
+			{
+			case 1:
+				smpEnemyBlock->SetType(Block::BLOCK_ENEMY_1);
+				break;
+			case 2:
+				smpEnemyBlock->SetType(Block::BLOCK_ENEMY_2);
+				break;
+			case 3:
+				smpEnemyBlock->SetType(Block::BLOCK_ENEMY_3);
+				break;
+			default:
+				assert(false);
+				break;
+			}
 			smpEnemyBlock->m_speedLevel = speedLevel;
 
 			//smpEnemyUnit->m_smpEnemies[i].Init(true, speedLevel);

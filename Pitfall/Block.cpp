@@ -37,6 +37,34 @@ void Block::draw() const
 	case Block::BLOCK_PLAYER_BODY:
 		Box{ m_pos, m_size }.draw(ColorF{ 0.6, 0.6, 0.3 }.removeSRGBCurve());
 		break;
+	case Block::BLOCK_ENEMY_1:
+	{
+		PhongMaterial phong;
+		phong.amibientColor = ColorF{ 1.0 };
+		phong.diffuseColor = ColorF{ 0.0 };
+		phong.emissionColor = ColorF{ 0.4, 0.8f, 0.4 }.removeSRGBCurve() * 0.8f;
+		Sphere{ m_pos, m_size / 2 }.draw(phong);
+	}
+	break;
+	case Block::BLOCK_ENEMY_2:
+	{
+		PhongMaterial phong;
+		phong.amibientColor = ColorF{ 1.0 };
+		phong.diffuseColor = ColorF{ 0.0 };
+		phong.emissionColor = ColorF{ 0.4, 0.6f, 0.4 }.removeSRGBCurve() * 0.8f;
+		Sphere{ m_pos, m_size / 2 }.draw(phong);
+	}
+	break;
+	case Block::BLOCK_ENEMY_3:
+	{
+		PhongMaterial phong;
+		phong.amibientColor = ColorF{ 1.0 };
+		phong.diffuseColor = ColorF{ 0.0 };
+		phong.emissionColor = ColorF{ 0.4, 1.0, 0.4 }.removeSRGBCurve() * 0.8f;
+		Sphere{ m_pos, m_size / 2 }.draw(phong);
+	}
+	break;
+
 	default:
 		break;
 	}

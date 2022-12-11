@@ -14,7 +14,9 @@ public:
 		BLOCK_BONUS,
 		BLOCK_PLAYER_HEAD,
 		BLOCK_PLAYER_BODY,
-
+		BLOCK_ENEMY_1,
+		BLOCK_ENEMY_2,
+		BLOCK_ENEMY_3,
 	};
 
 
@@ -34,7 +36,6 @@ public:
 
 	TYPE GetType() { return m_type; };
 	void SetType(TYPE type) { m_type = type; };
-
 
 protected:
 	float m_size;

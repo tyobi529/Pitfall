@@ -185,7 +185,9 @@ void Player::CheckHit(const int* hitStatus)
 {
 	for (int i = 0; i < Define::BLOCK_NUM; i++)
 	{
-		if (hitStatus[i] == 1)
+		if (hitStatus[i] == Block::BLOCK_ENEMY_1 ||
+			hitStatus[i] == Block::BLOCK_ENEMY_2 ||
+			hitStatus[i] == Block::BLOCK_ENEMY_3 )
 		{
 			std::shared_ptr<PlayerBlock> smpBlock = std::static_pointer_cast<PlayerBlock>(m_smpBlockUnit->GetObject(i));
 			smpBlock->SetType(Block::BLOCK_NONE);
