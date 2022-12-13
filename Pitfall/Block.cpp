@@ -42,7 +42,7 @@ void Block::draw() const
 		PhongMaterial phong;
 		phong.amibientColor = ColorF{ 1.0 };
 		phong.diffuseColor = ColorF{ 0.0 };
-		phong.emissionColor = ColorF{ 0.4, 0.8f, 0.4 }.removeSRGBCurve() * 0.8f;
+		phong.emissionColor = ColorF{ 0.4, 0.8f, 0.4 }.removeSRGBCurve() * 1.0f;
 		Sphere{ m_pos, m_size / 2 }.draw(phong);
 	}
 	break;
@@ -51,7 +51,7 @@ void Block::draw() const
 		PhongMaterial phong;
 		phong.amibientColor = ColorF{ 1.0 };
 		phong.diffuseColor = ColorF{ 0.0 };
-		phong.emissionColor = ColorF{ 0.4, 0.6f, 0.4 }.removeSRGBCurve() * 0.8f;
+		phong.emissionColor = ColorF{ 0.4, 0.6f, 0.4 }.removeSRGBCurve() * 1.5f;
 		Sphere{ m_pos, m_size / 2 }.draw(phong);
 	}
 	break;
@@ -60,7 +60,7 @@ void Block::draw() const
 		PhongMaterial phong;
 		phong.amibientColor = ColorF{ 1.0 };
 		phong.diffuseColor = ColorF{ 0.0 };
-		phong.emissionColor = ColorF{ 0.4, 1.0, 0.4 }.removeSRGBCurve() * 0.8f;
+		phong.emissionColor = ColorF{ 0.4, 0.4f, 0.4 }.removeSRGBCurve() * 2.0f;
 		Sphere{ m_pos, m_size / 2 }.draw(phong);
 	}
 	break;
@@ -77,7 +77,7 @@ void Block::SetPosition(float x, float y, float z)
 	float posY = m_pos.y;
 	if (y != -1) posY = y;
 	float posZ = m_pos.z;
-	if (z != -1) posZ = y;
+	if (z != -1) posZ = z;
 
 	m_pos = Vec3(posX, posY, posZ);
 }

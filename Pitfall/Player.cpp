@@ -23,6 +23,10 @@ Player::Player() :
 	std::shared_ptr<PlayerBlock> smpBlock = std::static_pointer_cast<PlayerBlock>(smpObject);
 	smpBlock->SetType(Block::BLOCK_PLAYER_HEAD);
 
+
+	m_smpFlyingBlockManager.reset();
+	m_smpFlyingBlockManager = std::make_shared<FlyingBlockManager>();
+
 }
 
 Player::~Player()
@@ -64,6 +68,8 @@ void Player::update()
 		std::shared_ptr<PlayerBlock> smpBlock = std::static_pointer_cast<PlayerBlock>(m_smpBlockUnit->GetObject(i));
 		smpBlock->update();
 	}
+
+	m_smpFlyingBlockManager->update();
 		
 }
 
@@ -75,6 +81,9 @@ void Player::draw() const
 		std::shared_ptr<PlayerBlock> smpBlock = std::static_pointer_cast<PlayerBlock>(m_smpBlockUnit->GetObject(i));
 		smpBlock->draw();
 	}
+
+	//飛んでいるブロック
+	m_smpFlyingBlockManager->draw();
 }
 
 void Player::updateEverySecond()
@@ -189,10 +198,21 @@ void Player::CheckHit(const int* hitStatus)
 			hitStatus[i] == Block::BLOCK_ENEMY_2 ||
 			hitStatus[i] == Block::BLOCK_ENEMY_3 )
 		{
-			std::shared_ptr<PlayerBlock> smpBlock = std::static_pointer_cast<PlayerBlock>(m_smpBlockUnit->GetObject(i));
-			smpBlock->SetType(Block::BLOCK_NONE);
+			std::shared_ptr<PlayerBlock> smpPlayerBlock = std::static_pointer_cast<PlayerBlock>(m_smpBlockUnit->GetObject(i));
+			if (smpPlayerBlock->GetType() != Block::BLOCK_NONE)
+			{
+				Vec3 pos = smpPlayerBlock->GetPosition();
+				m_smpFlyingBlockManager->GenerateFlyingBlock(Vec3(pos.x - 1, pos.y, pos.z));
+
+				smpPlayerBlock->SetType(Block::BLOCK_NONE); //当たった部分はNONEに
+			}
+
 		}
 
 	}
 
 }
+
+
+
+

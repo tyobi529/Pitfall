@@ -32,6 +32,8 @@ public:
 	void draw() const;
 
 	void SetPosition(float x, float y = -1, float z = -1);
+	Vec3 GetPosition() { return m_pos; };
+
 	void SetSize(float value) { m_size = value; };
 
 	TYPE GetType() { return m_type; };
