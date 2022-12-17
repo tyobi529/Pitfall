@@ -39,12 +39,14 @@ void Block::draw() const
 	}
 	else if (m_type == BLOCK_PLAYER_HEAD)
 	{
-		Box{ m_pos, m_size }.draw(ColorF{ 0.2, 0.6, 0.4 }.removeSRGBCurve());
+		//Box{ m_pos, m_size }.draw(ColorF{ 0.2, 0.6, 0.4 }.removeSRGBCurve());
+		Box{ m_pos, m_size }.draw(ColorF{ 0.2, 0.6, 0.4 }.removeSRGBCurve() * 0.5f);
 
 	}
 	else if (m_type == BLOCK_PLAYER_BODY)
 	{
-		Box{ m_pos, m_size }.draw(ColorF{ 0.6, 0.6, 0.3 }.removeSRGBCurve());
+		//Box{ m_pos, m_size }.draw(ColorF{ 0.6, 0.6, 0.3 }.removeSRGBCurve());
+		Box{ m_pos, m_size }.draw(ColorF{ 0.6, 0.6, 0.3 }.removeSRGBCurve() * 0.5f);
 
 	}
 	else if (m_type == BLOCK_ENEMY_1)
@@ -52,15 +54,16 @@ void Block::draw() const
 		PhongMaterial phong;
 		phong.amibientColor = ColorF{ 1.0 };
 		phong.diffuseColor = ColorF{ 0.0 };
-		phong.emissionColor = ColorF{ 0.4, 0.8f, 0.4 }.removeSRGBCurve() * 1.0f;
+		phong.emissionColor = ColorF{ 0.4, 0.4, 1.0 }.removeSRGBCurve() * 1.0f;
 		Sphere{ m_pos, m_size / 2 }.draw(phong);
+
 	}
 	else if (m_type == BLOCK_ENEMY_2)
 	{
 		PhongMaterial phong;
 		phong.amibientColor = ColorF{ 1.0 };
 		phong.diffuseColor = ColorF{ 0.0 };
-		phong.emissionColor = ColorF{ 0.4, 0.6f, 0.4 }.removeSRGBCurve() * 1.5f;
+		phong.emissionColor = ColorF{ 0.4, 1.0, 0.4 }.removeSRGBCurve() * 1.0f;
 		Sphere{ m_pos, m_size / 2 }.draw(phong);
 	}
 	else if (m_type == BLOCK_ENEMY_3)
@@ -68,7 +71,7 @@ void Block::draw() const
 		PhongMaterial phong;
 		phong.amibientColor = ColorF{ 1.0 };
 		phong.diffuseColor = ColorF{ 0.0 };
-		phong.emissionColor = ColorF{ 0.4, 0.4f, 0.4 }.removeSRGBCurve() * 2.0f;
+		phong.emissionColor = ColorF{ 1.0, 0.4, 0.4 }.removeSRGBCurve() * 1.0f;
 		Sphere{ m_pos, m_size / 2 }.draw(phong);
 	}
 	else if (m_type == BLOCK_FLYING)

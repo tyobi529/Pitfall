@@ -23,7 +23,14 @@ const int   Define::WIN_W = 960;		//ウィンドウサイズ横
 
 
 //カメラ位置
-const Vec3 Define::EYE_POS = Vec3(2, 12, -35);
+//const Vec3 Define::EYE_POS = Vec3(2, 12, -35);
+//const Vec3 Define::EYE_POS = Vec3(-13, 12, -30);
+const Vec3 Define::EYE_POS = Vec3(-7, 12, -35);
+
+//
+//const Vec3 Define::EYE_POS = Vec3(2, 17, -35);
+//const Vec3 Define::EYE_POS = Vec3(2, 6, -35);
+
 
 const float Define::BLOCK_SIZE = 1.0f;
 

@@ -22,7 +22,10 @@ Vec3 GetDirection(double angle)
 
 Vec3 GetFocusPosition(const Vec3& eyePosition, double angle)
 {
-	return (eyePosition + GetDirection(angle));
+	//return (eyePosition + GetDirection(angle));
+	Vec3 pos = Vec3(0, -0.1, 1).normalize();
+	return (eyePosition + pos);
+
 }
 
 GameScene::GameScene(const InitData& init)
@@ -42,11 +45,32 @@ GameScene::GameScene(const InitData& init)
 	, m_nextEverySecondTime(0)
 	, m_generateCount(0)
 {
+	psBright = HLSL{ U"example/shader/hlsl/extract_bright_linear.hlsl", U"PS" }
+	| GLSL{ U"example/shader/glsl/extract_bright_linear.frag", {{U"PSConstants2D", 0}} };
+
+	gaussianA4 = RenderTexture{ renderTexture.size() / 4 };
+	gaussianB4 = RenderTexture{ renderTexture.size() / 4 };
+	gaussianA8 = RenderTexture{ renderTexture.size() / 8 };
+	gaussianB8 = RenderTexture{ renderTexture.size() / 8 };
+	gaussianA16 = RenderTexture{ renderTexture.size() / 16 };
+	gaussianB16 = RenderTexture{ renderTexture.size() / 16 };
+
+	//renderTexture = MSRenderTexture{ Scene::Size(), TextureFormat::R16G16B16A16_Float, HasDepth::Yes };
 
 	//camera = BasicCamera3D{ renderTexture.size(), 30_deg, eyePosition, GetFocusPosition(eyePosition, angle) };
-	camera = BasicCamera3D{ renderTexture.size(), 28_deg, eyePosition, GetFocusPosition(eyePosition, angle) };
+	camera = BasicCamera3D{ renderTexture.size(), 30_deg, eyePosition, GetFocusPosition(eyePosition, angle) };
 	//camera = BasicCamera3D{ renderTexture.size(), 30_deg, eyePosition, GetFocusPosition(eyePosition, angle) };
 
+	eyePosition = Define::EYE_POS;
+	//Vec3 targetDir = Vec3(0, -0.15, 1).normalize();
+	//Vec3 targetDir = Vec3(0, 0.15, 1).normalize();
+	// 
+	//Vec3 targetDir = Vec3(0.5, 0, 1).normalize();
+	Vec3 targetDir = Vec3(0.25, 0, 1).normalize();
+	//Vec3 targetDir = Vec3(0, 0, 1).normalize();
+
+	Vec3 focusPos = eyePosition + targetDir;
+	camera.setView(eyePosition, focusPos);
 
 	playerMesh = Mesh{ MeshData::Pyramid(1.0, 1.0) };
 
@@ -57,8 +81,8 @@ GameScene::GameScene(const InitData& init)
 
 	InitGame();
 
-	//Player* pPlayer = new Player();
-	//int a = 0;
+
+
 }
 
 void GameScene::InitGame()
@@ -109,7 +133,7 @@ void GameScene::update()
 	float addSpeed = 0.01f;
 	m_timeSpeed += m_deltaTime * addSpeed;
 
-	const float speed = m_deltaTime * 2.0;
+	//const float speed = m_deltaTime * 2.0;
 
 
 	//if (KeyUp.pressed())
@@ -131,29 +155,14 @@ void GameScene::update()
 	//{
 	//	eyePosition.x += speed;
 	//}
+	ClearPrint();
+	const double deltaTime = Scene::DeltaTime();
+	const double speed = (deltaTime * 2.0);
 
-	if (KeyW.pressed())
-	{
-		eyePosition += (GetDirection(angle) * speed);
-	}
 
-	if (KeyA.pressed())
-	{
-		eyePosition += (GetDirection(angle - 90_deg) * speed);
-	}
-
-	if (KeyS.pressed())
-	{
-		eyePosition += (-GetDirection(angle) * speed);
-	}
-
-	if (KeyD.pressed())
-	{
-		eyePosition += (GetDirection(angle + 90_deg) * speed);
-	}
 
 	// 位置・注目点情報を更新
-	camera.setView(eyePosition, GetFocusPosition(eyePosition, angle));
+	//camera.setView(eyePosition, GetFocusPosition(eyePosition, angle));
 	//camera.setView(Vec3(eyePosition.x - m_playerMoveX, eyePosition.y, eyePosition.z), GetFocusPosition(eyePosition, angle));
 
 	Print << U"Time: {:.1f}"_fmt(Scene::Time());
@@ -196,8 +205,6 @@ void GameScene::update()
 	//m_smpPlayerBlockUnit->update();
 	m_smpPlayer->update();
 
-
-
 }
 
 void GameScene::updateEverySecond()
@@ -209,7 +216,6 @@ void GameScene::updateEverySecond()
 
 
 	m_smpEnemyManager->updateEverySecond();
-	//m_smpPlayerBlockUnit->updateEverySecond();
 	m_smpPlayer->updateEverySecond();
 
 
@@ -217,8 +223,6 @@ void GameScene::updateEverySecond()
 	const int* hitStatus = m_smpEnemyManager->GetHitStatus();
 
 	//落とすのを1秒先にするために先にDropPlayerBlockを呼んでいる
-	//m_smpPlayerBlockUnit->DropBlock();
-	//m_smpPlayerBlockUnit->CheckHit(hitStatus);
 	m_smpPlayer->DropBlock();
 	m_smpPlayer->CheckHit(hitStatus);
 
@@ -253,17 +257,17 @@ void GameScene::draw() const
 		if (m_isDebug)
 		{
 			int length = 30;
-			Line3D{ Vec3{-length, 0, 0}, Vec3{length, 0, 0} }.draw(ColorF(0, 0, 0, 1));
-			Line3D{ Vec3{0, -length, 0}, Vec3{0, length, 0} }.draw(ColorF(0, 0, 0, 1));
+			Line3D{ Vec3{-length, 0, 0}, Vec3{length, 0, 0} }.draw(ColorF(0, 0, 0, 1).removeSRGBCurve() * 0.5f);
+			Line3D{ Vec3{0, -length, 0}, Vec3{0, length, 0} }.draw(ColorF(0, 0, 0, 1).removeSRGBCurve() * 0.5f);
 			for (int i = 1; i < 15; i++) //縦線
 			{
-				Line3D{ Vec3{i, -length, 0}, Vec3{i, length, 0} }.draw();
-				Line3D{ Vec3{-i, -length, 0}, Vec3{-i, length, 0} }.draw();
+				Line3D{ Vec3{i, -length, 0}, Vec3{i, length, 0} }.draw(ColorF(1, 1, 1, 1).removeSRGBCurve() * 0.5f);
+				Line3D{ Vec3{-i, -length, 0}, Vec3{-i, length, 0} }.draw(ColorF(1, 1, 1, 1).removeSRGBCurve() * 0.5f);
 			}
 			for (int i = 1; i < 15; i++) //横線
 			{
-				Line3D{ Vec3{-length, i, 0}, Vec3{length, i, 0} }.draw();
-				Line3D{ Vec3{-length, -i, 0}, Vec3{length, -i, 0} }.draw();
+				Line3D{ Vec3{-length, i, 0}, Vec3{length, i, 0} }.draw(ColorF(1, 1, 1, 1).removeSRGBCurve() * 0.5f);
+				Line3D{ Vec3{-length, -i, 0}, Vec3{length, -i, 0} }.draw(ColorF(1, 1, 1, 1).removeSRGBCurve() * 0.5f);
 			}
 		}
 
@@ -274,7 +278,6 @@ void GameScene::draw() const
 
 		m_smpEnemyManager->draw();
 
-
 	}
 
 	// 3D シーンを 2D シーンに描画
@@ -284,55 +287,55 @@ void GameScene::draw() const
 		Shader::LinearToScreen(renderTexture);
 	}
 
+
+	//const RenderTexture gaussianA4{ renderTexture.size() / 4 }, gaussianB4{ renderTexture.size() / 4 };
+	//const RenderTexture gaussianA8{ renderTexture.size() / 8 }, gaussianB8{ renderTexture.size() / 8 };
+	//const RenderTexture gaussianA16{ renderTexture.size() / 16 }, gaussianB16{ renderTexture.size() / 16 };
+
+	// 高輝度部分を抽出
+	{
+		const ScopedCustomShader2D shader{ psBright };
+		const ScopedRenderTarget2D target{ gaussianA4.clear(ColorF{0.0}) };
+		renderTexture.scaled(0.25).draw();
+	}
+
+	// 高輝度部分のぼかしテクスチャの生成
+	{
+		Shader::GaussianBlur(gaussianA4, gaussianB4, gaussianA4);
+		Shader::Downsample(gaussianA4, gaussianA8);
+		Shader::GaussianBlur(gaussianA8, gaussianB8, gaussianA8);
+		Shader::GaussianBlur(gaussianA8, gaussianB8, gaussianA8);
+		Shader::Downsample(gaussianA8, gaussianA16);
+		Shader::GaussianBlur(gaussianA16, gaussianB16, gaussianA16);
+		Shader::GaussianBlur(gaussianA16, gaussianB16, gaussianA16);
+		Shader::GaussianBlur(gaussianA16, gaussianB16, gaussianA16);
+	}
+
+	// Glow エフェクト
+	{
+		const ScopedRenderStates2D blend{ BlendState::AdditiveRGB };
+
+		{
+			const ScopedRenderTarget2D target{ gaussianA8 };
+			gaussianA16.scaled(2.0).draw(ColorF{ 3.0 });
+		}
+
+		{
+			const ScopedRenderTarget2D target{ gaussianA4 };
+			gaussianA8.scaled(2.0).draw(ColorF{ 1.0 });
+		}
+
+		gaussianA4.resized(Scene::Size()).draw(ColorF{ 1.0 });
+	}
+
 }
 
-//
-//void GameScene::DecideBlockType(Block::TYPE* pType, bool isNone, bool isHall)
-//{
-//	for (int i = 0; i < BLOCK_NUM; i++)
-//	{
-//		if (i < Define::BLOCK_HURDLE_HALL_NUM)
-//		{
-//			//pType[i] = Block::BLOCK_HALL;
-//			pType[i] = Block::BLOCK_NORMAL;
-//		}
-//		else if (i < Define::BLOCK_HURDLE_HALL_NUM + Define::BLOCK_HURDLE_CENTER_NUM)
-//		{
-//			if (isNone)
-//			{
-//				pType[i] = Block::BLOCK_NONE;
-//			}
-//			else
-//			{
-//				if (RandomBool(0.8))
-//				{
-//					pType[i] = Block::BLOCK_NONE;
-//				}
-//				else
-//				{
-//					pType[i] = Block::BLOCK_NORMAL;
-//				}
-//			}
-//
-//
-//		}
-//		else
-//		{
-//			//pType[i] = Block::BLOCK_HALL;
-//			pType[i] = Block::BLOCK_NORMAL;
-//		}
-//	}
-//
-//	if (isHall)
-//	{
-//		pType[1] = Block::BLOCK_NONE;
-//	}
-//	//return pType;
-//}
 
 
 void GameScene::DrawStage() const
 {
+	ColorF color = ColorF{ 1, 1, 1 };
+
 	for (int i = 0; i < UNIT_NUM; i++)
 	{
 		float posX = SIZE * i;
@@ -343,13 +346,15 @@ void GameScene::DrawStage() const
 			for (int j = 0; j < Define::BLOCK_GROUND_TOP_NUM; j++)
 			{
 				float posY = Define::LIMIT_POS_Y_HURDLE_TOP + SIZE * j;
-				Box{ Vec3(posX, posY, 0), SIZE }.draw(TextureAsset(U"wood"));
+				//Box{ Vec3(posX, posY, 0), SIZE }.draw(TextureAsset(U"wood"));
+				Box{ Vec3(posX, posY, 0), SIZE }.draw(color.removeSRGBCurve() * 0.15f);
 			}
 			//下
 			for (int j = 0; j < Define::BLOCK_GROUND_BOTTOM_NUM; j++)
 			{
 				float posY = Define::LIMIT_POS_Y_STAGE_BOTTOM + SIZE * j;
-				Box{ Vec3(posX, posY, 0), SIZE }.draw(TextureAsset(U"wood"));
+				//Box{ Vec3(posX, posY, 0), SIZE }.draw(TextureAsset(U"wood"));
+				Box{ Vec3(posX, posY, 0), SIZE }.draw(color.removeSRGBCurve() * 0.15f);
 			}
 			continue;
 		}
@@ -358,15 +363,19 @@ void GameScene::DrawStage() const
 		for (int j = 0; j < Define::BLOCK_GROUND_TOP_NUM; j++)
 		{
 			float posY = Define::LIMIT_POS_Y_HURDLE_TOP + SIZE * j;
-			Box{ Vec3(posX, posY, 0), SIZE }.draw(TextureAsset(U"wood"));
-			Box{ Vec3(-posX, posY, 0), SIZE }.draw(TextureAsset(U"wood"));
+			//Box{ Vec3(posX, posY, 0), SIZE }.draw(TextureAsset(U"wood"));
+			//Box{ Vec3(-posX, posY, 0), SIZE }.draw(TextureAsset(U"wood"));
+			Box{ Vec3(posX, posY, 0), SIZE }.draw(color.removeSRGBCurve() * 0.15f);
+			Box{ Vec3(-posX, posY, 0), SIZE }.draw(color.removeSRGBCurve() * 0.15f);
 		}
 		//下
 		for (int j = 0; j < Define::BLOCK_GROUND_BOTTOM_NUM; j++)
 		{
 			float posY = Define::LIMIT_POS_Y_STAGE_BOTTOM + SIZE * j;
-			Box{ Vec3(posX, posY, 0), SIZE }.draw(TextureAsset(U"wood"));
-			Box{ Vec3(-posX, posY, 0), SIZE }.draw(TextureAsset(U"wood"));
+			//Box{ Vec3(posX, posY, 0), SIZE }.draw(TextureAsset(U"wood"));
+			//Box{ Vec3(-posX, posY, 0), SIZE }.draw(TextureAsset(U"wood"));
+			Box{ Vec3(posX, posY, 0), SIZE }.draw(color.removeSRGBCurve() * 0.15f);
+			Box{ Vec3(-posX, posY, 0), SIZE }.draw(color.removeSRGBCurve() * 0.15f);
 		} 
 	}
 

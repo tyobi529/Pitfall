@@ -55,12 +55,12 @@ private:
 	// 現在のゲームのスコア
 	int32 m_score = 0;
 
-	Rect getPaddle() const;
 
+	//const ColorF backgroundColor = ColorF{ 0.4, 0.6, 0.8 }.removeSRGBCurve();
+	const ColorF backgroundColor = ColorF{ 0.02 }.removeSRGBCurve();
 
-	const ColorF backgroundColor = ColorF{ 0.4, 0.6, 0.8 }.removeSRGBCurve();
 	const Texture uvChecker{ U"example/texture/uv.png", TextureDesc::MippedSRGB };
-	const MSRenderTexture renderTexture{ Scene::Size(), TextureFormat::R8G8B8A8_Unorm_SRGB, HasDepth::Yes };
+	//const MSRenderTexture renderTexture{ Scene::Size(), TextureFormat::R8G8B8A8_Unorm_SRGB, HasDepth::Yes };
 
 	Vec3 eyePosition;
 
@@ -82,10 +82,6 @@ private:
 	int wallWidth = 3;
 
 
-	//std::vector<Wall*> m_pWalls;
-
-	//std::vector<std::shared_ptr<Wall>> vec = std::vector<std::shared_ptr<Wall>>();
-
 	std::vector<std::unique_ptr<Wall>> m_smpWalls;
 
 
@@ -99,24 +95,9 @@ private:
 	std::unique_ptr<WallManager> m_smpWallManager;
 
 
-	//std::vector<std::unique_ptr<BlockUnit>> m_smpBlockUnits; //rotateするためvector
-
-
 
 	const Texture woodTexture{ U"example/texture/wood.jpg", TextureDesc::MippedSRGB };
 
-
-	//std::unique_ptr<Block> m_smpEnemyBlocks[Define::BLOCK_H_NUM][Define::BLOCK_HURDLE_NUM];
-	//std::shared_ptr<Block> m_smpEnemyBlocks[Define::BLOCK_H_NUM][Define::BLOCK_HURDLE_NUM];
-	//std::shared_ptr<Block> m_smpBlocks[Define::BLOCK_H_NUM][Define::BLOCK_HURDLE_NUM];
-	//std::shared_ptr<BlockUnit> m_smpEnemyBlockUnits[Define::BLOCK_H_NUM];
-
-	//std::vector<std::shared_ptr<BlockUnit>> m_smpEnemyBlockUnits;
-	//std::unique_ptr<PlayerBlock> m_smpPlayerBlocks[Define::BLOCK_HURDLE_NUM];
-	//std::unique_ptr<Block> m_smpPlayerBlocks[Define::BLOCK_HURDLE_NUM];
-	//std::shared_ptr<PlayerBlock> m_smpPlayerBlocks[Define::BLOCK_HURDLE_NUM];
-	//std::shared_ptr<BlockUnit> m_smpEnemyBlockUnit;
-	//std::shared_ptr<BlockUnit> m_smpPlayerBlockUnit;
 
 	std::shared_ptr<Player> m_smpPlayer;
 
@@ -143,11 +124,16 @@ private:
 	std::unique_ptr<EnemyManager> m_smpEnemyManager;
 
 
-	//std::unique_ptr<Enemy> m_smpEnemy;
-	//std::unique_ptr<Enemy> m_smpEnemy2;
-
 	float m_nextEverySecondTime;
 
 	int m_generateCount;
+
+	PixelShader psBright;
+
+	const MSRenderTexture renderTexture{ Scene::Size(), TextureFormat::R16G16B16A16_Float, HasDepth::Yes };
+	RenderTexture gaussianA4, gaussianB4;
+	RenderTexture gaussianA8, gaussianB8;
+	RenderTexture gaussianA16, gaussianB16;
+
 
 };
