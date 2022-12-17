@@ -12,17 +12,15 @@ Player::Player() :
 	for (int i = 0; i < Define::BLOCK_NUM; i++)
 	{
 		std::shared_ptr<PlayerBlock> smpBlock = std::make_shared<PlayerBlock>();
-		smpBlock->Init();
 		if (!m_smpBlockUnit->SetObject(i, smpBlock))
 			assert(false);
 
 	}
 
 	m_headIndex = 0;
-	std::shared_ptr<Block> smpObject = m_smpBlockUnit->GetObject(0);
-	std::shared_ptr<PlayerBlock> smpBlock = std::static_pointer_cast<PlayerBlock>(smpObject);
-	smpBlock->SetType(Block::BLOCK_PLAYER_HEAD);
-
+	std::shared_ptr<PlayerBlock> smpPlayerBlock = std::static_pointer_cast<PlayerBlock>(m_smpBlockUnit->GetObject(0));
+	smpPlayerBlock->SetType(Block::BLOCK_PLAYER_HEAD);
+	smpPlayerBlock->PlayerInit(true);
 
 	m_smpFlyingBlockManager.reset();
 	m_smpFlyingBlockManager = std::make_shared<FlyingBlockManager>();
@@ -100,14 +98,17 @@ void Player::CreateBlock()
 		return;
 	}
 
-	std::shared_ptr<PlayerBlock> smpHeadBlock = std::static_pointer_cast<PlayerBlock>(m_smpBlockUnit->GetObject(m_headIndex));
-	smpHeadBlock->Init();
-	smpHeadBlock->SetType(Block::BLOCK_PLAYER_BODY);
+	{
+		std::shared_ptr<PlayerBlock> smpHeadBlock = std::static_pointer_cast<PlayerBlock>(m_smpBlockUnit->GetObject(m_headIndex));
+		smpHeadBlock->SetType(Block::BLOCK_PLAYER_BODY);
+		smpHeadBlock->PlayerInit(false);
+	}
 
 	//1つ上に頭を移動
 	int newHeadIndex = m_headIndex + 1;
 	std::shared_ptr<PlayerBlock> smpNewHeadBlock = std::static_pointer_cast<PlayerBlock>(m_smpBlockUnit->GetObject(newHeadIndex));
 	smpNewHeadBlock->SetType(Block::BLOCK_PLAYER_HEAD);
+	smpNewHeadBlock->PlayerInit(true);
 	m_headIndex = newHeadIndex;
 }
 
@@ -116,12 +117,10 @@ void Player::DropBlock()
 {
 	for (int i = 0; i < Define::BLOCK_NUM; i++)
 	{
-		std::shared_ptr<Block> smpObject = m_smpBlockUnit->GetObject(i);
-		std::shared_ptr<PlayerBlock> smpBlock = std::static_pointer_cast<PlayerBlock>(smpObject);
+		std::shared_ptr<PlayerBlock> smpPlayerBlock = std::static_pointer_cast<PlayerBlock>(m_smpBlockUnit->GetObject(i));
 
 
-		Block::TYPE type = smpBlock->GetType();
-
+		Block::TYPE type = smpPlayerBlock->GetType();
 
 
 		if (type != Block::BLOCK_NONE)
@@ -150,7 +149,7 @@ void Player::DropBlock()
 
 						smpBlockNext->SetType(type);
 						//元の位置を消す
-						smpBlock->SetType(Block::BLOCK_NONE);
+						smpPlayerBlock->SetType(Block::BLOCK_NONE);
 						//移動元情報入れる
 						m_preIndex[j + 1] = i;
 
@@ -168,7 +167,7 @@ void Player::DropBlock()
 						smpBlockUnder->SetType(type);
 						//m_smpBlocks[0]->SetType(type);
 						//元の位置を消す
-						smpBlock->SetType(Block::BLOCK_NONE);
+						smpPlayerBlock->SetType(Block::BLOCK_NONE);
 						//m_smpBlocks[i]->SetType(Block::BLOCK_NONE);
 						//移動元情報入れる
 						m_preIndex[0] = i;

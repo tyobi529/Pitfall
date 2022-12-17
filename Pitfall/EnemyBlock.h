@@ -7,7 +7,7 @@ public:
 	EnemyBlock();
 	~EnemyBlock();
 
-	void Init() override;
+	void EnemyInit();
 
 	void update() override;
 

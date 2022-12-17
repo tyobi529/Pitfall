@@ -5,7 +5,6 @@
 
 EnemyBlock::EnemyBlock() : Block()
 {
-	Init();
 }
 
 
@@ -13,7 +12,7 @@ EnemyBlock::~EnemyBlock()
 {
 }
 
-void EnemyBlock::Init()
+void EnemyBlock::EnemyInit()
 {
 }
 

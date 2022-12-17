@@ -10,9 +10,9 @@ Block::Block() :
 {
 }
 
-
 void Block::draw() const
 {
+
 	switch (m_type)
 	{
 	case Block::BLOCK_NONE:

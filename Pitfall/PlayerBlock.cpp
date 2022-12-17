@@ -7,7 +7,6 @@ PlayerBlock::PlayerBlock() : Block()
 	, m_isExpand(false)
 	, m_sizeMag(0)
 {
-	Init();
 }
 
 
@@ -15,10 +14,20 @@ PlayerBlock::~PlayerBlock()
 {
 }
 
-void PlayerBlock::Init()
+void PlayerBlock::PlayerInit(bool isHead)
 {
-	m_isExpand = true;
-	m_sizeMag = 0.0f;
+	if (isHead)
+	{
+		m_isExpand = false;
+		m_sizeMag = 1.0f;
+		m_size = Define::BLOCK_SIZE;
+	}
+	else
+	{
+		m_isExpand = true;
+		m_sizeMag = 0.0f;
+	}
+
 }
 
 void PlayerBlock::update()

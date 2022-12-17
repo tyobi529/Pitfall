@@ -12,7 +12,6 @@ Enemy::Enemy() :
 	for (int i = 0; i < Define::BLOCK_NUM; i++)
 	{
 		std::shared_ptr<EnemyBlock> smpEnemyBlock = std::make_shared<EnemyBlock>();
-		smpEnemyBlock->Init();
 		float posY = Define::LIMIT_POS_Y_HURDLE_BOTTOM + Define::BLOCK_SIZE * i;
 		smpEnemyBlock->SetPosition(1000, posY); //初期位置指定
 		if (!m_smpBlockUnit->SetObject(i, smpEnemyBlock))

@@ -168,9 +168,6 @@
     <ClCompile Include="PlayerBlock.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="StageManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Enemy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -181,6 +178,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FlyingBlockManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FlyingBlock.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -842,9 +842,6 @@
     <ClInclude Include="PlayerBlock.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="StageManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Enemy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -855,6 +852,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FlyingBlockManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FlyingBlock.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

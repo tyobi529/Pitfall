@@ -10,7 +10,6 @@
 
 #include "PlayerBlock.h"
 
-#include "StageManager.h"
 
 #include "Enemy.h"
 #include "EnemyManager.h"
@@ -138,7 +137,6 @@ private:
 	//const Mesh cylinder24{ MeshData::Cylinder(Vec3{0,0,0}, 0.5, 1, 24u) };
 
 	float m_timeCount;
-	std::unique_ptr<StageManager> m_smpStageManager;
 
 	std::unique_ptr<EnemyManager> m_smpEnemyManager;
 

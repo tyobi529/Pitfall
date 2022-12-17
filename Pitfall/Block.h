@@ -7,7 +7,7 @@ class Block
 public:
 
 	enum TYPE {
-		BLOCK_NONE = 0, //何もない
+		BLOCK_NONE, 
 		BLOCK_GROUND, //固定の地面部分
 		BLOCK_NORMAL,
 		BLOCK_HEAD,
@@ -25,9 +25,6 @@ public:
 	virtual ~Block() {};
 
 
-	virtual void Init() {};
-
-
 	virtual void update() {};
 	void draw() const;
 
@@ -38,6 +35,7 @@ public:
 
 	TYPE GetType() { return m_type; };
 	void SetType(TYPE type) { m_type = type; };
+
 
 protected:
 	float m_size;
@@ -67,13 +65,13 @@ public:
 	void Init()
 	{
 		for (int i = 0; i < Define::BLOCK_NUM; i++)
-			m_smpObjects[i].reset();
+			m_smpBlocks[i].reset();
 	}
 
 	std::shared_ptr<Block> GetObject(int index)
 	{
 		if (0 <= index && index < Define::BLOCK_NUM)
-			return m_smpObjects[index];
+			return m_smpBlocks[index];
 		else
 			return nullptr;
 	};
@@ -82,7 +80,7 @@ public:
 	{
 		if (0 <= index && index < Define::BLOCK_NUM)
 		{
-			m_smpObjects[index] = smpObject;
+			m_smpBlocks[index] = smpObject;
 			return true;
 		}
 		else
@@ -94,6 +92,6 @@ public:
 
 
 private:
-	std::shared_ptr<Block> m_smpObjects[Define::BLOCK_NUM];
+	std::shared_ptr<Block> m_smpBlocks[Define::BLOCK_NUM];
 
 };

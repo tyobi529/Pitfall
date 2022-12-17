@@ -76,7 +76,7 @@ void GameScene::InitGame()
 
 	m_tapCount = 0;
 
-	m_smpStageManager = std::make_unique<StageManager>();
+	//m_smpStageManager = std::make_unique<StageManager>();
 
 	m_nextEverySecondTime = Scene::Time() + 1.0f;
 }

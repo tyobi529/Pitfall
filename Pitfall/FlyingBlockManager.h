@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "Block.h"
+#include "FlyingBlock.h"
 
 
 class FlyingBlockManager
@@ -16,10 +16,10 @@ public:
 
 	void GenerateFlyingBlock(Vec3 pos);
 
-	std::shared_ptr<Block> GetFlyingBlock();
+	std::shared_ptr<FlyingBlock> GetFlyingBlock();
 
 private:
-	Array<std::shared_ptr<Block>> m_smpFlyingBlockArray;
+	Array<std::shared_ptr<FlyingBlock>> m_smpFlyingBlockArray;
 
 };
 

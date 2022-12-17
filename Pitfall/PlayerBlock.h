@@ -8,7 +8,8 @@ public:
 	PlayerBlock();
 	~PlayerBlock();
 
-	void Init() override;
+	void PlayerInit(bool isHead);
+
 
 	void update() override;
 
