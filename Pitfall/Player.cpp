@@ -80,6 +80,47 @@ void Player::draw() const
 		smpBlock->draw();
 	}
 
+	//ガイド
+	ColorF color = ColorF(1.0f, 1.0f, 1.0f, 0.5f);
+	float bottomY = Define::LIMIT_POS_Y_HURDLE_BOTTOM - Define::BLOCK_SIZE / 2.0f;
+	float topY = Define::LIMIT_POS_Y_HURDLE_TOP - Define::BLOCK_SIZE / 2.0f;
+	float lineWidth = 0.04f;
+	Vec3 bottomPos1 = Vec3{ -0.5f, bottomY, -0.5f };
+	Vec3 bottomPos2 = Vec3{ 0.5f, bottomY, -0.5f };
+	Vec3 bottomPos3 = Vec3{ 0.5f, bottomY, 0.5f };
+	Vec3 bottomPos4 = Vec3{ -0.5f, bottomY, 0.5f };
+
+	//横線
+	Box::FromPoints(bottomPos1 - Vec3(lineWidth / 2.0f, 0, lineWidth / 2.0f),
+		bottomPos1 + Vec3(lineWidth / 2.0f, topY - bottomY, lineWidth / 2.0f)).draw(color.removeSRGBCurve() * 0.5f);
+	Box::FromPoints(bottomPos2 - Vec3(lineWidth / 2.0f, 0, lineWidth / 2.0f),
+		bottomPos2 + Vec3(lineWidth / 2.0f, topY - bottomY, lineWidth / 2.0f)).draw(color.removeSRGBCurve() * 0.5f);
+	Box::FromPoints(bottomPos3 - Vec3(lineWidth / 2.0f, 0, lineWidth / 2.0f),
+		bottomPos3 + Vec3(lineWidth / 2.0f, topY - bottomY, lineWidth / 2.0f)).draw(color.removeSRGBCurve() * 0.5f);
+	Box::FromPoints(bottomPos4 - Vec3(lineWidth / 2.0f, 0, lineWidth / 2.0f),
+		bottomPos4 + Vec3(lineWidth / 2.0f, topY - bottomY, lineWidth / 2.0f)).draw(color.removeSRGBCurve() * 0.5f);
+
+	//横線
+	for (int i = 0; i < Define::BLOCK_NUM; i++)
+	{
+		Vec3 pos1 = bottomPos1 + Vec3(0, i * Define::BLOCK_SIZE, 0);
+		Vec3 pos2 = bottomPos2 + Vec3(0, i * Define::BLOCK_SIZE, 0);
+		Vec3 pos3 = bottomPos3 + Vec3(0, i * Define::BLOCK_SIZE, 0);
+		Vec3 pos4 = bottomPos4 + Vec3(0, i * Define::BLOCK_SIZE, 0);
+
+		Box::FromPoints(pos1 - Vec3(lineWidth / 2.0f, lineWidth / 2.0f, lineWidth / 2.0f),
+						pos2 + Vec3(lineWidth / 2.0f, lineWidth / 2.0f, lineWidth / 2.0f)).draw(color.removeSRGBCurve() * 0.5f);
+
+		Box::FromPoints(pos2 - Vec3(lineWidth / 2.0f, lineWidth / 2.0f, lineWidth / 2.0f),
+						pos3 + Vec3(lineWidth / 2.0f, lineWidth / 2.0f, lineWidth / 2.0f)).draw(color.removeSRGBCurve() * 0.5f);
+
+		Box::FromPoints(pos3 - Vec3(lineWidth / 2.0f, lineWidth / 2.0f, lineWidth / 2.0f),
+						pos4 + Vec3(lineWidth / 2.0f, lineWidth / 2.0f, lineWidth / 2.0f)).draw(color.removeSRGBCurve() * 0.5f);
+
+		Box::FromPoints(pos4 - Vec3(lineWidth / 2.0f, lineWidth / 2.0f, lineWidth / 2.0f),
+						pos1 + Vec3(lineWidth / 2.0f, lineWidth / 2.0f, lineWidth / 2.0f)).draw(color.removeSRGBCurve() * 0.5f);
+	}
+
 	//飛んでいるブロック
 	m_smpFlyingBlockManager->draw();
 }
