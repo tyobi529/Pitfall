@@ -5,6 +5,7 @@
 
 Block::Block() :
 	m_pos(Vec3(0, 0, 0)),
+	m_quaternion(),
 	m_size(0),
 	m_type(TYPE::BLOCK_NONE)
 {
@@ -39,13 +40,6 @@ void Block::draw() const
 	else if (m_type == BLOCK_PLAYER_HEAD)
 	{
 		Box{ m_pos, m_size }.draw(ColorF{ 0.2, 0.6, 0.4 }.removeSRGBCurve());
-		//TODO
-		//const double t = 1.f;
-		//const Quaternion orientation = (Quaternion::RotateZ(1 * 20_deg) * Quaternion::RotateX(0 * 30_deg));
-
-		//OrientedBox{ m_pos, 1, orientation }.draw(ColorF{ 0.2, 0.6, 0.4 }.removeSRGBCurve());
-
-
 
 	}
 	else if (m_type == BLOCK_PLAYER_BODY)
@@ -79,6 +73,14 @@ void Block::draw() const
 	}
 	else if (m_type == BLOCK_FLYING)
 	{
+		//TODO
+//const double t = 1.f;
+//const Quaternion orientation = (Quaternion::RotateZ(1 * 20_deg) * Quaternion::RotateX(0 * 30_deg));
+
+//OrientedBox{ m_pos, 1, orientation }.draw(ColorF{ 0.2, 0.6, 0.4 }.removeSRGBCurve());
+
+
+		OrientedBox{ m_pos, 1, m_quaternion }.draw(ColorF{ 0.2, 0.6, 0.4 }.removeSRGBCurve());
 
 	}
 
@@ -105,3 +107,5 @@ void Block::MovePosition(float moveX, float moveY, float moveZ)
 
 	m_pos = Vec3(posX, posY, posZ);
 }
+
+

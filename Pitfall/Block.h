@@ -34,6 +34,7 @@ public:
 
 	void MovePosition(float moveX, float moveY = 0, float moveZ = 0);
 
+	void SetQuaternion(float x, float y = 0, float z = 0) { m_quaternion = (Quaternion::RotateX(x * 20_deg) * Quaternion::RotateY(y * 20_deg) * Quaternion::RotateZ(z * 20_deg)); };
 	void SetSize(float value) { m_size = value; };
 
 	TYPE GetType() { return m_type; };
@@ -47,7 +48,7 @@ private:
 	Vec3 m_pos;
 	//属性情報だけ持つ
 	TYPE m_type;
-
+	Quaternion m_quaternion;
 
 
 };

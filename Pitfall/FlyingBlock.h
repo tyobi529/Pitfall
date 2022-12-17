@@ -27,5 +27,7 @@ private:
 	STATE m_state;
 	Vec3 m_startPos;
 	float m_startTime;
+
+	Vec3 m_rotSpeed; //回転速度（yを大きめに）
 };
 
