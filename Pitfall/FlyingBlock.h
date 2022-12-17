@@ -7,8 +7,8 @@ class FlyingBlock : public Block
 public:
 	enum STATE
 	{
-		STATE_SLOW, 
-		STATE_MAIN,
+		STATE_MOVE_SLOW, 
+		STATE_MOVE,
 		STATE_END,
 	};
 
@@ -18,6 +18,8 @@ public:
 	void FlyingInit(Vec3 startPos);
 
 	void update() override;
+	void updateEverySecond();
+
 
 	STATE GetState() { return m_state; };
 

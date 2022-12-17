@@ -12,32 +12,48 @@ Block::Block() :
 
 void Block::draw() const
 {
-
-	switch (m_type)
+	if (m_type == BLOCK_NONE)
 	{
-	case Block::BLOCK_NONE:
-		break;
-	case Block::BLOCK_GROUND:
+
+	}
+	else if (m_type == BLOCK_GROUND)
+	{
 		Box{ m_pos, m_size }.draw(ColorF{ 0.8, 0.6, 0.4 }.removeSRGBCurve());
-		//Box{ m_centerPos, m_size }.draw(TextureAsset(U"normal"));
-		break;
-	case Block::BLOCK_NORMAL:
-		//Box{ m_centerPos, m_size }.draw(ColorF{ 0.8, 0.6, 0.4 }.removeSRGBCurve());
+
+	}
+	else if (m_type == BLOCK_NORMAL)
+	{
 		Box{ m_pos, m_size }.draw(TextureAsset(U"normal"));
-		break;
-	case Block::BLOCK_HEAD:
+
+	}
+	else if (m_type == BLOCK_HEAD)
+	{
 		Box{ m_pos, m_size }.draw(TextureAsset(U"head"));
-		break;
-	case Block::BLOCK_BONUS:
+
+	}
+	else if (m_type == BLOCK_BONUS)
+	{
 		Box{ m_pos, 0.5 }.draw(ColorF{ 0.85, 0.7, 0 }.removeSRGBCurve());
-		break;
-	case Block::BLOCK_PLAYER_HEAD:
+
+	}
+	else if (m_type == BLOCK_PLAYER_HEAD)
+	{
 		Box{ m_pos, m_size }.draw(ColorF{ 0.2, 0.6, 0.4 }.removeSRGBCurve());
-		break;
-	case Block::BLOCK_PLAYER_BODY:
+		//TODO
+		//const double t = 1.f;
+		//const Quaternion orientation = (Quaternion::RotateZ(1 * 20_deg) * Quaternion::RotateX(0 * 30_deg));
+
+		//OrientedBox{ m_pos, 1, orientation }.draw(ColorF{ 0.2, 0.6, 0.4 }.removeSRGBCurve());
+
+
+
+	}
+	else if (m_type == BLOCK_PLAYER_BODY)
+	{
 		Box{ m_pos, m_size }.draw(ColorF{ 0.6, 0.6, 0.3 }.removeSRGBCurve());
-		break;
-	case Block::BLOCK_ENEMY_1:
+
+	}
+	else if (m_type == BLOCK_ENEMY_1)
 	{
 		PhongMaterial phong;
 		phong.amibientColor = ColorF{ 1.0 };
@@ -45,8 +61,7 @@ void Block::draw() const
 		phong.emissionColor = ColorF{ 0.4, 0.8f, 0.4 }.removeSRGBCurve() * 1.0f;
 		Sphere{ m_pos, m_size / 2 }.draw(phong);
 	}
-	break;
-	case Block::BLOCK_ENEMY_2:
+	else if (m_type == BLOCK_ENEMY_2)
 	{
 		PhongMaterial phong;
 		phong.amibientColor = ColorF{ 1.0 };
@@ -54,8 +69,7 @@ void Block::draw() const
 		phong.emissionColor = ColorF{ 0.4, 0.6f, 0.4 }.removeSRGBCurve() * 1.5f;
 		Sphere{ m_pos, m_size / 2 }.draw(phong);
 	}
-	break;
-	case Block::BLOCK_ENEMY_3:
+	else if (m_type == BLOCK_ENEMY_3)
 	{
 		PhongMaterial phong;
 		phong.amibientColor = ColorF{ 1.0 };
@@ -63,11 +77,12 @@ void Block::draw() const
 		phong.emissionColor = ColorF{ 0.4, 0.4f, 0.4 }.removeSRGBCurve() * 2.0f;
 		Sphere{ m_pos, m_size / 2 }.draw(phong);
 	}
-	break;
+	else if (m_type == BLOCK_FLYING)
+	{
 
-	default:
-		break;
 	}
+
+
 }
 
 void Block::SetPosition(float x, float y, float z)
@@ -78,6 +93,15 @@ void Block::SetPosition(float x, float y, float z)
 	if (y != -1) posY = y;
 	float posZ = m_pos.z;
 	if (z != -1) posZ = z;
+
+	m_pos = Vec3(posX, posY, posZ);
+}
+
+void Block::MovePosition(float moveX, float moveY, float moveZ)
+{
+	float posX = m_pos.x + moveX;
+	float posY = m_pos.y + moveY;
+	float posZ = m_pos.z + moveZ;
 
 	m_pos = Vec3(posX, posY, posZ);
 }

@@ -17,6 +17,7 @@ public:
 		BLOCK_ENEMY_1,
 		BLOCK_ENEMY_2,
 		BLOCK_ENEMY_3,
+		BLOCK_FLYING,
 	};
 
 
@@ -30,6 +31,8 @@ public:
 
 	void SetPosition(float x, float y = -1, float z = -1);
 	Vec3 GetPosition() { return m_pos; };
+
+	void MovePosition(float moveX, float moveY = 0, float moveZ = 0);
 
 	void SetSize(float value) { m_size = value; };
 

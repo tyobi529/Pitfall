@@ -88,6 +88,8 @@ void Player::updateEverySecond()
 {
 	m_fallTime = 0;
 	m_fallValue = 0;
+
+	m_smpFlyingBlockManager->updateEverySecond();
 }
 
 void Player::CreateBlock()
