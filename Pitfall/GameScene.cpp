@@ -12,6 +12,12 @@ Vec3 GetDirection(double angle)
 {
 	const Vec2 dir = Circular{ 1.0, angle };
 	return{ dir.x, 0.0, -dir.y };
+
+	//const Vec2 dir = Circular{ 1.0, 30_deg };
+	//return{ dir.x, 0.0, -dir.y };
+	//return{ 0, -30_deg, 0 };
+	//return{ 0, -dir.x, 0 };
+
 }
 
 Vec3 GetFocusPosition(const Vec3& eyePosition, double angle)
@@ -39,6 +45,8 @@ GameScene::GameScene(const InitData& init)
 
 	//camera = BasicCamera3D{ renderTexture.size(), 30_deg, eyePosition, GetFocusPosition(eyePosition, angle) };
 	camera = BasicCamera3D{ renderTexture.size(), 28_deg, eyePosition, GetFocusPosition(eyePosition, angle) };
+	//camera = BasicCamera3D{ renderTexture.size(), 30_deg, eyePosition, GetFocusPosition(eyePosition, angle) };
+
 
 	playerMesh = Mesh{ MeshData::Pyramid(1.0, 1.0) };
 
@@ -104,24 +112,44 @@ void GameScene::update()
 	const float speed = m_deltaTime * 2.0;
 
 
-	if (KeyUp.pressed())
+	//if (KeyUp.pressed())
+	//{
+	//	eyePosition.y += speed;
+	//}
+
+	//if (KeyDown.pressed())
+	//{
+	//	eyePosition.y -= speed;
+	//}
+
+	//if (KeyLeft.pressed())
+	//{
+	//	eyePosition.x -= speed;
+	//}
+
+	//if (KeyRight.pressed())
+	//{
+	//	eyePosition.x += speed;
+	//}
+
+	if (KeyW.pressed())
 	{
-		eyePosition.y += speed;
+		eyePosition += (GetDirection(angle) * speed);
 	}
 
-	if (KeyDown.pressed())
+	if (KeyA.pressed())
 	{
-		eyePosition.y -= speed;
+		eyePosition += (GetDirection(angle - 90_deg) * speed);
 	}
 
-	if (KeyLeft.pressed())
+	if (KeyS.pressed())
 	{
-		eyePosition.x -= speed;
+		eyePosition += (-GetDirection(angle) * speed);
 	}
 
-	if (KeyRight.pressed())
+	if (KeyD.pressed())
 	{
-		eyePosition.x += speed;
+		eyePosition += (GetDirection(angle + 90_deg) * speed);
 	}
 
 	// 位置・注目点情報を更新

@@ -65,6 +65,8 @@ private:
 	Vec3 eyePosition;
 
 	double angle = 0_deg;
+	//double angle = 30_deg;
+
 	BasicCamera3D camera;
 
 	//プレイヤー
