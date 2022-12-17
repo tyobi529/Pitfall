@@ -78,7 +78,7 @@ void EnemyManager::draw() const
 }
 
 
-void EnemyManager::updateEverySecond()
+void EnemyManager::updateInterval()
 {
 	//有効なものだけ操作
 	//for (auto itr = m_smpEnemyArray.begin(); itr != m_smpEnemyArray.end(); itr++)
@@ -101,7 +101,7 @@ void EnemyManager::updateEverySecond()
 
 	for (auto itr = m_smpEnemyArray.begin(); itr != m_smpEnemyArray.end(); itr++)
 	{
-		(*itr)->updateEverySecond();
+		(*itr)->updateInterval();
 	}
 
 	UpdateHitStatus();
@@ -199,8 +199,8 @@ std::shared_ptr<Enemy> EnemyManager::GetEnemy()
 void EnemyManager::EnemyInit(std::shared_ptr<Enemy> smpEnemy, float startTime)
 {
 	smpEnemy->m_isValid = true;
-	smpEnemy->m_count = 10; //TODO
-	smpEnemy->m_endTime = startTime + smpEnemy->m_count * 1.0f;
+	smpEnemy->m_count = 20; //TODO
+	smpEnemy->m_endTime = startTime + smpEnemy->m_count * Define::INTERVAL_TIME;
 
 	float color_r = Random(0.0f, 1.0f);
 

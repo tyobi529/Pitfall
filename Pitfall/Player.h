@@ -12,7 +12,7 @@ public:
 
 	void update();
 	void draw() const;
-	void updateEverySecond();
+	void updateInterval();
 
 
 	void CreateBlock();

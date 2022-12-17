@@ -96,4 +96,6 @@ public:
 	const static int SPEED_LEVEL_MAX;
 	const static float SPEED_PER_LEVEL;
 
+	const static float INTERVAL_TIME;
+
 };

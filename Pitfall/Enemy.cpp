@@ -58,7 +58,7 @@ void Enemy::draw() const
 	}
 }
 
-void Enemy::updateEverySecond()
+void Enemy::updateInterval()
 {
 	if (!m_isValid)
 		return;

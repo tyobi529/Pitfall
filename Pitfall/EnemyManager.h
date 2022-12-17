@@ -15,7 +15,7 @@ public:
 	void update();
 	void draw() const;
 
-	void updateEverySecond();
+	void updateInterval();
 
 	void UpdateHitStatus();
 	const int* const GetHitStatus(){ return m_hitStatus; };

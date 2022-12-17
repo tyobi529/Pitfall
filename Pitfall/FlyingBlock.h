@@ -18,7 +18,7 @@ public:
 	void FlyingInit(Vec3 startPos);
 
 	void update() override;
-	void updateEverySecond();
+	void updateInterval();
 
 
 	STATE GetState() { return m_state; };

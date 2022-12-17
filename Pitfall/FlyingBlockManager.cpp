@@ -27,11 +27,11 @@ void FlyingBlockManager::update()
 
 }
 
-void FlyingBlockManager::updateEverySecond()
+void FlyingBlockManager::updateInterval()
 {
 	for (auto itr = m_smpFlyingBlockArray.begin(); itr != m_smpFlyingBlockArray.end(); itr++)
 	{
-		(*itr)->updateEverySecond();
+		(*itr)->updateInterval();
 	}
 
 }

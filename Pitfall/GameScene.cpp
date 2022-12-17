@@ -92,7 +92,7 @@ void GameScene::InitGame()
 	m_wallSpeed = Define::WALL_SPEED_FIRST;
 
 
-
+	
 	m_smpWallManager.reset(new WallManager());
 
 	//==== ブロック生成 =======
@@ -108,7 +108,7 @@ void GameScene::InitGame()
 
 	//m_smpStageManager = std::make_unique<StageManager>();
 
-	m_nextEverySecondTime = Scene::Time() + 1.0f;
+	m_nextEverySecondTime = Scene::Time() + Define::INTERVAL_TIME;
 }
 
 
@@ -117,8 +117,8 @@ void GameScene::update()
 {
 	if (Scene::Time() >= m_nextEverySecondTime)
 	{
-		updateEverySecond();
-		m_nextEverySecondTime += 1.0f;
+		updateInterval();
+		m_nextEverySecondTime += Define::INTERVAL_TIME;
 	}
 
 	m_smpEnemyManager->update();
@@ -205,7 +205,7 @@ void GameScene::update()
 
 }
 
-void GameScene::updateEverySecond()
+void GameScene::updateInterval()
 {
 	//落下量初期化
 	m_fallTime = 0;
@@ -213,8 +213,8 @@ void GameScene::updateEverySecond()
 	m_timeCount = 0;
 
 
-	m_smpEnemyManager->updateEverySecond();
-	m_smpPlayer->updateEverySecond();
+	m_smpEnemyManager->updateInterval();
+	m_smpPlayer->updateInterval();
 
 
 	//衝突判定

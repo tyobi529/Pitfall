@@ -87,3 +87,4 @@ const int Define::SPEED_LEVEL_MIN = 1;
 const int Define::SPEED_LEVEL_MAX = 3;//スピード3段階
 const float Define::SPEED_PER_LEVEL = 0.8f; //1段階で上がるスピード
 
+const float Define::INTERVAL_TIME = 0.5f;

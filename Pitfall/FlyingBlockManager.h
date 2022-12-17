@@ -12,7 +12,7 @@ public:
 
 	void update();
 	void draw() const;
-	void updateEverySecond();
+	void updateInterval();
 
 	void GenerateFlyingBlock(Vec3 pos);
 

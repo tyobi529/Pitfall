@@ -125,12 +125,12 @@ void Player::draw() const
 	m_smpFlyingBlockManager->draw();
 }
 
-void Player::updateEverySecond()
+void Player::updateInterval()
 {
 	m_fallTime = 0;
 	m_fallValue = 0;
 
-	m_smpFlyingBlockManager->updateEverySecond();
+	m_smpFlyingBlockManager->updateInterval();
 }
 
 void Player::CreateBlock()

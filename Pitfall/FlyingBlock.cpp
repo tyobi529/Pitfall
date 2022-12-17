@@ -42,16 +42,16 @@ void FlyingBlock::update()
 	float deltaTime = Scene::Time() - m_startTime;
 	float flyingTime = 0; //補正してこっちの値を使う
 
-	if (deltaTime < 1)
+	if (deltaTime < Define::INTERVAL_TIME)
 	{
 		flyingTime = deltaTime / 15.0f; //遅めに
 	}
 	else
 	{
-		//1秒はゆっくり
-		flyingTime = 1.0f / 10.0f; //遅めに
+		//interval秒はゆっくり
+		flyingTime = Define::INTERVAL_TIME / 10.0f; //遅めに
 		//残り
-		float restTime = deltaTime - 1.0f;
+		float restTime = deltaTime - Define::INTERVAL_TIME;
 		flyingTime += restTime;
 	}
 
@@ -64,7 +64,7 @@ void FlyingBlock::update()
 }
 
 
-void FlyingBlock::updateEverySecond()
+void FlyingBlock::updateInterval()
 {
 	if (m_state == STATE_MOVE_SLOW)
 	{

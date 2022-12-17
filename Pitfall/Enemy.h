@@ -12,7 +12,7 @@ public:
 
 	void update();
 	void draw() const;
-	void updateEverySecond();
+	void updateInterval();
 
 	bool m_isValid;
 	int m_count;
