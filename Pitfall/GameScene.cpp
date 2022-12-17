@@ -57,20 +57,18 @@ GameScene::GameScene(const InitData& init)
 
 	//renderTexture = MSRenderTexture{ Scene::Size(), TextureFormat::R16G16B16A16_Float, HasDepth::Yes };
 
-	//camera = BasicCamera3D{ renderTexture.size(), 30_deg, eyePosition, GetFocusPosition(eyePosition, angle) };
 	camera = BasicCamera3D{ renderTexture.size(), 30_deg, eyePosition, GetFocusPosition(eyePosition, angle) };
-	//camera = BasicCamera3D{ renderTexture.size(), 30_deg, eyePosition, GetFocusPosition(eyePosition, angle) };
 
-	eyePosition = Define::EYE_POS;
-	//Vec3 targetDir = Vec3(0, -0.15, 1).normalize();
-	//Vec3 targetDir = Vec3(0, 0.15, 1).normalize();
-	// 
-	//Vec3 targetDir = Vec3(0.5, 0, 1).normalize();
-	Vec3 targetDir = Vec3(0.25, 0, 1).normalize();
-	//Vec3 targetDir = Vec3(0, 0, 1).normalize();
+	//右向き
+	//eyePosition = Vec3(-7, 12, -35);
+	//Vec3 targetDir = Vec3(0.25, 0, 1).normalize();
 
-	Vec3 focusPos = eyePosition + targetDir;
-	camera.setView(eyePosition, focusPos);
+	//下向き
+	eyePosition = Vec3(2, 15, -32);
+	Vec3 targetDir = Vec3(0, -0.15, 1).normalize();
+
+
+	camera.setView(eyePosition, eyePosition + targetDir);
 
 	playerMesh = Mesh{ MeshData::Pyramid(1.0, 1.0) };
 
@@ -339,25 +337,6 @@ void GameScene::DrawStage() const
 	for (int i = 0; i < UNIT_NUM; i++)
 	{
 		float posX = SIZE * i;
-
-		if (i == 0)
-		{
-			//上
-			for (int j = 0; j < Define::BLOCK_GROUND_TOP_NUM; j++)
-			{
-				float posY = Define::LIMIT_POS_Y_HURDLE_TOP + SIZE * j;
-				//Box{ Vec3(posX, posY, 0), SIZE }.draw(TextureAsset(U"wood"));
-				Box{ Vec3(posX, posY, 0), SIZE }.draw(color.removeSRGBCurve() * 0.15f);
-			}
-			//下
-			for (int j = 0; j < Define::BLOCK_GROUND_BOTTOM_NUM; j++)
-			{
-				float posY = Define::LIMIT_POS_Y_STAGE_BOTTOM + SIZE * j;
-				//Box{ Vec3(posX, posY, 0), SIZE }.draw(TextureAsset(U"wood"));
-				Box{ Vec3(posX, posY, 0), SIZE }.draw(color.removeSRGBCurve() * 0.15f);
-			}
-			continue;
-		}
 
 		//上
 		for (int j = 0; j < Define::BLOCK_GROUND_TOP_NUM; j++)
