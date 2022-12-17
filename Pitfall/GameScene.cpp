@@ -64,7 +64,7 @@ GameScene::GameScene(const InitData& init)
 	//Vec3 targetDir = Vec3(0.25, 0, 1).normalize();
 
 	//下向き
-	eyePosition = Vec3(2, 15, -32);
+	eyePosition = Vec3(2, 16, -32);
 	Vec3 targetDir = Vec3(0, -0.15, 1).normalize();
 
 
