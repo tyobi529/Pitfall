@@ -22,7 +22,7 @@ public:
 	GameScene(const InitData& init);
 
 	void update() override;
-	void updateInterval(); //1秒に一回実行
+	void updateInterval(); 
 
 	void draw() const override;
 

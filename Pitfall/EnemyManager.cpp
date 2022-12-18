@@ -194,11 +194,11 @@ std::shared_ptr<Enemy> EnemyManager::GetEnemy()
 void EnemyManager::EnemyInit(std::shared_ptr<Enemy> smpEnemy, float startTime)
 {
 	smpEnemy->m_isValid = true;
-	smpEnemy->m_count = 20; //TODO
-	smpEnemy->m_endTime = startTime + smpEnemy->m_count * Define::INTERVAL_TIME;
+	//smpEnemy->m_count = 20; //TODO
+	//smpEnemy->m_endTime = startTime + smpEnemy->m_count * Define::INTERVAL_SECOND;
 
-	//smpEnemy->m_count = Define::ENEMY_COUNT_ALL; 
-	//smpEnemy->m_endTime = startTime + smpEnemy->m_count * Define::INTERVAL_TIME;
+	smpEnemy->m_count = Define::ENEMY_COUNT; 
+	smpEnemy->m_endTime = startTime + (float)Define::ENEMY_COUNT * Define::INTERVAL_SECOND;
 
 
 	float color_r = Random(0.0f, 1.0f);
@@ -265,6 +265,7 @@ void EnemyManager::EnemyInit(std::shared_ptr<Enemy> smpEnemy, float startTime)
 				assert(false);
 				break;
 			}
+			smpEnemyBlock->SetTime(smpEnemy->m_endTime);
 			smpEnemyBlock->m_speedLevel = speedLevel;
 
 			//smpEnemyUnit->m_smpEnemies[i].Init(true, speedLevel);

@@ -42,12 +42,12 @@ public:
 
 
 protected:
+	TYPE m_type;
 	float m_size;
 
 private:
 	Vec3 m_pos;
-	//属性情報だけ持つ
-	TYPE m_type;
+
 	Quaternion m_quaternion;
 
 

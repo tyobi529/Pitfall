@@ -108,7 +108,7 @@ void GameScene::InitGame()
 
 	//m_smpStageManager = std::make_unique<StageManager>();
 
-	m_nextEverySecondTime = Scene::Time() + Define::INTERVAL_TIME;
+	m_nextEverySecondTime = Scene::Time() + Define::INTERVAL_SECOND;
 }
 
 
@@ -118,7 +118,7 @@ void GameScene::update()
 	if (Scene::Time() >= m_nextEverySecondTime)
 	{
 		updateInterval();
-		m_nextEverySecondTime += Define::INTERVAL_TIME;
+		m_nextEverySecondTime += Define::INTERVAL_SECOND;
 	}
 
 	m_smpEnemyManager->update();
@@ -227,7 +227,7 @@ void GameScene::updateInterval()
 
 
 	//新しく生成
-	if (m_generateCount == 1)
+	if (m_generateCount == 3)
 	{
 
 		m_generateCount = 0;

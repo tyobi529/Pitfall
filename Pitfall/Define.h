@@ -96,18 +96,24 @@ public:
 	const static int SPEED_LEVEL_MAX;
 	const static float SPEED_PER_LEVEL;
 
-	const static float INTERVAL_TIME;
+	const static float INTERVAL_SECOND;
 
 	//敵の移動
 	const static float ENEMY_GENERATE_POS_X;
 	const static float ENEMY_START_POS_X;
 	const static float ENEMY_END_POS_X;
 
-	const static int ENEMY_COUNT_ALL;
-	const static int ENEMY_COUNT_IN;
-	const static int ENEMY_COUNT_DELAY;
-	const static int ENEMY_COUNT_MOVE_1;
-	const static int ENEMY_COUNT_MOVE_2;
-	const static int ENEMY_COUNT_MOVE_3;
+	const static int ENEMY_COUNT;
+	//const static int ENEMY_COUNT_IN;
+	//const static int ENEMY_COUNT_DELAY;
+	//const static int ENEMY_COUNT_MOVE_1;
+	//const static int ENEMY_COUNT_MOVE_2;
+	//const static int ENEMY_COUNT_MOVE_3;
+
+	const static float ENEMY_IN_SECOND;
+	const static float ENEMY_DELAY_SECOND;
+	const static float ENEMY_MOVE_1_SECOND;
+	const static float ENEMY_MOVE_2_SECOND;
+	const static float ENEMY_MOVE_3_SECOND;
 
 };
