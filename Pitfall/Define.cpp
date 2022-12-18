@@ -85,6 +85,20 @@ const float Define::BOTTOM_POS_Y = LIMIT_POS_Y_STAGE_BOTTOM + Define::BLOCK_SIZE
 
 const int Define::SPEED_LEVEL_MIN = 1;
 const int Define::SPEED_LEVEL_MAX = 3;//スピード3段階
-const float Define::SPEED_PER_LEVEL = 0.8f; //1段階で上がるスピード
+//const float Define::SPEED_PER_LEVEL = 0.8f; //1段階で上がるスピード
+const float Define::SPEED_PER_LEVEL = 0.3f; //1段階で上がるスピード
 
 const float Define::INTERVAL_TIME = 0.5f;
+
+//敵の移動
+const float Define::ENEMY_GENERATE_POS_X = 15.0f;
+const float Define::ENEMY_START_POS_X = 10.0f;
+const float Define::ENEMY_END_POS_X = 1.0f;
+
+const int Define::ENEMY_COUNT_ALL = 50; //生成からぶつかるまでの全体
+const int Define::ENEMY_COUNT_IN = 10; //画面に入る動きの全体
+const int Define::ENEMY_COUNT_DELAY = 5; //画面に入ってから動き始めるまでのdelay
+//動き始めてからぶつかるまで
+const int Define::ENEMY_COUNT_MOVE_1 = 20; 
+const int Define::ENEMY_COUNT_MOVE_2 = 15;
+const int Define::ENEMY_COUNT_MOVE_3 = 10;

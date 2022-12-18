@@ -98,4 +98,16 @@ public:
 
 	const static float INTERVAL_TIME;
 
+	//敵の移動
+	const static float ENEMY_GENERATE_POS_X;
+	const static float ENEMY_START_POS_X;
+	const static float ENEMY_END_POS_X;
+
+	const static int ENEMY_COUNT_ALL;
+	const static int ENEMY_COUNT_IN;
+	const static int ENEMY_COUNT_DELAY;
+	const static int ENEMY_COUNT_MOVE_1;
+	const static int ENEMY_COUNT_MOVE_2;
+	const static int ENEMY_COUNT_MOVE_3;
+
 };

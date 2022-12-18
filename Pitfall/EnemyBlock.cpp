@@ -4,6 +4,7 @@
 #define SIZE Define::BLOCK_SIZE
 
 EnemyBlock::EnemyBlock() : Block()
+, m_state(STATE_IDLE)
 {
 }
 
@@ -14,6 +15,7 @@ EnemyBlock::~EnemyBlock()
 
 void EnemyBlock::EnemyInit()
 {
+	m_state = STATE_IDLE;
 }
 
 void EnemyBlock::update()

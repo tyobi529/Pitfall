@@ -126,12 +126,7 @@ void EnemyManager::UpdateHitStatus()
 				for (int i = 0; i < Define::BLOCK_NUM; i++)
 				{
 
-					//std::shared_ptr<EnemyBlock> smpEnemyBlock = std::static_pointer_cast<EnemyBlock>((*itr)->m_smpBlockUnit->GetObject(i));
 					m_hitStatus[i] = (*itr)->m_smpBlockUnit->GetObject(i)->GetType();
-					//if ((*itr)->m_smpEnemies[i].GetIsValid())
-					//{
-					//	m_hitStatus[i] = 1; //TODO １固定
-					//}
 				}
 
 				//無効に
@@ -201,6 +196,10 @@ void EnemyManager::EnemyInit(std::shared_ptr<Enemy> smpEnemy, float startTime)
 	smpEnemy->m_isValid = true;
 	smpEnemy->m_count = 20; //TODO
 	smpEnemy->m_endTime = startTime + smpEnemy->m_count * Define::INTERVAL_TIME;
+
+	//smpEnemy->m_count = Define::ENEMY_COUNT_ALL; 
+	//smpEnemy->m_endTime = startTime + smpEnemy->m_count * Define::INTERVAL_TIME;
+
 
 	float color_r = Random(0.0f, 1.0f);
 
