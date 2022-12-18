@@ -207,50 +207,17 @@ void EnemyManager::EnemyInit(std::shared_ptr<Enemy> smpEnemy, float startTime)
 	{
 		if (RandomBool(0.3))
 		{
-			//同じレーンにオブジェクトがあるか判定する
-			int limitSpeedLevel = 0;
-			for (auto itr = m_smpEnemyArray.begin(); itr != m_smpEnemyArray.end(); itr++)
-			{
-				if ((*itr)->m_isValid)
-				{
-					if ((*itr)->m_smpBlockUnit->GetObject(i)->GetType() != Block::BLOCK_NONE)
-					{
-						std::shared_ptr<EnemyBlock> smpEnemyBlock = std::static_pointer_cast<EnemyBlock>((*itr)->m_smpBlockUnit->GetObject(i));
-						int speedLevel = smpEnemyBlock->m_speedLevel;
-						if (speedLevel > limitSpeedLevel)
-							limitSpeedLevel = speedLevel;
-					}
 
-					//if ((*itr)->m_smpEnemies[i].GetIsValid())
-					//{
-					//	int speedLevel = (*itr)->m_smpEnemies[i].GetSpeedLevel();
-					//	if (speedLevel > limitSpeedLevel)
-					//		limitSpeedLevel = speedLevel;
-					//}
-				}
-			}
 
-			int speedLevel = 0;
-
-			if (limitSpeedLevel > 0)
-			{
-				//limitSpeedより早くないと重なってしまう。
-				speedLevel = Random(limitSpeedLevel, Define::SPEED_LEVEL_MAX);
-			}
-			else
-			{
-				speedLevel = Random(Define::SPEED_LEVEL_MIN, Define::SPEED_LEVEL_MAX);
-			}
-
-			//3段階
-			//int tmp = Random(1, 3);
-			//float speed = 0.5f * tmp;
 
 			std::shared_ptr<EnemyBlock> smpEnemyBlock = std::static_pointer_cast<EnemyBlock>(smpEnemy->m_smpBlockUnit->GetObject(i));
 			float posY = Define::LIMIT_POS_Y_HURDLE_BOTTOM + Define::BLOCK_SIZE * i;
 			smpEnemyBlock->SetPosition(1000, posY); //初期位置指定
 			smpEnemyBlock->SetSize(1.0f); //初期サイズ指定
-			switch (speedLevel)
+
+			//3段階
+			int tmp = Random(1, 3);
+			switch (tmp)
 			{
 			case 1:
 				smpEnemyBlock->SetType(Block::BLOCK_ENEMY_1);
@@ -266,11 +233,6 @@ void EnemyManager::EnemyInit(std::shared_ptr<Enemy> smpEnemy, float startTime)
 				break;
 			}
 			smpEnemyBlock->SetTime(smpEnemy->m_endTime);
-			smpEnemyBlock->m_speedLevel = speedLevel;
-
-			//smpEnemyUnit->m_smpEnemies[i].Init(true, speedLevel);
-			//TODO
-			//smpEnemyUnit->m_smpEnemies[i].SetColor(color_r);
 
 		}
 		else

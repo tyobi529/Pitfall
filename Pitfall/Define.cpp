@@ -96,16 +96,12 @@ const float Define::ENEMY_GENERATE_POS_X = 8.0f;
 const float Define::ENEMY_START_POS_X = 6.0f;
 const float Define::ENEMY_END_POS_X = 1.0f;
 
-const int Define::ENEMY_COUNT = 10; //生成からぶつかるまでの全体
-//const int Define::ENEMY_COUNT_IN = 10; //画面に入る動きの全体
-//const int Define::ENEMY_COUNT_DELAY = 5; //画面に入ってから動き始めるまでのdelay
-////動き始めてからぶつかるまでのカウント
-//const int Define::ENEMY_COUNT_MOVE_1 = 20; 
-//const int Define::ENEMY_COUNT_MOVE_2 = 15;
-//const int Define::ENEMY_COUNT_MOVE_3 = 10;
-
 const float Define::ENEMY_IN_SECOND = 0.5f;
-const float Define::ENEMY_DELAY_SECOND = 1.5f;
+const float Define::ENEMY_DELAY_SECOND = 0.5f;
 const float Define::ENEMY_MOVE_1_SECOND = 4.0f;
 const float Define::ENEMY_MOVE_2_SECOND = 3.0f;
 const float Define::ENEMY_MOVE_3_SECOND = 2.0f;
+
+//生成からぶつかるまでの全体カウント。一番遅いMOVE_1に合わせている
+const int Define::ENEMY_COUNT = (ENEMY_IN_SECOND + ENEMY_DELAY_SECOND + ENEMY_MOVE_1_SECOND) / INTERVAL_SECOND + 1;
+

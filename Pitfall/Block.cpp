@@ -76,13 +76,6 @@ void Block::draw() const
 	}
 	else if (m_type == BLOCK_FLYING)
 	{
-		//TODO
-//const double t = 1.f;
-//const Quaternion orientation = (Quaternion::RotateZ(1 * 20_deg) * Quaternion::RotateX(0 * 30_deg));
-
-//OrientedBox{ m_pos, 1, orientation }.draw(ColorF{ 0.2, 0.6, 0.4 }.removeSRGBCurve());
-
-
 		OrientedBox{ m_pos, 1, m_quaternion }.draw(ColorF{ 0.2, 0.6, 0.4 }.removeSRGBCurve());
 
 	}

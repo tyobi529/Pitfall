@@ -227,7 +227,7 @@ void GameScene::updateInterval()
 
 
 	//新しく生成
-	if (m_generateCount == 3)
+	if (m_generateCount == 4)
 	{
 
 		m_generateCount = 0;

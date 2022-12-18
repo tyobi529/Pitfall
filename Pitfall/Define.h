@@ -110,10 +110,11 @@ public:
 	//const static int ENEMY_COUNT_MOVE_2;
 	//const static int ENEMY_COUNT_MOVE_3;
 
-	const static float ENEMY_IN_SECOND;
 	const static float ENEMY_DELAY_SECOND;
 	const static float ENEMY_MOVE_1_SECOND;
 	const static float ENEMY_MOVE_2_SECOND;
 	const static float ENEMY_MOVE_3_SECOND;
+
+	const static float ENEMY_IN_SECOND;
 
 };
