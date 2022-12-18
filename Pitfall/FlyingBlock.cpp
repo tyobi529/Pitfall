@@ -57,9 +57,11 @@ void FlyingBlock::update()
 
 	float moveX = flyingTime * 5.0f;
 
+
 	SetPosition(m_startPos.x - moveX);
 	SetQuaternion(flyingTime * m_rotSpeed.x, flyingTime * m_rotSpeed.y, flyingTime * m_rotSpeed.z);
 
+	if (moveX > 5.0f) m_state = STATE_END; //終了
 
 }
 
