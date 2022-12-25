@@ -80,6 +80,14 @@ void Player::draw() const
 		smpBlock->draw();
 	}
 
+	//drawGuid();
+
+	//飛んでいるブロック
+	m_smpFlyingBlockManager->draw();
+}
+
+void Player::drawGuid() const
+{
 	//ガイド
 	ColorF color = ColorF(1.0f, 1.0f, 1.0f, 0.5f);
 	float bottomY = Define::LIMIT_POS_Y_HURDLE_BOTTOM - Define::BLOCK_SIZE / 2.0f;
@@ -122,9 +130,6 @@ void Player::draw() const
 		Box::FromPoints(pos4 - Vec3(lineWidth / 2.0f, lineWidth / 2.0f, lineWidth / 2.0f),
 						pos1 + Vec3(lineWidth / 2.0f, lineWidth / 2.0f, lineWidth / 2.0f)).draw(color.removeSRGBCurve() * light);
 	}
-
-	//飛んでいるブロック
-	m_smpFlyingBlockManager->draw();
 }
 
 void Player::updateInterval()

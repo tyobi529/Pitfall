@@ -294,7 +294,10 @@ void GameScene::draw() const
 		const double t = Scene::Time();
 
 		//oneSidedPlane.draw(5, 2, 0, uvChecker);
-		bgPlane.draw(Vec3{ 2, 11, 2 }, Quaternion::RotateX(-90_deg), bgTex);
+		//bgPlane.draw(Vec3{ 2, 11, 2 }, Quaternion::RotateX(-90_deg), bgTex);
+
+		bgPlane.draw(Vec3{ 2, 10, 10 }, Quaternion::RotateX(-90_deg), bgTex);
+
 
 
 	}

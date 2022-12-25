@@ -140,6 +140,6 @@ private:
 
 	const Texture bgTex{ U"img/bg.png", TextureDesc::MippedSRGB };
 
-	const Mesh bgPlane{ MeshData::OneSidedPlane(12) };
+	const Mesh bgPlane{ MeshData::OneSidedPlane(15) };
 
 };

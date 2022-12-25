@@ -12,6 +12,8 @@ public:
 
 	void update();
 	void draw() const;
+	void drawGuid() const;
+
 	void updateInterval();
 
 
