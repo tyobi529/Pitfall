@@ -86,9 +86,6 @@ void FlyingBlock::OverFlowInit(float posY, double angle)
 		.then(-2.0f, downDuration, EaseInOutSine);
 
 	//xz方向
-
-	//const double angle = Random<double>(3.0f, 9.0f);
-	//const double angle = Random<double>(1.0f, 9.0f);
 	const double speed = Random<double>(5.0f, 6.0f);
 
 	m_smpTweens->tweenPosX
@@ -97,11 +94,8 @@ void FlyingBlock::OverFlowInit(float posY, double angle)
 	m_smpTweens->tweenPosZ
 		.then(m_startPos.z + Math::Sin(angle * 30_deg) * speed, Define::FLYING_OVERFLOW_UP_SECOND + downDuration);
 
-	//m_smpTweens->tweenPosX
-	//	.then(m_startPos.x - 0.5f, Define::FLYING_OVERFLOW_UP_SECOND)
-	//	.then(m_startPos.x - 2.0f, downDuration);
-
-
+	m_smpTweens->tweenRotVal
+		.then(1, Define::FLYING_OVERFLOW_UP_SECOND + downDuration);
 
 	m_smpTweens->start();
 

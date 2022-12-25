@@ -109,11 +109,10 @@ const float Define::ENEMY_MOVE_3_SECOND = 2.0f;
 const int Define::ENEMY_COUNT = (ENEMY_IN_SECOND + ENEMY_DELAY_SECOND + ENEMY_MOVE_1_SECOND) / INTERVAL_SECOND + 1;
 
 
-const Duration Define::FLYING_BLOW_SLOW_SECOND = 0.5s;
+const Duration Define::FLYING_BLOW_SLOW_SECOND = (Duration)Define::INTERVAL_SECOND;
 const Duration Define::FLYING_BLOW_MOVE_SECOND = 1.0s;
 
 const Duration Define::FLYING_OVERFLOW_UP_SECOND = 0.2s;
-//const Duration Define::FLYING_OVERFLOW_DOWN_SECOND = 0.5s;
 const double Define::FLYING_OVERFLOW_ANGLE_MIN = 1.0f;
 const double Define::FLYING_OVERFLOW_ANGLE_MAX = 9.0f;
 const double Define::FLYING_OVERFLOW_ANGLE_PITCH = (FLYING_OVERFLOW_ANGLE_MAX - FLYING_OVERFLOW_ANGLE_MIN) / (double)Define::BLOCK_NUM;
