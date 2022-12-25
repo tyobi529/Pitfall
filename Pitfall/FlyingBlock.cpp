@@ -51,7 +51,7 @@ void FlyingBlock::BlowInit(Vec3 startPos)
 	m_smpTweens->start();
 }
 
-void FlyingBlock::OverFlowInit(float posY)
+void FlyingBlock::OverFlowInit(float posY, double angle)
 {
 	SetType(BLOCK_OVERFLOW);
 	m_isFlying = true;
@@ -88,7 +88,7 @@ void FlyingBlock::OverFlowInit(float posY)
 	//xz方向
 
 	//const double angle = Random<double>(3.0f, 9.0f);
-	const double angle = Random<double>(1.0f, 9.0f);
+	//const double angle = Random<double>(1.0f, 9.0f);
 	const double speed = Random<double>(5.0f, 6.0f);
 
 	m_smpTweens->tweenPosX

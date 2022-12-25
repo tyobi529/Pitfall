@@ -211,20 +211,26 @@ void Player::DropBlock()
 
 void Player::ClearBlock()
 {
+	//崩す方向を決める配列を作る
+	double delta = Random<double>(0.0f, Define::FLYING_OVERFLOW_ANGLE_PITCH);
+	Array<double> angleArray;
+	for (int i = 0; i < Define::BLOCK_NUM; i++)
+	{
+		angleArray << delta +
+			Define::FLYING_OVERFLOW_ANGLE_MIN +
+			Define::FLYING_OVERFLOW_ANGLE_PITCH * i;
+	}
+	angleArray.shuffle();
 
-
-
+	//生成されているブロック分飛ばす
 	for (int i = 0; i < Define::BLOCK_NUM; i++)
 	{
 		std::shared_ptr<PlayerBlock> smpPlayerBlock = std::static_pointer_cast<PlayerBlock>(m_smpBlockUnit->GetObject(i));
 
 		if (smpPlayerBlock->GetType() == Block::BLOCK_PLAYER_BODY)
 		{
-			//TODO
 			std::shared_ptr<FlyingBlock> smpFlyingBlock = m_smpFlyingBlockManager->GetFlyingBlock();
-			//smpFlyingBlock->SetType(Block::BLOCK_PLAYER_BODY);
-			Vec3 pos = smpPlayerBlock->GetPosition();
-			smpFlyingBlock->OverFlowInit(pos.y);
+			smpFlyingBlock->OverFlowInit(smpPlayerBlock->GetPosition().y, angleArray[i]);
 		}
 
 		if (i == 0) 

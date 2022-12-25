@@ -114,5 +114,8 @@ const Duration Define::FLYING_BLOW_MOVE_SECOND = 1.0s;
 
 const Duration Define::FLYING_OVERFLOW_UP_SECOND = 0.2s;
 //const Duration Define::FLYING_OVERFLOW_DOWN_SECOND = 0.5s;
+const double Define::FLYING_OVERFLOW_ANGLE_MIN = 1.0f;
+const double Define::FLYING_OVERFLOW_ANGLE_MAX = 9.0f;
+const double Define::FLYING_OVERFLOW_ANGLE_PITCH = (FLYING_OVERFLOW_ANGLE_MAX - FLYING_OVERFLOW_ANGLE_MIN) / (double)Define::BLOCK_NUM;
 
 int Define::SCORE = 0;

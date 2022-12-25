@@ -12,7 +12,7 @@ public:
 	~FlyingBlock();
 
 	void BlowInit(Vec3 startPos);
-	void OverFlowInit(float posY);
+	void OverFlowInit(float posY, double angle);
 
 	void update() override;
 	void updateInterval();

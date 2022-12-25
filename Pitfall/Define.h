@@ -124,6 +124,11 @@ public:
 	const static Duration FLYING_OVERFLOW_UP_SECOND;
 	//const static Duration FLYING_OVERFLOW_DOWN_SECOND;
 
+	const static double FLYING_OVERFLOW_ANGLE_MIN;
+	const static double FLYING_OVERFLOW_ANGLE_MAX;
+	const static double FLYING_OVERFLOW_ANGLE_PITCH;
+
+
 	static int SCORE;
 
 };
