@@ -8,9 +8,8 @@ FlyingBlock::FlyingBlock() : Block()
 	, m_startPos(Vec3(0, 0, 0))
 	, m_startTime(0)
 	, m_rotSpeed(Vec3(0, 0, 0))
-	, m_moveDir(Vec3(0, 0, 0))
 {
-
+	m_smpTweens.reset(new Tweens());
 }
 
 
@@ -34,7 +33,21 @@ void FlyingBlock::FlyingInit(Vec3 startPos)
 	float z = Random<float>(1.0, 2.0);
 	if (RandomBool()) z = -z;
 	m_rotSpeed = Vec3(x, y, z);
-	m_moveDir = Vec3(-1, 0, 0);
+
+	m_smpTweens->tweenPosX.Init(m_startPos.x);
+	m_smpTweens->tweenPosX
+		.then(m_startPos.x - 0.5f, Define::FLYING_BLOW_SLOW_SECOND)
+		.then(m_startPos.x - 5, Define::FLYING_BLOW_MOVE_SECOND);
+
+	m_smpTweens->tweenPosY.Init(m_startPos.y);
+	m_smpTweens->tweenPosZ.Init(m_startPos.z);
+
+	m_smpTweens->tweenRotVal.Init(0);
+	m_smpTweens->tweenRotVal
+		.then(0.5, Define::FLYING_BLOW_SLOW_SECOND)
+		.then(5, Define::FLYING_BLOW_MOVE_SECOND);
+
+	m_smpTweens->start();
 }
 
 void FlyingBlock::OverFlowInit(Vec3 startPos)
@@ -53,7 +66,6 @@ void FlyingBlock::OverFlowInit(Vec3 startPos)
 	float z = Random<float>(1.0, 2.0);
 	if (RandomBool()) z = -z;
 	m_rotSpeed = Vec3(x, y, z);
-	m_moveDir = Vec3(-1, 0, 0);
 }
 
 
@@ -64,36 +76,24 @@ void FlyingBlock::update()
 		return;
 	}
 
-	float deltaTime = Scene::Time() - m_startTime;
-
 	if (m_state == STATE_BLOW)
 	{
-
-		float flyingTime = 0; //補正してこっちの値を使う
-
-		if (deltaTime < Define::INTERVAL_SECOND)
+		if (!m_smpTweens->update())
 		{
-			flyingTime = deltaTime / 15.0f; //遅めに
-		}
-		else
-		{
-			//interval秒はゆっくり
-			flyingTime = Define::INTERVAL_SECOND / 10.0f; //遅めに
-			//残り
-			float restTime = deltaTime - Define::INTERVAL_SECOND;
-			flyingTime += restTime;
+			m_state = STATE_END;
 		}
 
-		float moveX = flyingTime * 5.0f;
 
-		SetPosition(m_startPos.x - moveX);
-		SetQuaternion(flyingTime * m_rotSpeed.x, flyingTime * m_rotSpeed.y, flyingTime * m_rotSpeed.z);
+		Vec3 pos = Vec3(m_smpTweens->tweenPosX.getValue(), m_smpTweens->tweenPosY.getValue(), m_smpTweens->tweenPosZ.getValue());
+		SetPosition(pos.x);
 
-		if (moveX > 5.0f) m_state = STATE_END; //終了
+		Vec3 rot = m_rotSpeed * m_smpTweens->tweenRotVal.getValue();
+		SetQuaternion(rot);
+
 	}
 	else if (m_state == STATE_OVERFLOW)
 	{
-		float flyingTime = deltaTime;
+		//float flyingTime = deltaTime;
 
 	}
 

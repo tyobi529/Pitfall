@@ -37,7 +37,8 @@ public:
 	void MovePosition(Vec3 val);
 
 
-	void SetQuaternion(float x, float y = 0, float z = 0) { m_quaternion = (Quaternion::RotateX(x * 20_deg) * Quaternion::RotateY(y * 20_deg) * Quaternion::RotateZ(z * 20_deg)); };
+	void SetQuaternion(float x, float y = 0, float z = 0) { m_quaternion = (Quaternion::RotateX(x * 10_deg) * Quaternion::RotateY(y * 10_deg) * Quaternion::RotateZ(z * 10_deg)); };
+	void SetQuaternion(Vec3 rot) { m_quaternion = (Quaternion::RotateX(rot.x * 10_deg) * Quaternion::RotateY(rot.y * 10_deg) * Quaternion::RotateZ(rot.z * 10_deg)); };
 	//void Rotate(Vec3 rot);
 	
 	void SetSize(float value) { m_size = value; };

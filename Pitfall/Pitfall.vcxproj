@@ -339,6 +339,7 @@
     <ClInclude Include="PlayerBlock.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="TitleScene.h" />
+    <ClInclude Include="Tween.hpp" />
     <ClInclude Include="Wall.h" />
     <ClInclude Include="WallManager.h" />
   </ItemGroup>

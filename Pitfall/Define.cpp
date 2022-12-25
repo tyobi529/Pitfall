@@ -108,4 +108,9 @@ const float Define::ENEMY_MOVE_3_SECOND = 2.0f;
 //生成からぶつかるまでの全体カウント。一番遅いMOVE_1に合わせている
 const int Define::ENEMY_COUNT = (ENEMY_IN_SECOND + ENEMY_DELAY_SECOND + ENEMY_MOVE_1_SECOND) / INTERVAL_SECOND + 1;
 
+
+const Duration Define::FLYING_BLOW_SLOW_SECOND = 0.5s;
+const Duration Define::FLYING_BLOW_MOVE_SECOND = 1.0s;
+
+
 int Define::SCORE = 0;
