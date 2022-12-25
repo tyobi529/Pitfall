@@ -7,8 +7,12 @@ class FlyingBlock : public Block
 public:
 	enum STATE
 	{
-		STATE_MOVE_SLOW, 
-		STATE_MOVE,
+		//敵に当たって飛ぶブロック
+		//STATE_BLOW_SLOW,
+		STATE_BLOW,
+		//リセット時にあふれるブロック
+		STATE_OVERFLOW,
+
 		STATE_END,
 	};
 
@@ -16,6 +20,7 @@ public:
 	~FlyingBlock();
 
 	void FlyingInit(Vec3 startPos);
+	void OverFlowInit(Vec3 startPos);
 
 	void update() override;
 	void updateInterval();
@@ -29,5 +34,7 @@ private:
 	float m_startTime;
 
 	Vec3 m_rotSpeed; //回転速度（yを大きめに）
+
+	Vec3 m_moveDir;
 };
 

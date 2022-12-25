@@ -117,4 +117,6 @@ public:
 
 	const static float ENEMY_IN_SECOND;
 
+	static int SCORE;
+
 };

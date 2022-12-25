@@ -9,14 +9,15 @@ public:
 	enum TYPE {
 		BLOCK_NONE, 
 		BLOCK_GROUND, //固定の地面部分
-		BLOCK_NORMAL,
 		BLOCK_HEAD,
 		BLOCK_BONUS,
 		BLOCK_PLAYER_HEAD,
 		BLOCK_PLAYER_BODY,
+		BLOCK_PLAYER_BODY_DOWN,
 		BLOCK_ENEMY_1,
 		BLOCK_ENEMY_2,
 		BLOCK_ENEMY_3,
+		BLOCK_ENEMY_COIN,
 		BLOCK_FLYING,
 	};
 
@@ -32,9 +33,13 @@ public:
 	void SetPosition(float x, float y = -1, float z = -1);
 	Vec3 GetPosition() { return m_pos; };
 
-	void MovePosition(float moveX, float moveY = 0, float moveZ = 0);
+	//void MovePosition(float moveX, float moveY = 0, float moveZ = 0);
+	void MovePosition(Vec3 val);
+
 
 	void SetQuaternion(float x, float y = 0, float z = 0) { m_quaternion = (Quaternion::RotateX(x * 20_deg) * Quaternion::RotateY(y * 20_deg) * Quaternion::RotateZ(z * 20_deg)); };
+	//void Rotate(Vec3 rot);
+	
 	void SetSize(float value) { m_size = value; };
 
 	TYPE GetType() { return m_type; };

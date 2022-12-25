@@ -76,6 +76,9 @@ void EnemyBlock::SetTime(float endTime)
 	case Block::BLOCK_ENEMY_3:
 		m_moveSecond = Define::ENEMY_MOVE_3_SECOND;
 		break;
+	case Block::BLOCK_ENEMY_COIN:
+		m_moveSecond = Define::ENEMY_MOVE_1_SECOND;
+		break;
 	default:
 		assert(false);
 		break;

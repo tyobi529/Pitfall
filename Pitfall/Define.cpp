@@ -13,6 +13,9 @@ void Define::RegisterTexture()
 	TextureAsset::Register(U"normal", U"img/normal.png");
 	TextureAsset::Register(U"head", U"img/head.png");
 
+	TextureAsset::Register(U"bg", U"img/bg.png");
+
+
 //https://www.peko-step.com/tool/alphachannel.html
 
 }
@@ -105,3 +108,4 @@ const float Define::ENEMY_MOVE_3_SECOND = 2.0f;
 //生成からぶつかるまでの全体カウント。一番遅いMOVE_1に合わせている
 const int Define::ENEMY_COUNT = (ENEMY_IN_SECOND + ENEMY_DELAY_SECOND + ENEMY_MOVE_1_SECOND) / INTERVAL_SECOND + 1;
 
+int Define::SCORE = 0;

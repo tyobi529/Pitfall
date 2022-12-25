@@ -216,7 +216,8 @@ void EnemyManager::EnemyInit(std::shared_ptr<Enemy> smpEnemy, float startTime)
 			smpEnemyBlock->SetSize(1.0f); //初期サイズ指定
 
 			//3段階
-			int tmp = Random(1, 3);
+			//int tmp = Random(1, 3);
+			int tmp = Random(1, 4);
 			switch (tmp)
 			{
 			case 1:
@@ -227,6 +228,9 @@ void EnemyManager::EnemyInit(std::shared_ptr<Enemy> smpEnemy, float startTime)
 				break;
 			case 3:
 				smpEnemyBlock->SetType(Block::BLOCK_ENEMY_3);
+				break;
+			case 4:
+				smpEnemyBlock->SetType(Block::BLOCK_ENEMY_COIN);
 				break;
 			default:
 				assert(false);

@@ -90,15 +90,17 @@ void Player::draw() const
 	Vec3 bottomPos3 = Vec3{ 0.5f, bottomY, 0.5f };
 	Vec3 bottomPos4 = Vec3{ -0.5f, bottomY, 0.5f };
 
+	float light = 0.2f;
+
 	//横線
 	Box::FromPoints(bottomPos1 - Vec3(lineWidth / 2.0f, 0, lineWidth / 2.0f),
-		bottomPos1 + Vec3(lineWidth / 2.0f, topY - bottomY, lineWidth / 2.0f)).draw(color.removeSRGBCurve() * 0.5f);
+		bottomPos1 + Vec3(lineWidth / 2.0f, topY - bottomY, lineWidth / 2.0f)).draw(color.removeSRGBCurve() * light);
 	Box::FromPoints(bottomPos2 - Vec3(lineWidth / 2.0f, 0, lineWidth / 2.0f),
-		bottomPos2 + Vec3(lineWidth / 2.0f, topY - bottomY, lineWidth / 2.0f)).draw(color.removeSRGBCurve() * 0.5f);
+		bottomPos2 + Vec3(lineWidth / 2.0f, topY - bottomY, lineWidth / 2.0f)).draw(color.removeSRGBCurve() * light);
 	Box::FromPoints(bottomPos3 - Vec3(lineWidth / 2.0f, 0, lineWidth / 2.0f),
-		bottomPos3 + Vec3(lineWidth / 2.0f, topY - bottomY, lineWidth / 2.0f)).draw(color.removeSRGBCurve() * 0.5f);
+		bottomPos3 + Vec3(lineWidth / 2.0f, topY - bottomY, lineWidth / 2.0f)).draw(color.removeSRGBCurve() * light);
 	Box::FromPoints(bottomPos4 - Vec3(lineWidth / 2.0f, 0, lineWidth / 2.0f),
-		bottomPos4 + Vec3(lineWidth / 2.0f, topY - bottomY, lineWidth / 2.0f)).draw(color.removeSRGBCurve() * 0.5f);
+		bottomPos4 + Vec3(lineWidth / 2.0f, topY - bottomY, lineWidth / 2.0f)).draw(color.removeSRGBCurve() * light);
 
 	//横線
 	for (int i = 0; i < Define::BLOCK_NUM; i++)
@@ -109,16 +111,16 @@ void Player::draw() const
 		Vec3 pos4 = bottomPos4 + Vec3(0, i * Define::BLOCK_SIZE, 0);
 
 		Box::FromPoints(pos1 - Vec3(lineWidth / 2.0f, lineWidth / 2.0f, lineWidth / 2.0f),
-						pos2 + Vec3(lineWidth / 2.0f, lineWidth / 2.0f, lineWidth / 2.0f)).draw(color.removeSRGBCurve() * 0.5f);
+						pos2 + Vec3(lineWidth / 2.0f, lineWidth / 2.0f, lineWidth / 2.0f)).draw(color.removeSRGBCurve() * light);
 
 		Box::FromPoints(pos2 - Vec3(lineWidth / 2.0f, lineWidth / 2.0f, lineWidth / 2.0f),
-						pos3 + Vec3(lineWidth / 2.0f, lineWidth / 2.0f, lineWidth / 2.0f)).draw(color.removeSRGBCurve() * 0.5f);
+						pos3 + Vec3(lineWidth / 2.0f, lineWidth / 2.0f, lineWidth / 2.0f)).draw(color.removeSRGBCurve() * light);
 
 		Box::FromPoints(pos3 - Vec3(lineWidth / 2.0f, lineWidth / 2.0f, lineWidth / 2.0f),
-						pos4 + Vec3(lineWidth / 2.0f, lineWidth / 2.0f, lineWidth / 2.0f)).draw(color.removeSRGBCurve() * 0.5f);
+						pos4 + Vec3(lineWidth / 2.0f, lineWidth / 2.0f, lineWidth / 2.0f)).draw(color.removeSRGBCurve() * light);
 
 		Box::FromPoints(pos4 - Vec3(lineWidth / 2.0f, lineWidth / 2.0f, lineWidth / 2.0f),
-						pos1 + Vec3(lineWidth / 2.0f, lineWidth / 2.0f, lineWidth / 2.0f)).draw(color.removeSRGBCurve() * 0.5f);
+						pos1 + Vec3(lineWidth / 2.0f, lineWidth / 2.0f, lineWidth / 2.0f)).draw(color.removeSRGBCurve() * light);
 	}
 
 	//飛んでいるブロック
@@ -158,75 +160,67 @@ void Player::CreateBlock()
 
 void Player::DropBlock()
 {
+	int blockNum = 0;
+	bool isblank = false;
+	Array<int> dropIndex;
+
+	for (int i = 0; i < Define::BLOCK_NUM; i++)
+	{
+
+		std::shared_ptr<PlayerBlock> smpPlayerBlock = std::static_pointer_cast<PlayerBlock>(m_smpBlockUnit->GetObject(i));
+		Block::TYPE type = smpPlayerBlock->GetType();
+		if (type == Block::BLOCK_NONE)
+		{
+			isblank = true;
+		}
+		else
+		{
+			//元の位置を消す
+			smpPlayerBlock->SetType(Block::BLOCK_NONE);
+
+			if (isblank) //下が開いているなら
+			{
+				m_smpBlockUnit->GetObject(blockNum)->SetType(Block::BLOCK_PLAYER_BODY_DOWN);
+			}
+			else
+			{
+				m_smpBlockUnit->GetObject(blockNum)->SetType(Block::BLOCK_PLAYER_BODY);
+			}
+
+			if (type == Block::BLOCK_PLAYER_HEAD)
+			{
+				m_headIndex = blockNum;
+				m_smpBlockUnit->GetObject(blockNum)->SetType(Block::BLOCK_PLAYER_HEAD);
+			}
+
+			blockNum++;
+			isblank = false;
+		}
+
+	
+		
+	}
+
+}
+
+
+void Player::ClearBlock()
+{
 	for (int i = 0; i < Define::BLOCK_NUM; i++)
 	{
 		std::shared_ptr<PlayerBlock> smpPlayerBlock = std::static_pointer_cast<PlayerBlock>(m_smpBlockUnit->GetObject(i));
 
-
-		Block::TYPE type = smpPlayerBlock->GetType();
-
-
-		if (type != Block::BLOCK_NONE)
+		if (i == 0) 
 		{
-			if (i == 0) //一番下は移動なし
-			{
-				continue;
-			}
-			else
-			{
-				//下を確認
-				for (int j = i - 1; j >= 0; j--)
-				{
-					std::shared_ptr<PlayerBlock> smpBlockUnder = std::static_pointer_cast<PlayerBlock>(m_smpBlockUnit->GetObject(j));
-
-					if (smpBlockUnder->GetType() != Block::BLOCK_NONE)
-					{
-						if (j == i - 1)
-						{
-							//真下にブロックがある場合は変化なし
-							break;
-						}
-
-						//ブロックが存在する場合はその１つ上に移動
-						std::shared_ptr<PlayerBlock> smpBlockNext = std::static_pointer_cast<PlayerBlock>(m_smpBlockUnit->GetObject(j + 1));
-
-						smpBlockNext->SetType(type);
-						//元の位置を消す
-						smpPlayerBlock->SetType(Block::BLOCK_NONE);
-						//移動元情報入れる
-						m_preIndex[j + 1] = i;
-
-						if (type == Block::BLOCK_PLAYER_HEAD)
-						{
-							m_headIndex = j + 1;
-						}
-
-						break;
-					}
-
-					//一番下までブロックが無かった場合
-					if (j == 0)
-					{
-						smpBlockUnder->SetType(type);
-						//m_smpBlocks[0]->SetType(type);
-						//元の位置を消す
-						smpPlayerBlock->SetType(Block::BLOCK_NONE);
-						//m_smpBlocks[i]->SetType(Block::BLOCK_NONE);
-						//移動元情報入れる
-						m_preIndex[0] = i;
-
-						if (type == Block::BLOCK_PLAYER_HEAD)
-						{
-							m_headIndex = 0;
-						}
-
-						break;
-					}
-				}
-			}
-
-
+			smpPlayerBlock->SetType(Block::BLOCK_PLAYER_HEAD);
+			smpPlayerBlock->PlayerInit(true);
+			m_headIndex = 0;
 		}
+		else
+		{
+			smpPlayerBlock->SetType(Block::BLOCK_NONE);
+		}
+
 	}
 
 }
@@ -250,6 +244,11 @@ void Player::CheckHit(const int* hitStatus)
 			}
 
 		}
+		else if (hitStatus[i] == Block::BLOCK_ENEMY_COIN)
+		{
+			//コイン
+			Define::SCORE += 1;
+		}
 
 	}
 
@@ -258,3 +257,78 @@ void Player::CheckHit(const int* hitStatus)
 
 
 
+//void Player::DropBlock()
+//{
+//	for (int i = 0; i < Define::BLOCK_NUM; i++)
+//	{
+//		std::shared_ptr<PlayerBlock> smpPlayerBlock = std::static_pointer_cast<PlayerBlock>(m_smpBlockUnit->GetObject(i));
+//
+//
+//		Block::TYPE type = smpPlayerBlock->GetType();
+//
+//
+//		if (type != Block::BLOCK_NONE)
+//		{
+//			if (i == 0) //一番下は移動なし
+//			{
+//				continue;
+//			}
+//			else
+//			{
+//				//下を確認
+//				for (int j = i - 1; j >= 0; j--)
+//				{
+//					std::shared_ptr<PlayerBlock> smpBlockUnder = std::static_pointer_cast<PlayerBlock>(m_smpBlockUnit->GetObject(j));
+//
+//					if (smpBlockUnder->GetType() != Block::BLOCK_NONE)
+//					{
+//						if (j == i - 1)
+//						{
+//							//真下にブロックがある場合は変化なし
+//							break;
+//						}
+//
+//						//ブロックが存在する場合はその１つ上に移動
+//						std::shared_ptr<PlayerBlock> smpBlockNext = std::static_pointer_cast<PlayerBlock>(m_smpBlockUnit->GetObject(j + 1));
+//
+//						smpBlockNext->SetType(type);
+//						//元の位置を消す
+//						smpPlayerBlock->SetType(Block::BLOCK_NONE);
+//						//移動元情報入れる
+//						//TODO
+//						m_preIndex[j + 1] = i;
+//
+//						if (type == Block::BLOCK_PLAYER_HEAD)
+//						{
+//							m_headIndex = j + 1;
+//						}
+//
+//						break;
+//					}
+//
+//					//一番下までブロックが無かった場合
+//					if (j == 0)
+//					{
+//						smpBlockUnder->SetType(type);
+//						//元の位置を消す
+//						smpPlayerBlock->SetType(Block::BLOCK_NONE);
+//						//m_smpBlocks[i]->SetType(Block::BLOCK_NONE);
+//						//移動元情報入れる
+//						//TODO
+//						m_preIndex[0] = i;
+//
+//						if (type == Block::BLOCK_PLAYER_HEAD)
+//						{
+//							m_headIndex = 0;
+//						}
+//
+//						break;
+//					}
+//				}
+//			}
+//
+//
+//		}
+//	}
+//
+//}

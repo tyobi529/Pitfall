@@ -136,4 +136,10 @@ private:
 	RenderTexture gaussianA16, gaussianB16;
 
 
+	const Mesh oneSidedPlane{ MeshData::OneSidedPlane(Vec2{ 6,2 }) };
+
+	const Texture bgTex{ U"img/bg.png", TextureDesc::MippedSRGB };
+
+	const Mesh bgPlane{ MeshData::OneSidedPlane(12) };
+
 };

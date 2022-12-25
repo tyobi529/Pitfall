@@ -37,7 +37,7 @@ GameScene::GameScene(const InitData& init)
 	, eyePosition(Define::EYE_POS)
 	, m_blockIndex(0)
 	, m_count(0)
-	, m_isDebug(true)
+	, m_isDebug(false)
 	, m_tapCount(0)
 	, m_timeCount(0)
 	, m_fallTime(0)
@@ -64,9 +64,16 @@ GameScene::GameScene(const InitData& init)
 	//Vec3 targetDir = Vec3(0.25, 0, 1).normalize();
 
 	//下向き
-	eyePosition = Vec3(2, 16, -32);
-	Vec3 targetDir = Vec3(0, -0.15, 1).normalize();
+	//eyePosition = Vec3(2, 16, -32);
+	//Vec3 targetDir = Vec3(0, -0.15, 1).normalize();
 
+	//正面
+	eyePosition = Vec3(2, 12, -32);
+	Vec3 targetDir = Vec3(0, 0, 1).normalize();
+
+	//右向き2
+	//eyePosition = Vec3(-2, 12, -35);
+	//Vec3 targetDir = Vec3(0.3, 0, 1).normalize();
 
 	camera.setView(eyePosition, eyePosition + targetDir);
 
@@ -169,6 +176,11 @@ void GameScene::update()
 	Print << U"direction: {:.2f}"_fmt(GetDirection(angle));
 	Print << U"eyePositon: {:.1f}"_fmt(camera.getEyePosition());
 	Print << U"focusPosition: {:.1f}"_fmt(camera.getFocusPosition());
+
+	//Print << U"SCORE: {:.1f}"_fmt(Define::SCORE);
+	Print << Define::SCORE;
+
+
 	Graphics3D::SetCameraTransform(camera);
 
 	if (KeyD.up())
@@ -188,9 +200,11 @@ void GameScene::update()
 	if (MouseR.up())
 	{
 		// 右クリックでタイトル画面へ
-		changeScene(State::Title);
+		//changeScene(State::Title);
+		//getData().lastGameScore = m_score;
 
-		getData().lastGameScore = m_score;
+
+		m_smpPlayer->ClearBlock();
 
 		return;
 	}
@@ -275,6 +289,13 @@ void GameScene::draw() const
 		DrawStage();
 
 		m_smpEnemyManager->draw();
+
+
+		const double t = Scene::Time();
+
+		//oneSidedPlane.draw(5, 2, 0, uvChecker);
+		bgPlane.draw(Vec3{ 2, 11, 2 }, Quaternion::RotateX(-90_deg), bgTex);
+
 
 	}
 

@@ -17,6 +17,7 @@ public:
 
 	void CreateBlock();
 	void DropBlock();
+	void ClearBlock();
 	void CheckHit(const int* hitStatus);
 
 	std::shared_ptr<BlockUnit> m_smpBlockUnit;
