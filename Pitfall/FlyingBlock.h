@@ -7,28 +7,16 @@
 class FlyingBlock : public Block
 {
 public:
-	enum STATE
-	{
-		//敵に当たって飛ぶブロック
-		//STATE_BLOW_SLOW,
-		STATE_BLOW,
-		//リセット時にあふれるブロック
-		STATE_OVERFLOW,
-
-		STATE_END,
-	};
 
 	FlyingBlock();
 	~FlyingBlock();
 
-	void FlyingInit(Vec3 startPos);
-	void OverFlowInit(Vec3 startPos);
+	void BlowInit(Vec3 startPos);
+	void OverFlowInit(float posY);
 
 	void update() override;
 	void updateInterval();
 
-
-	STATE GetState() { return m_state; };
 
 	struct Tweens
 	{
@@ -63,8 +51,10 @@ public:
 
 	};
 
+	bool m_isFlying;
+
 private:
-	STATE m_state;
+
 	Vec3 m_startPos;
 	float m_startTime;
 

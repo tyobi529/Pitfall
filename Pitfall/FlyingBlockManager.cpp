@@ -46,19 +46,26 @@ void FlyingBlockManager::draw() const
 	}
 }
 
-void FlyingBlockManager::GenerateFlyingBlock(Vec3 pos)
-{
-	std::shared_ptr<FlyingBlock> smpFlyingBlock = GetFlyingBlock();
-	smpFlyingBlock->SetType(Block::BLOCK_PLAYER_BODY);
-	smpFlyingBlock->FlyingInit(pos);
-}
+//void FlyingBlockManager::GenerateFlyingBlock(Vec3 pos)
+//{
+//	std::shared_ptr<FlyingBlock> smpFlyingBlock = GetFlyingBlock();
+//	smpFlyingBlock->SetType(Block::BLOCK_PLAYER_BODY);
+//	smpFlyingBlock->BlowInit(pos);
+//}
+//
+//void FlyingBlockManager::GenerateFlyingOverFlowBlock(Vec3 pos)
+//{
+//	std::shared_ptr<FlyingBlock> smpFlyingBlock = GetFlyingBlock();
+//	smpFlyingBlock->SetType(Block::BLOCK_PLAYER_BODY);
+//	smpFlyingBlock->OverFlowInit(pos);
+//}
 
 std::shared_ptr<FlyingBlock> FlyingBlockManager::GetFlyingBlock()
 {
 	//無効なものを探す
 	for (auto itr = m_smpFlyingBlockArray.begin(); itr != m_smpFlyingBlockArray.end(); itr++)
 	{
-		if ((*itr)->GetState() == FlyingBlock::STATE_END)
+		if (!(*itr)->m_isFlying)
 		{
 			return *itr;
 		}

@@ -117,8 +117,12 @@ public:
 
 	const static float ENEMY_IN_SECOND;
 
+	
 	const static Duration FLYING_BLOW_SLOW_SECOND;
 	const static Duration FLYING_BLOW_MOVE_SECOND;
+
+	const static Duration FLYING_OVERFLOW_UP_SECOND;
+	//const static Duration FLYING_OVERFLOW_DOWN_SECOND;
 
 	static int SCORE;
 

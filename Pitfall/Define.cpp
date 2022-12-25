@@ -112,5 +112,7 @@ const int Define::ENEMY_COUNT = (ENEMY_IN_SECOND + ENEMY_DELAY_SECOND + ENEMY_MO
 const Duration Define::FLYING_BLOW_SLOW_SECOND = 0.5s;
 const Duration Define::FLYING_BLOW_MOVE_SECOND = 1.0s;
 
+const Duration Define::FLYING_OVERFLOW_UP_SECOND = 0.2s;
+//const Duration Define::FLYING_OVERFLOW_DOWN_SECOND = 0.5s;
 
 int Define::SCORE = 0;

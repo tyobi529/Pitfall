@@ -14,7 +14,8 @@ public:
 	void draw() const;
 	void updateInterval();
 
-	void GenerateFlyingBlock(Vec3 pos);
+	//void GenerateFlyingBlock(Vec3 pos);
+	//void GenerateFlyingOverFlowBlock(Vec3 pos);
 
 	std::shared_ptr<FlyingBlock> GetFlyingBlock();
 

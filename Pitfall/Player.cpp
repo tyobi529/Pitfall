@@ -206,9 +206,21 @@ void Player::DropBlock()
 
 void Player::ClearBlock()
 {
+
+
+
 	for (int i = 0; i < Define::BLOCK_NUM; i++)
 	{
 		std::shared_ptr<PlayerBlock> smpPlayerBlock = std::static_pointer_cast<PlayerBlock>(m_smpBlockUnit->GetObject(i));
+
+		if (smpPlayerBlock->GetType() == Block::BLOCK_PLAYER_BODY)
+		{
+			//TODO
+			std::shared_ptr<FlyingBlock> smpFlyingBlock = m_smpFlyingBlockManager->GetFlyingBlock();
+			//smpFlyingBlock->SetType(Block::BLOCK_PLAYER_BODY);
+			Vec3 pos = smpPlayerBlock->GetPosition();
+			smpFlyingBlock->OverFlowInit(pos.y);
+		}
 
 		if (i == 0) 
 		{
@@ -222,6 +234,7 @@ void Player::ClearBlock()
 		}
 
 	}
+
 
 }
 
@@ -238,7 +251,10 @@ void Player::CheckHit(const int* hitStatus)
 			if (smpPlayerBlock->GetType() != Block::BLOCK_NONE)
 			{
 				Vec3 pos = smpPlayerBlock->GetPosition();
-				m_smpFlyingBlockManager->GenerateFlyingBlock(Vec3(pos.x - 1, pos.y, pos.z));
+				//m_smpFlyingBlockManager->GenerateFlyingBlock(Vec3(pos.x - 1, pos.y, pos.z));
+				std::shared_ptr<FlyingBlock> smpFlyingBlock = m_smpFlyingBlockManager->GetFlyingBlock();
+				smpFlyingBlock->SetType(Block::BLOCK_PLAYER_BODY);
+				smpFlyingBlock->BlowInit(Vec3(pos.x - 1, pos.y, pos.z));
 
 				smpPlayerBlock->SetType(Block::BLOCK_NONE); //当たった部分はNONEに
 			}

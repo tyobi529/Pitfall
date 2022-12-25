@@ -84,10 +84,14 @@ void Block::draw() const
 		Sphere{ m_pos, m_size / 2 }.draw(phong);
 
 	}
-	else if (m_type == BLOCK_FLYING)
+	else if (m_type == BLOCK_BLOW)
 	{
 		OrientedBox{ m_pos, 1, m_quaternion }.draw(ColorF{ 0.2, 0.6, 0.4 }.removeSRGBCurve());
 
+	}
+	else if (m_type == BLOCK_OVERFLOW)
+	{
+		OrientedBox{ m_pos, 1, m_quaternion }.draw(ColorF{ 0.6, 0.6, 0.3, 0.3 }.removeSRGBCurve() * 0.5f);
 	}
 
 

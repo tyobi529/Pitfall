@@ -18,7 +18,8 @@ public:
 		BLOCK_ENEMY_2,
 		BLOCK_ENEMY_3,
 		BLOCK_ENEMY_COIN,
-		BLOCK_FLYING,
+		BLOCK_BLOW,
+		BLOCK_OVERFLOW,
 	};
 
 
@@ -31,6 +32,8 @@ public:
 	void draw() const;
 
 	void SetPosition(float x, float y = -1, float z = -1);
+	void SetPosition(Vec3 pos) { m_pos = pos; };
+
 	Vec3 GetPosition() { return m_pos; };
 
 	//void MovePosition(float moveX, float moveY = 0, float moveZ = 0);
