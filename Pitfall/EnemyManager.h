@@ -28,7 +28,7 @@ public:
 
 private:
 
-	int m_hitStatus[Define::BLOCK_HURDLE_NUM]; //0何もなし。1:Hit
+	int m_hitStatus[Define::BLOCK_NUM]; //0何もなし。1:Hit
 
 	Array<std::shared_ptr<Enemy>> m_smpEnemyArray;
 

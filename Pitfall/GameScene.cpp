@@ -4,7 +4,7 @@
 #include "Define.h"
 
 #define SIZE Define::BLOCK_SIZE
-#define BLOCK_NUM Define::BLOCK_HURDLE_NUM
+#define BLOCK_NUM Define::BLOCK_NUM
 #define UNIT_NUM Define::BLOCK_H_NUM
 
 
@@ -33,7 +33,6 @@ GameScene::GameScene(const InitData& init)
 	, m_gameTime(0)
 	, m_deltaTime(0)
 	, m_timeSpeed(0)
-	, m_wallSpeed(0)
 	, eyePosition(Define::EYE_POS)
 	, m_blockIndex(0)
 	, m_count(0)
@@ -95,9 +94,6 @@ void GameScene::InitGame()
 	m_gameTime = 0.0f;
 	m_deltaTime = 0.0f;
 	m_timeSpeed = 1.0f;
-
-	m_wallSpeed = Define::WALL_SPEED_FIRST;
-
 
 	
 	m_smpWallManager.reset(new WallManager());

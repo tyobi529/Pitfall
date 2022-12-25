@@ -2,7 +2,7 @@
 
 EnemyManager::EnemyManager()
 {
-	for (int i = 0; i < Define::BLOCK_HURDLE_NUM; i++)
+	for (int i = 0; i < Define::BLOCK_NUM; i++)
 	{
 		m_hitStatus[i] = 0;
 	}
@@ -111,7 +111,7 @@ void EnemyManager::updateInterval()
 void EnemyManager::UpdateHitStatus()
 {
 	//初期化
-	for (int i = 0; i < Define::BLOCK_HURDLE_NUM; i++)
+	for (int i = 0; i < Define::BLOCK_NUM; i++)
 	{
 		m_hitStatus[i] = 0;
 	}

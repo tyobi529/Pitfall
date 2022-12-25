@@ -79,8 +79,6 @@ private:
 
 	int playerPosX = 3;
 	int depthZ = 1;
-	int wallWidth = 3;
-
 
 	std::vector<std::unique_ptr<Wall>> m_smpWalls;
 
