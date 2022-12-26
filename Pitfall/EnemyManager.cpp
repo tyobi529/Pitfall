@@ -99,6 +99,7 @@ void EnemyManager::updateInterval()
 	//	}
 	//}
 
+
 	for (auto itr = m_smpEnemyArray.begin(); itr != m_smpEnemyArray.end(); itr++)
 	{
 		(*itr)->updateInterval();

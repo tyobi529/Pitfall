@@ -235,7 +235,6 @@ void GameScene::updateInterval()
 	m_smpPlayer->CheckHit(hitStatus);
 
 
-
 	//新しく生成
 	if (m_generateCount == 4)
 	{
