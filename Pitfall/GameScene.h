@@ -124,8 +124,6 @@ private:
 
 	float m_nextEverySecondTime;
 
-	int m_generateCount;
-
 	PixelShader psBright;
 
 	const MSRenderTexture renderTexture{ Scene::Size(), TextureFormat::R16G16B16A16_Float, HasDepth::Yes };

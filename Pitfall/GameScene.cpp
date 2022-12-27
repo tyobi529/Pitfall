@@ -42,7 +42,6 @@ GameScene::GameScene(const InitData& init)
 	, m_fallTime(0)
 	, m_fallValue(0)
 	, m_nextEverySecondTime(0)
-	, m_generateCount(0)
 {
 	psBright = HLSL{ U"example/shader/hlsl/extract_bright_linear.hlsl", U"PS" }
 	| GLSL{ U"example/shader/glsl/extract_bright_linear.frag", {{U"PSConstants2D", 0}} };
@@ -234,19 +233,8 @@ void GameScene::updateInterval()
 	m_smpPlayer->DropBlock();
 	m_smpPlayer->CheckHit(hitStatus);
 
+	m_smpEnemyManager->NextEnemy(m_nextEverySecondTime);
 
-	//新しく生成
-	if (m_generateCount == 4)
-	{
-
-		m_generateCount = 0;
-		std::shared_ptr<Enemy> smpEnemy = m_smpEnemyManager->GetEnemy();
-		m_smpEnemyManager->EnemyInit(smpEnemy, m_nextEverySecondTime);
-	}
-	else
-	{
-		m_generateCount++;
-	}
 }
 
 void GameScene::draw() const
